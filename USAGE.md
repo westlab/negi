@@ -13,11 +13,15 @@ Debian squeezeの場合、
 
 PostgreSQLのユーザとデータベースを作成します。  
 `$su - postgres`  
-`$createuser -P YourDBUserName`  
-`$createdatabase YourDBName`  
+`$psql`  
+`psql# create user YourDBUserName`  
+`psql# create database YourDBName`  
+`psql# grant all privileges to database YourDBName to YourDBUserName`  
+`psql# \q`  
+`$exit`   
 
 テーブルデータを作成します。template/scripts/negi.sqlがひな型です。  
-`$psql -UYourDbUserName YourDBName < template/scripts/negi.sql`
+`$psql -UYourDbUserName YourDBName < template/scripts/negi.sql`  
 
 
 コンパイルします。  
