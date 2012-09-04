@@ -8,7 +8,7 @@ Discription:
 * negi can read pcap files.
 
 REMARKS:
-* negi can eat over 2TB pcap files with 6GB memory usage.
+* negi can eat over 2TB pcap files with about 6GB memory usage.
 * negi can extract informations about 20Mbps/80Mbps speeds with ethX/pcap.
 
 Files:  
