@@ -1,8 +1,14 @@
-## Software: negi (Negi Enables Global Intelligence)
-
-Publication Date: 2012/9/4
-
+## Software: negi (Negi Enables Global Intelligence)  
+Publication Date: 2012/9/4  
 Author: Shinichi Ishida
+
+Files  
+ * README.md: This file.
+ * USAGE.md: First step guide for building/executing negi.
+ * LICENSE: License agreement of negi.
+ * AUTHORS: Author list of negi.
+ * COPYING: GPL v2 original text.
+
 
 The negi software ("negi") is the copyrighted work of Shinichi Ishida (C) 2012 All Rights Reserved.
 
