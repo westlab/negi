@@ -1,3 +1,5 @@
 config/
 pcap/
 script/
+*.o
+negi
