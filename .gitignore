@@ -3,3 +3,4 @@ pcap/
 script/
 *.o
 negi
+output.txt
