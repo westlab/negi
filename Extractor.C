@@ -130,6 +130,8 @@ void Extractor::Proc(Packet *pkt){
 					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 #endif
 
+//					cout << query << endl;
+
 #ifdef FILEWRITE_MODE
 						file_writer->Write(query);
 #endif
