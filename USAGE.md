@@ -16,7 +16,7 @@ PostgreSQLのユーザとデータベースを作成します。
 `$psql`  
 `psql# create user YourDBUserName`  
 `psql# create database YourDBName`  
-`psql# grant all privileges to database YourDBName to YourDBUserName`  
+`psql# grant all privileges on database YourDBName to YourDBUserName`  
 `psql# \q`  
 `$exit`   
 
