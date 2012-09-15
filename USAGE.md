@@ -11,6 +11,14 @@ Debian squeezeの場合、
 `#aptitude install g++ libboost-dev libpqxx-dev zlib1g-dev libpcap-dev libboost-all-dev postgresql`  
 で導入できます。
 
+Centos 6.3の場合
+yum install gcc-c++ libpcap-devel zlib-devel
+
+yum install http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/libpqxx-3.1-0.1.rhel6.x86_64.rpm http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/libpqxx-devel-3.1-0.1.rhel6.x86_64.rpm http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/postgresql84-devel-8.4.13-1PGDG.rhel6.x86_64.rpm http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/postgresql84-8.4.13-1PGDG.rhel6.x86_64.rpm http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/postgresql84-libs-8.4.13-1PGDG.rhel6.i686.rpm http://yum.postgresql.org/8.4/redhat/rhel-6-x86_64/postgresql84-server-8.4.13-1PGDG.rhel6.x86_64.rpm
+で導入できます。
+
+
+
 PostgreSQLのユーザとデータベースを作成します。  
 `$su - postgres`  
 `$psql`  
