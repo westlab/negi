@@ -13,7 +13,10 @@
 #pragma once
 
 #include "Stream.H"
+
+#ifdef USE_POSTGRES
 using namespace pqxx;
+#endif
 
 class RuleLoaderFile
 {

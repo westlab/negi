@@ -4,3 +4,4 @@ script/
 *.o
 negi
 output.txt
+makefile.depend

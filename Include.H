@@ -38,7 +38,6 @@ using namespace std;
 #include <fstream>
 //#include <boost/regex.hpp>
 #include <vector>
-#include <pqxx/pqxx>
 #include <zlib.h> 
 #include <syslog.h> 
 #include <signal.h> 
@@ -49,7 +48,11 @@ using namespace std;
 #include <functional>
 #include <utility>
 #include <pthread.h>
+#include <sstream>
 
+#ifdef USE_POSTGRES
+#include <pqxx/pqxx>
+#endif
 
 #include "Color.H"
 #include "Debug.H"
