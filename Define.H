@@ -25,9 +25,9 @@
 //for MatchPreFilter
 #define STRING_MATCH_NUM 3
 
-#define USE_POSTGRES
-#define POSTGRES_MODE
-//#define FILEWRITE_MODE
+//#define USE_POSTGRES
+//#define POSTGRES_MODE
+#define FILEWRITE_MODE
 #define DEBUG
 
 enum Trunc{

@@ -26,15 +26,20 @@ RuleLoaderFile::RuleLoaderFile(){
 int RuleLoaderFile::Proc(){
 	rule_pool->Clear();
 
-/*
-		for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
-			rule_pool->AddRule(	c[0].as(u_int()), c[1].as(string()), c[2].as(string()), c[3].as(string()), \
-			c[4].as(string()), c[5].as(u_int()), c[6].as(string()), c[7].as(string()), c[8].as(u_int()), \
-			c[9].as(string()),c[10].as(string()),c[11].as(u_int()), c[12].as(u_int()), c[13].as(u_int()));
+	ifstream is;
+	is.open( config->get("rule_file").c_str());
 
-		}
+	if(!is){
+		cout << "Config: Can't open " << config->get("rule_file") << "."<< endl;
+		exit(1);
+	}
+	while(!is.eof()){
+		string rule;
 
-*/
+		is >> rule;
+		rule_pool->AddRule(rule);
+	
+	}
 	stream_id_prev = 0;
 
 	

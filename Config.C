@@ -51,6 +51,12 @@ string Config::operator[](const string index){
 	return get(index);
 }
 
+string Config::operator[](const char *index){
+	string temp(index);
+	return get(temp);
+}
+
+
 void Config::show(){
 	for(map<string, string>::iterator it=config_map.begin();it != config_map.end(); it++){
 	cout << "config["<<it->first<<"] = "<<it->second << endl;
@@ -59,6 +65,7 @@ void Config::show(){
 
 void Config::setDefault(){
 	config_map["ip_packet_mode"] = "false";
+    config_map["rule_file"] = "";
 //    config_map["pcap_filter"] = "ip proto \\tcp";
     config_map["pcap_filter"] = "";
     config_map["savemode"] = "packet";

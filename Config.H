@@ -31,6 +31,7 @@ class Config
 		string get(const string index);
 		void set(const string index, const string value);
 		string operator[](const string index);
+		string operator[](const char *);
 		void show();
 };
 #endif

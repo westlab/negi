@@ -49,3 +49,9 @@ MPF_DEBUG(rule_p->Show();)
 	rule_pool.push_back(rule_p);
 }
 
+void RulePool::AddRule(string rule){
+	Rule* rule_p = new Rule(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, rule, NULL, NULL, 1);
+MPF_DEBUG(rule_p->Show();)
+	rule_pool.push_back(rule_p);
+}
+
