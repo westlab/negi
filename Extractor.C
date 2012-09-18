@@ -101,7 +101,7 @@ void Extractor::Proc(Packet *pkt){
 					//Lets save it to PGSQL
 /*
 				cout << "this is result!!--------------------" << endl;
-				pkt->Show();
+//				pkt->Show();
 //				cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
 				cout << "Stream p: "<< pkt->GetStream() << endl;
 				cout << "Rule id: "<< (*it)->GetRuleId() << endl;
@@ -117,6 +117,7 @@ void Extractor::Proc(Packet *pkt){
 
 */
 
+
 					ostringstream oss;
 					oss.str("");
 
@@ -128,6 +129,10 @@ void Extractor::Proc(Packet *pkt){
 					
 #ifdef USE_POSTGRES
 					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
+
+#else
+					string temp = (char *)((*it)->GetResultString());
+					query += "',E'"+ temp +"');";
 #endif
 
 //					cout << query << endl;

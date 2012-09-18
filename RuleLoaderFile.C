@@ -34,10 +34,12 @@ int RuleLoaderFile::Proc(){
 		exit(1);
 	}
 	while(!is.eof()){
+		int id;
 		string rule;
 
-		is >> rule;
-		rule_pool->AddRule(rule);
+		is >> id >> rule;
+		cout << rule << endl;
+		rule_pool->AddRule(id, rule);
 	
 	}
 	stream_id_prev = 0;

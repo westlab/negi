@@ -28,11 +28,15 @@
 #include "Extractor.H"
 #include "ResultSaver.H"
 #include "ResultPool.H"
+
 #ifdef USE_POSTGRES
 #include "PgsqlSaver.H"
 #include "Pgsql.H"
 #include "RuleLoaderPgsql.H"
+#else
+#include "RuleLoaderFile.H"
 #endif
+
 #include "PacketClean.H"
 #include "Observer.H"
 #include "Global.H"
@@ -82,6 +86,8 @@ extern Extractor *extractor;
 extern PgsqlSaver *pgsql_saver;
 extern RuleLoaderPgsql *rule_loader_pgsql;
 extern Pgsql *pgsql;
+#else
+extern RuleLoaderFile *rule_loader_file;
 #endif
 extern TcpConnPool *tcp_conn_pool;
 extern Master *master;

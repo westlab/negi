@@ -54,6 +54,8 @@ StreamPool *stream_pool;
 Pgsql *pgsql;
 PgsqlSaver *pgsql_saver;
 RuleLoaderPgsql *rule_loader_pgsql;
+#else
+RuleLoaderFile *rule_loader_file;
 #endif
 Master *master;
 TcpConnPool *tcp_conn_pool;
