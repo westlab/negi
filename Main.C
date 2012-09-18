@@ -62,7 +62,7 @@ if(argc != 2){
 	rule_loader_pgsql->Proc();
 #endif
 
-//	rule_pool->ShowRules();
+	rule_pool->ShowRules();
 
 	//Create threads
 	//SSS thread
