@@ -13,7 +13,7 @@ TARGET=negi
 # Default Parameters
 #------------------------------------------------------
 
-CC=g++-4.4
+CC=g++
 #OPT=-Wall -O9
 #OPT=-Wall -g -ggdb -pg -O9 -fno-inline
 #OPT=-Wall -m32
@@ -22,8 +22,8 @@ CC=g++-4.4
 #OPT=-Wall -g
 INC=
 #LIB=-lpqxx -lpcap -pthread -lboost_thread -lz
-LIB=-lpqxx -lpcap -lz
-#LIB=-lpcap -lz
+#LIB=-lpqxx -lpcap -lz
+LIB= -pthread -lpcap -lz
 
 #------------------------------------------------------
 # Compile Option

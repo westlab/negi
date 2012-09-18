@@ -60,6 +60,9 @@ if(argc != 2){
 
 	pgsql->Connect(config->get("dbname"),config->get("dbuser"),config->get("dbhost"),config->get("dbpass"));
 	rule_loader_pgsql->Proc();
+#else
+	rule_loader_file = new RuleLoaderFile;
+	rule_loader_file->Proc();
 #endif
 
 	rule_pool->ShowRules();
