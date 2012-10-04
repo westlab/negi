@@ -11,6 +11,7 @@
  */
 #pragma once
 
+#include "Define.H"
 using namespace std;
 
 #include <sys/types.h>
@@ -56,4 +57,3 @@ using namespace std;
 
 #include "Color.H"
 #include "Debug.H"
-#include "Define.H"
