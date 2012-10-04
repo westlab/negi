@@ -131,8 +131,13 @@ void Extractor::Proc(Packet *pkt){
 					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 
 #else
-					string temp = (char *)((*it)->GetResultString());
-					query += "',E'"+ temp +"');";
+					char * temp = (char *)malloc(sizeof(char)* 100);
+					memcpy(temp, (char *)((*it)->GetResultString()), 99);
+					temp[99] = '\0';
+					query += "','";
+					query += temp;
+					query += "');";
+					free(temp);
 #endif
 
 //					cout << query << endl;
@@ -140,6 +145,7 @@ void Extractor::Proc(Packet *pkt){
 #ifdef FILEWRITE_MODE
 						file_writer->Write(query);
 #endif
+						file_writer->Write(query);
 
 #ifdef RIVER_MODE
 					river_gate->ProcResult( pkt->GetStream()->GetStreamId(), (*it)->GetRuleId(), (*it)->GetResultString(), (*it)->GetResultSize());

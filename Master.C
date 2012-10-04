@@ -66,7 +66,6 @@ void Master::Proc(Packet *pkt){
 //	river_gate->ProcPacket(pkt);
 	
 
-/*
 	if(pkt->GetProtocol() == IPPROTO_TCP && !(pkt->GetAck()) && (pkt->GetSyn() || pkt->GetFin())){
 		pthread_mutex_lock(&sss_cond_mut);
 		sss_send_value = new Packet(pkt->GetPacketContainer());
@@ -74,7 +73,6 @@ void Master::Proc(Packet *pkt){
 		pthread_mutex_unlock(&sss_cond_mut);
 	//	pkt->Show();
 	}
-*/
 
 
 	if(!end_stream_list.empty()){
