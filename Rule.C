@@ -74,13 +74,14 @@ MatchPreFilterInfo* Rule::GetMatchPreFilterInfo(){
 
 void Rule::Show(){
 	YELLOW
-	cout << "Rule------------------------------------" <<endl;
-	cout <<"IP: "<< inet_ntoa(src_ip) << "/" << inet_ntoa(src_netmask) << ":" << src_port;
-	cout << " -> "<<inet_ntoa(dst_ip) << "/" << inet_ntoa(dst_netmask) << ":" << dst_port << endl;
-	cout << "RegExp:" <<regexp<<endl;
-	cout << "PreFilterPattern:" <<prefilter_pattern<<endl;
-	cout << "PreFilterOffset:" <<offset<<endl;
-	cout << "PreFilterDepth:" <<depth<<endl;
+	cout << "Rule--------------------------" <<endl;
+//	cout <<"IP: "<< inet_ntoa(src_ip) << "/" << inet_ntoa(src_netmask) << ":" << src_port;
+//	cout << " -> "<<inet_ntoa(dst_ip) << "/" << inet_ntoa(dst_netmask) << ":" << dst_port << endl;
+//	cout << "RegExp:" <<regexp<<endl;
+	cout << "Pattern:" <<prefilter_pattern<<endl;
+//	cout << "PreFilterOffset:" <<offset<<endl;
+//	cout << "PreFilterDepth:" <<depth<<endl;
+	cout << "------------------------------" <<endl;
 	RESET
 }
 void Rule::ShowResult(){

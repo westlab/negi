@@ -99,24 +99,29 @@ void Extractor::Proc(Packet *pkt){
 			
 				if((*it)->GetFinished()){
 					//Lets save it to PGSQL
-/*
+///*
 				cout << "this is result!!--------------------" << endl;
 //				pkt->Show();
-//				cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
-				cout << "Stream p: "<< pkt->GetStream() << endl;
-				cout << "Rule id: "<< (*it)->GetRuleId() << endl;
+			//	cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
+			//	cout << "Stream p: "<< pkt->GetStream() << endl;
+			//	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
 				cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-				cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-				cout << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize() << endl;
-				cout << "Packet Size: " << pkt->GetL7ContentSize() << endl;
-				cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-				cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-				cout << "ResultStart: " << result_start_num << endl;
-				cout << "ResultEnd: " << result_end_num << endl;
-				cout << "Flag: " << (*it)->GetFinished() << endl;
-
-*/
-
+			//	cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
+			//	cout << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize() << endl;
+			//	cout << "Packet Size: " << pkt->GetL7ContentSize() << endl;
+			//	cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
+			//	cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
+			//	cout << "ResultStart: " << result_start_num << endl;
+			//	cout << "ResultEnd: " << result_end_num << endl;
+			//	cout << "Flag: " << (*it)->GetFinished() << endl;
+	
+				cout << "Source IP,port:      " << inet_ntoa(pkt->GetSrcIP()) << ","<< pkt->GetSrcPort()<< endl;
+				cout << "Destination IP,port: " << inet_ntoa(pkt->GetDstIP()) << "," <<pkt->GetDstPort()<< endl;
+				cout << "ResultString: ";
+				RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
+				YELLOW cout << escape_binary((*it)->GetResultString(), (*it)->GetResultSize()) << endl; RESET
+				cout << "------------------------------------" << endl;
+//*/
 
 					ostringstream oss;
 					oss.str("");
@@ -139,15 +144,10 @@ void Extractor::Proc(Packet *pkt){
 					query += "');";
 					free(temp);
 #endif
-					cout << query << endl;
+					//cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 						file_writer->Write(query);
-#endif
-						file_writer->Write(query);
-
-#ifdef RIVER_MODE
-					river_gate->ProcResult( pkt->GetStream()->GetStreamId(), (*it)->GetRuleId(), (*it)->GetResultString(), (*it)->GetResultSize());
 #endif
 
 #ifdef USE_POSTGRES
