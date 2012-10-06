@@ -13,7 +13,7 @@ TARGET=negi
 # Default Parameters
 #------------------------------------------------------
 
-CC=g++
+CC=g++-4.4
 #OPT=-Wall -O9
 #OPT=-Wall -g -ggdb -pg -O9 -fno-inline
 #OPT=-Wall -m32
