@@ -12,8 +12,10 @@
 
 #pragma once
 
+#include "Include.H"
 #include "Stream.H"
 #include "Packet.H"
+#include <pqxx/pqxx>
 using namespace pqxx;
 
 class PgsqlSaver
