@@ -69,10 +69,12 @@ if(argc != 2){
 
 	//Create threads
 	//SSS thread
+/*
 	pthread_t thread_sss_t;
 	pthread_create(&thread_sss_t, NULL, thread_sss, NULL);
 	pthread_detach(thread_sss_t);
 	sleep(1);
+*/
 
 ///*
 	packetcap();
