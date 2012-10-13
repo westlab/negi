@@ -114,12 +114,23 @@ void Extractor::Proc(Packet *pkt){
 			//	cout << "ResultStart: " << result_start_num << endl;
 			//	cout << "ResultEnd: " << result_end_num << endl;
 			//	cout << "Flag: " << (*it)->GetFinished() << endl;
+				if(pkt->GetStream()->GetHttpCompress()==2){
+				BLUE	cout << "HTTP Encode: " << "GZIP" << endl;RESET
+				}else{
+					cout << "HTTP Encode: " << "None" << endl;
+				}
+					
 	
 				cout << "Source IP,port:      " << inet_ntoa(pkt->GetSrcIP()) << ","<< pkt->GetSrcPort()<< endl;
 				cout << "Destination IP,port: " << inet_ntoa(pkt->GetDstIP()) << "," <<pkt->GetDstPort()<< endl;
 				cout << "ResultString: ";
 				RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
 				YELLOW cout << escape_binary((*it)->GetResultString(), (*it)->GetResultSize()) << endl; RESET
+				if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
+					URED cout << "VIRUS DETECTED!! Shut out :"<< inet_ntoa(pkt->GetSrcIP()) << endl; RESET
+					RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
+				}
+			
 				cout << "------------------------------------" << endl;
 //*/
 

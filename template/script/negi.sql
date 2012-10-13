@@ -322,6 +322,7 @@ COPY error (id, error, "timestamp") FROM stdin;
 COPY rule (id, owner, expire_date, src_ip, src_netmask, src_port, dst_ip, dst_netmask, dst_port, "timestamp", regexp, prefilter_pattern, prefilter_offset, prefilter_depth, save_flag) FROM stdin;
 478	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	html	0	0	1
 481	hoge	2011-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	<a 	0	0	1
+500	sin	2012-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	VIRUS 	0	0	1
 \.
 
 
