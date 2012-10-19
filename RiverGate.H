@@ -17,8 +17,8 @@
 //#include "Stream.H"
 //#include "Packet.H"
 
-#define SZTXT 512
-#define SZINT 4
+//#define SZTXT 512
+//#define SZINT 4
 #define RIVERPORT 12322
 #define RIVERHOST "localhost"
 

@@ -23,8 +23,9 @@ Packet::Packet(PacketCnt *pcnt){
 
 	error = 0;
 
-	packet = packet_cnt->pcap_pkt;
-
+	packet = (unsigned char *)malloc(packet_size_cap);
+	memcpy(packet, packet_cnt->pcap_pkt, packet_size_cap);
+	
 	l2_header_size = sizeof(struct ether_header);
 	l3_header = packet + sizeof(struct ether_header); //IP header
 	ip_header = (struct ip *)l3_header;
@@ -83,6 +84,8 @@ Packet::Packet(PacketCnt *pcnt){
 }
 
 Packet::Packet(string timestamp_str, string content_size_str, string srcip_str, string src_port_str, string dstip_str, string dst_port_str, string flag_str, string content_str){
+}
+/*
 	//Count packet creation
 	observer->PacketCreated();
 	
@@ -130,6 +133,7 @@ Packet::Packet(string timestamp_str, string content_size_str, string srcip_str, 
 	
 	return;
 }
+*/
 
 Packet::~Packet(){
 	//Count packet deletion
@@ -146,12 +150,9 @@ Packet::~Packet(){
 	}
 //#endif
 
-	if(packet_cnt != NULL){
-		//Count packet deletion
-//		observer->PacketFreed(mem_size);
-		free(packet_cnt);
-	packet_cnt = NULL;
-	//	packet_pool.ShowPackets();
+	if(packet != NULL){
+	free(packet);
+	packet = NULL;
 	}
 }
 

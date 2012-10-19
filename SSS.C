@@ -16,32 +16,26 @@
 
 void *thread_sss(void *)
 {
-	Packet* pkt;
-	while(1){
-		//wait for Packet Recieve.
-		pthread_mutex_lock(&sss_cond_mut);
-		pthread_cond_wait(&sss_cond, &sss_cond_mut);
-		pkt = sss_send_value;
+  Packet* pkt;
+  int dstport;
 
-		pkt->Show();
-
-
-		/*
-		cout << "Thread SSS Get Answer! "<< endl;
-	
-		//src ip
-		cout << inet_ntoa(pkt->GetSrcIP()) << endl;
-
-		//dst ip
-		cout << inet_ntoa(pkt->GetDstIP()) << endl;
-		}
-		*/
-
-
-		pthread_mutex_unlock(&sss_cond_mut);
-	}
-
-//	config->show();
-
+  while(1) {
+    // Waiting for packet to be arrived
+    pthread_mutex_lock(&sss_cond_mut);
+    pthread_cond_wait(&sss_cond, &sss_cond_mut);
+    pkt = sss_send_value;
+    pkt->Show();
+    dstport = pkt->GetDstPort();
+    cout << dstport << endl;
+    /*
+      cout << "Thread SSS Get Answer! "<< endl;
+      //src ip
+      cout << inet_ntoa(pkt->GetSrcIP()) << endl;
+      //dst ip
+      cout << inet_ntoa(pkt->GetDstIP()) << endl;
+      }
+    */
+    pthread_mutex_unlock(&sss_cond_mut);
+  }
+  //	config->show();
 }
-
