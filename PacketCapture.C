@@ -47,7 +47,7 @@ void packetcap(){
 		static const int pflag = 0;
 		static const int timeout = 1000;
 		static const int iterate = -1;
-//		static const int iterate = 5000000;
+		//static const int iterate = 1000000;
 		char ebuf[PCAP_ERRBUF_SIZE];
 		bpf_u_int32 localnet, netmask;
 		struct bpf_program fcode;
@@ -125,11 +125,14 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
 
 	//Calc. ongoing time from Start time.
 	if(start_time.tv_sec == 0 && start_time.tv_usec == 0) start_time = h->ts;
+/*
 	//Time limietd Run setting.
 	if((h->ts).tv_sec - start_time.tv_sec > (long)sim_time) {
 		cerr << "Simulation time end." << endl;
-		exit(0);
+		//exit(0);
+		pthread_exit(NULL);
 	}
+*/
 	PacketCnt *pcnt;
 
 	pcnt = (PacketCnt *)malloc(sizeof(PacketCnt) + h->caplen);

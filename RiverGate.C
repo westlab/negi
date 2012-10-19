@@ -119,31 +119,31 @@ void RiverGate::ProcPacket(Packet *pkt){
 
 
 	//src ip
-	str = inet_ntoa(pkt->GetSrcIP()); strcpy(send_buf + c, str); c += SZTXT;
+	str = inet_ntoa(pkt->GetSrcIP()); strcpy(send_buf + c, str); c += sizeof(int);
 	cout << str << "	";
 
 	//dst ip
-	str = inet_ntoa(pkt->GetDstIP()); strcpy(send_buf + c, str); c += SZTXT;
+	str = inet_ntoa(pkt->GetDstIP()); strcpy(send_buf + c, str); c += sizeof(int);
 	cout << str << "	";
 
 	//src port
 	int hoge = pkt->GetSrcPort();
-	memcpy(send_buf + c, &hoge,SZINT); c += SZINT;
+	memcpy(send_buf + c, &hoge,sizeof(int)); c += sizeof(int);
 	cout << hoge << "	";
 
 	//dst port
 	hoge = pkt->GetDstPort();
-	memcpy(send_buf + c, &hoge,SZINT); c += SZINT;
+	memcpy(send_buf + c, &hoge,sizeof(int)); c += sizeof(int);
 	cout << hoge << "	";
 
 	//direction
 	hoge = 1;
-	memcpy(send_buf + c, &hoge,SZINT); c += SZINT;
+	memcpy(send_buf + c, &hoge,sizeof(int)); c += sizeof(int);
 	cout << hoge << "	";
 
 	//content size
 	hoge = 12;
-	memcpy(send_buf + c, &hoge,SZINT); c += SZINT;
+	memcpy(send_buf + c, &hoge,sizeof(int)); c += sizeof(int);
 	cout << hoge << "	";
 
 	cout << endl;

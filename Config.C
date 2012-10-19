@@ -71,7 +71,8 @@ void Config::setDefault(){
     config_map["savemode"] = "packet";
     config_map["mallocmode"] = "malloc";
     config_map["gc_remove_time"] = "10000000";
-    config_map["sim_time"] = "259200"; //60*60*24*3
+//    config_map["sim_time"] = "259200"; //60*60*24*3
+    config_map["sim_time"] = "2592000"; //60*60*24*3
 //    sim_rule_num = "100";
 //   sim_rule_size = "32";
     config_map["dbpass"] = "";
