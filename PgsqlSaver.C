@@ -28,8 +28,9 @@ void PgsqlSaver::Proc(Stream * stream){
 	string src_ip_str, dst_ip_str;
 	src_ip_str = inet_ntoa(stream->GetSrcIP());
 	dst_ip_str = inet_ntoa(stream->GetDstIP());
-	
-	struct tm *tmp = localtime(&((stream->GetTimestamp()).tv_sec));
+
+	struct timeval tmp_time = stream->GetTimestamp();
+	struct tm *tmp = localtime(&tmp_time.tv_sec);
 	ostringstream oss;
 	oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
 	string tstamp = oss.str();
@@ -56,7 +57,7 @@ void PgsqlSaver::Proc(Stream * stream){
 	<< stream->GetError() <<"','"
 	<< stream->GetL7Error() <<"','"
 	<< stream->GetL7Protocol() <<"','"<<  stream->GetHttpContentSize() <<"','"<<  stream->GetHttpCompress() <<"','" \
-	<< stream->GetHttpHeaderSize() <<"','"<<  stream->GetHttpChunked() <<"','"<<  stream->GetHitCount(); 
+	<< stream->GetHttpHeaderSize() <<"','"<<  stream->GetHttpChunked() <<"','"<<  stream->GetHitCount();
 	string query = oss.str();
 
 
@@ -123,7 +124,8 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 
 	if(pkt->GetProtocol() != IPPROTO_TCP){return;}
 	char ctstamp[100];
-	strftime(ctstamp, 100, "%Y-%m-%d %H:%M:%S", (const struct tm *)localtime(&((pkt->GetTimestamp()).tv_sec)));
+	struct timeval tmp_time = pkt->GetTimestamp();
+	strftime(ctstamp, 100, "%Y-%m-%d %H:%M:%S", (const struct tm *)localtime(&tmp_time.tv_sec));
 	string tstamp = ctstamp;
 //	BLUE cout << timetemp << endl;RESET
 	/*
@@ -154,7 +156,7 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 
 	connection *conn = pgsql->GetConn();
 	work T(*conn);
-	
+
 	try{
 //		T.exec(query);
 //		T.commit();
@@ -168,7 +170,7 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 
 //	pgsql.ExecSql(query);
 	oss.str("");
-	
+
 	return;
 }
 
