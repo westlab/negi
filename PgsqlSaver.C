@@ -29,6 +29,7 @@ void PgsqlSaver::Proc(Stream * stream){
 	src_ip_str = inet_ntoa(stream->GetSrcIP());
 	dst_ip_str = inet_ntoa(stream->GetDstIP());
 
+	//add
 	struct timeval tmp_time = stream->GetTimestamp();
 	struct tm *tmp = localtime(&tmp_time.tv_sec);
 	ostringstream oss;
