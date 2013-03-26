@@ -148,7 +148,7 @@ void Extractor::Proc(Packet *pkt){
 
 					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
-					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() "','"\
+					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() <<"','" \
 					<< tstamp << "','" << inet_ntoa(pkt->GetSrcIP()) << "','" << inet_ntoa(pkt->GetDstIP()) << "','"
 					<< pkt->GetDstPort() << "','" << pkt->GetDstPort();
 
