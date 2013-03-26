@@ -154,7 +154,6 @@ void Extractor::Proc(Packet *pkt){
 					<< tstamp << "','" << src_ip << "','" << dst_ip << "','"
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
 
-cout << oss.str() << endl;
 					string query = oss.str();
 
 #ifdef USE_POSTGRES
