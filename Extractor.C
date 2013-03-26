@@ -39,6 +39,8 @@ void Extractor::Proc(Packet *pkt){
 				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
 				string tstamp = oss.str();
 
+				string src_ip =inet_ntoa(pkt->GetSrcIP());
+				string dst_ip =inet_ntoa(pkt->GetDstIP());
 
 
 /*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
@@ -149,9 +151,10 @@ void Extractor::Proc(Packet *pkt){
 					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() <<"','" \
-					<< tstamp << "','" << inet_ntoa(pkt->GetSrcIP()) << "','" << inet_ntoa(pkt->GetDstIP()) << "','"
+					<< tstamp << "','" << src_ip << "','" << dst_ip << "','"
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
 
+cout << oss.str() << endl;
 					string query = oss.str();
 
 #ifdef USE_POSTGRES
