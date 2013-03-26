@@ -32,10 +32,19 @@ void Extractor::Proc(Packet *pkt){
 				u_int result_end_num = result_start_num + RESULT_SIZE;
 
 
+//timestamp
+				struct timeval tmp_time = pkt->GetStream()->GetTimestamp();
+				struct tm *tmp = localtime(&tmp_time.tv_sec);
+				ostringstream oss;
+				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
+				string tstamp = oss.str();
+
+
+
 /*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
 				cerr << "packet of place < 0!!" <<endl;
 
-				}else 
+				}else
 				*/
 				if((u_int)(*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize() ){
 					ERROR_DEBUG(cout << "something error on extractor!!" << endl;)
@@ -56,7 +65,7 @@ void Extractor::Proc(Packet *pkt){
 					cout << "Flag: " << (*it)->GetFinished() << endl;
 					cout << "Packet num: " << pkt->GetStream()->GetPacketNum() << endl;
 					*/
-					}else 
+					}else
 
 				if((*it)->GetResultOffset() > 0){
 					//this means results crosses packets.
@@ -96,7 +105,7 @@ void Extractor::Proc(Packet *pkt){
 						(*it)->SetFinished(0);
 					}
 				}
-			
+
 				if((*it)->GetFinished()){
 					//Lets save it to PGSQL
 ///*
@@ -119,8 +128,8 @@ void Extractor::Proc(Packet *pkt){
 				}else{
 					cout << "HTTP Encode: " << "None" << endl;
 				}
-					
-	
+
+
 				cout << "Source IP,port:      " << inet_ntoa(pkt->GetSrcIP()) << ","<< pkt->GetSrcPort()<< endl;
 				cout << "Destination IP,port: " << inet_ntoa(pkt->GetDstIP()) << "," <<pkt->GetDstPort()<< endl;
 				cout << "ResultString: ";
@@ -130,19 +139,21 @@ void Extractor::Proc(Packet *pkt){
 					URED cout << "VIRUS DETECTED!! Shut out :"<< inet_ntoa(pkt->GetSrcIP()) << endl; RESET
 					RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
 				}
-			
+
 				cout << "------------------------------------" << endl;
 //*/
 
 					ostringstream oss;
 					oss.str("");
 
-					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place, result) values "\
+					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
-					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket()  ;
+					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() "','"\
+					<< tstamp << "','" << inet_ntoa(pkt->GetSrcIP()) << "','" << inet_ntoa(pkt->GetDstIP()) << "','"
+					<< pkt->GetDstPort() << "','" << pkt->GetDstPort();
 
 					string query = oss.str();
-					
+
 #ifdef USE_POSTGRES
 					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 
@@ -165,9 +176,9 @@ void Extractor::Proc(Packet *pkt){
 #ifdef POSTGRES_MODE
 					connection *conn = pgsql->GetConn();
 					work T(*conn);
-					
+
 					try{
-						
+
 						T.exec(query);
 						T.commit();
 					}
