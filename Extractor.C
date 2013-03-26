@@ -150,7 +150,7 @@ void Extractor::Proc(Packet *pkt){
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() <<"','" \
 					<< tstamp << "','" << inet_ntoa(pkt->GetSrcIP()) << "','" << inet_ntoa(pkt->GetDstIP()) << "','"
-					<< pkt->GetDstPort() << "','" << pkt->GetDstPort();
+					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
 
 					string query = oss.str();
 
