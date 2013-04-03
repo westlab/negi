@@ -24,7 +24,7 @@ void Proc::Init(){
 }
 
 void Proc::InitManager(){
-	// lock shem 
+	// lock shem
 	// initialize shem
 	// read config
 	// unlock shem
@@ -45,7 +45,7 @@ void Proc::InitManager(){
 	packet_clean = new PacketClean;
 	observer = new Observer;
 //	packet_queue = new PacketQueue;
-	river_gate = new RiverGate;
+	//river_gate = new RiverGate;
 
 }
 

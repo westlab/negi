@@ -41,9 +41,9 @@
 #include "Observer.H"
 #include "Global.H"
 #include "FileWriter.H"
-#include "RiverGate.H"
+//#include "RiverGate.H"
 
- 
+
 extern unsigned int stream_buf_size;
 extern unsigned int emergency_save_all;
 extern unsigned int no_stream_save;
@@ -95,7 +95,7 @@ extern PacketClean *packet_clean;
 extern Observer *observer;
 extern Gzip *gzip;
 extern FileWriter *file_writer;
-extern RiverGate *river_gate;
+//extern RiverGate *river_gate;
 
 extern void packetcap();
 extern void pcap_signal();

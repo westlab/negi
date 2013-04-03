@@ -66,7 +66,7 @@ FileWriter *file_writer;
 
 ResultPool *result_pool;
 
-RiverGate *river_gate;
+//RiverGate *river_gate;
 
 pthread_mutex_t sss_cond_mut = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t sss_cond =  PTHREAD_COND_INITIALIZER;

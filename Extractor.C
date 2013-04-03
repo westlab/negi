@@ -168,7 +168,7 @@ void Extractor::Proc(Packet *pkt){
 					query += "');";
 					free(temp);
 #endif
-					//cout << query << endl;
+					cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 						file_writer->Write(query);
