@@ -11,7 +11,7 @@
  * Note: This is small inputbuffer  stream test!
 */
 //Here is bug
-
+////giwa
 #include "Include.H"
 #include "Gzip.H"
 #include "Global.H"
