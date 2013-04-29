@@ -45,7 +45,7 @@ void Proc::InitManager(){
 	packet_clean = new PacketClean;
 	observer = new Observer;
 //	packet_queue = new PacketQueue;
-	river_gate = new RiverGate;
+	//river_gate = new RiverGate;
 
 }
 

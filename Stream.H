@@ -114,6 +114,7 @@ class Stream
 		bool gc_deleted;
 		struct timeval	last_updated_time;
 
+		int gzip_only_http_header;		//Flag this stream is gzipped but first packet contains only httpdeader
 		char buffer[BUFF_SIZE];
 	public:
 		Stream(Packet *pkt);
@@ -204,4 +205,7 @@ class Stream
 		void SetGzipZ(z_stream *z){gzip_z = z ;};
 		z_stream* GetGzipZ(){return gzip_z ;};
 
+		void SetGzipOnlyHttpHeader(int _gzip_only_http_header){ gzip_only_http_header = _gzip_only_http_header;}
+		int GetGzipOnlyHttpHeader(){return gzip_only_http_header;}
+		void IncGzipOnlyHttpHeader(){ gzip_only_http_header++;}
 };
