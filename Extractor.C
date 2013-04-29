@@ -151,7 +151,7 @@ void Extractor::Proc(Packet *pkt){
 					string query = oss.str();
 
 #ifdef USE_POSTGRES
-					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
+					query += "','"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 
 #else
 					char * temp = (char *)malloc(sizeof(char)* 100);

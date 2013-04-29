@@ -139,7 +139,7 @@ Packet::~Packet(){
 	//Count packet deletion
 	observer->PacketDeleted();
 
-	if(l7_content != content) free(l7_content);
+//	if(l7_content != content) free(l7_content);
 	
 //	packet_pool.RemovePacketIt(packet_pool_it);
 //#ifndef STREAM_CLEAN_MODE

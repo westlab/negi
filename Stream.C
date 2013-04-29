@@ -61,6 +61,7 @@ Stream::Stream(Packet *pkt){
 	disorder_flag = 0;
 
 	gzip_z = NULL;
+	gzip_only_http_header = 0;
 
 	//Add stream_pool
 	stream_pool_it = stream_pool->AddStream(this);
