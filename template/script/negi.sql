@@ -4,39 +4,46 @@
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
+SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET search_path = public, pg_catalog;
 
 --
--- Name: config_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: config_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE config_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
-
---
--- Name: config_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('config_id_seq', 3, true);
-
+ALTER TABLE public.config_id_seq OWNER TO postgres;
 
 SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- Name: config; Type: TABLE; Schema: public; Tablespace: 
+-- Name: config; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE config (
@@ -46,29 +53,24 @@ CREATE TABLE config (
 );
 
 
+ALTER TABLE public.config OWNER TO postgres;
 
 --
--- Name: error_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: error_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE error_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
+ALTER TABLE public.error_id_seq OWNER TO postgres;
 
 --
--- Name: error_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('error_id_seq', 24, true);
-
-
---
--- Name: error; Type: TABLE; Schema: public; Tablespace: 
+-- Name: error; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE error (
@@ -78,29 +80,24 @@ CREATE TABLE error (
 );
 
 
+ALTER TABLE public.error OWNER TO postgres;
 
 --
--- Name: regexp_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: regexp_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE regexp_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1;
 
 
+ALTER TABLE public.regexp_id_seq OWNER TO postgres;
 
 --
--- Name: regexp_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('regexp_id_seq', 482, true);
-
-
---
--- Name: rule; Type: TABLE; Schema: public; Tablespace: 
+-- Name: rule; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE rule (
@@ -122,51 +119,40 @@ CREATE TABLE rule (
 );
 
 
+ALTER TABLE public.rule OWNER TO postgres;
 
 --
--- Name: save_data_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: save_data_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE save_data_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1
     CYCLE;
 
 
+ALTER TABLE public.save_data_id_seq OWNER TO postgres;
 
 --
--- Name: save_data_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('save_data_id_seq', 1, true);
-
-
---
--- Name: save_packet_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: save_packet_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE save_packet_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1
     CYCLE;
 
 
+ALTER TABLE public.save_packet_id_seq OWNER TO postgres;
 
 --
--- Name: save_packet_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('save_packet_id_seq', 1, false);
-
-
---
--- Name: save_packet; Type: TABLE; Schema: public; Tablespace: 
+-- Name: save_packet; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE save_packet (
@@ -186,30 +172,25 @@ CREATE TABLE save_packet (
 );
 
 
+ALTER TABLE public.save_packet OWNER TO postgres;
 
 --
--- Name: save_result_id_seq; Type: SEQUENCE; Schema: public; 
+-- Name: save_result_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE save_result_id_seq
     START WITH 1
     INCREMENT BY 1
-    NO MAXVALUE
     NO MINVALUE
+    NO MAXVALUE
     CACHE 1
     CYCLE;
 
 
+ALTER TABLE public.save_result_id_seq OWNER TO postgres;
 
 --
--- Name: save_result_id_seq; Type: SEQUENCE SET; Schema: public; 
---
-
-SELECT pg_catalog.setval('save_result_id_seq', 3909, true);
-
-
---
--- Name: save_result; Type: TABLE; Schema: public; Tablespace: 
+-- Name: save_result; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE save_result (
@@ -219,13 +200,19 @@ CREATE TABLE save_result (
     pattern text,
     pattern_len integer,
     place integer,
-    result bytea
+    result bytea,
+    "timestamp" timestamp without time zone,
+    src_ip text,
+    dst_ip text,
+    src_port integer,
+    dst_port integer
 );
 
 
+ALTER TABLE public.save_result OWNER TO postgres;
 
 --
--- Name: save_stream; Type: TABLE; Schema: public; Tablespace: 
+-- Name: save_stream; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE save_stream (
@@ -260,9 +247,10 @@ CREATE TABLE save_stream (
 );
 
 
+ALTER TABLE public.save_stream OWNER TO postgres;
 
 --
--- Name: update_check; Type: TABLE; Schema: public; Tablespace: 
+-- Name: update_check; Type: TABLE; Schema: public; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE update_check (
@@ -271,48 +259,41 @@ CREATE TABLE update_check (
 );
 
 
+ALTER TABLE public.update_check OWNER TO postgres;
 
 --
--- Data for Name: config; Type: TABLE DATA; Schema: public; 
+-- Name: config_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
 --
 
-COPY config (name, value, id) FROM stdin;
-stream_buf_size	10240	1
-http_max_body_size	20480	2
-emergency_save_all	1	3
-\.
+ALTER TABLE ONLY config
+    ADD CONSTRAINT config_pkey PRIMARY KEY (id);
 
 
 --
--- Data for Name: error; Type: TABLE DATA; Schema: public; 
+-- Name: regexp_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
 --
 
-COPY error (id, error, "timestamp") FROM stdin;
-1	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-2	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-3	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-4	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-5	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-6	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-7	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-8	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-9	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-10	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-11	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-12	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-13	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-14	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-15	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-16	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-17	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-18	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-19	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-20	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-21	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-22	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-23	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-24	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-\.
+ALTER TABLE ONLY rule
+    ADD CONSTRAINT regexp_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: save_data_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace:
+--
+
+ALTER TABLE ONLY save_stream
+    ADD CONSTRAINT save_data_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
 
 
 --
@@ -330,68 +311,12 @@ COPY rule (id, owner, expire_date, src_ip, src_netmask, src_port, dst_ip, dst_ne
 -- Data for Name: save_packet; Type: TABLE DATA; Schema: public; 
 --
 
-COPY save_packet ("timestamp", src_ip, dst_ip, src_port, dst_port, packet_size, packet_size_org, content_size, error, content, id, protocol, flag) FROM stdin;
-\.
 
 
---
--- Data for Name: save_result; Type: TABLE DATA; Schema: public; 
---
-
-COPY save_result (id, stream_id, rule_id, pattern, pattern_len, place, result) FROM stdin;
-\.
 
 
---
--- Data for Name: save_stream; Type: TABLE DATA; Schema: public; 
---
-
-COPY save_stream (id, "timestamp", src_ip, dst_ip, src_port, dst_port, protcol, direction, truncate, regexp_id, stream, st_size, st_size_org, l5prot, match_str, http_size, http_header_size, http_chunked, http_compress, error, stream_org, srim_version, hit_count, after_ipfilter, after_prefilter, prefilter_log, l7_error, l7prot) FROM stdin;
-\.
 
 
---
--- Data for Name: update_check; Type: TABLE DATA; Schema: public; 
---
-
-COPY update_check (value, updated) FROM stdin;
-regexp	0
-filter	0
-\.
-
-
---
--- Name: config_pkey; Type: CONSTRAINT; Schema: public; Tablespace: 
---
-
-ALTER TABLE ONLY config
-    ADD CONSTRAINT config_pkey PRIMARY KEY (id);
-
-
---
--- Name: regexp_pkey; Type: CONSTRAINT; Schema: public; Tablespace: 
---
-
-ALTER TABLE ONLY rule
-    ADD CONSTRAINT regexp_pkey PRIMARY KEY (id);
-
-
---
--- Name: save_data_pkey; Type: CONSTRAINT; Schema: public; Tablespace: 
---
-
-ALTER TABLE ONLY save_stream
-    ADD CONSTRAINT save_data_pkey PRIMARY KEY (id);
-
-
---
--- Name: public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
