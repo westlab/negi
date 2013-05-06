@@ -23,7 +23,7 @@ PacketClean::~PacketClean(){
 }
 
 void PacketClean::Proc(Packet *pkt){
-	cout << "Packet Clean-----------------------" << endl;
+//	cout << "Packet Clean-----------------------" << endl;
 	struct timeval	packet_timestamp = pkt->GetTimestamp();
 
 	if(savemode == PACKET){
@@ -37,7 +37,7 @@ void PacketClean::Proc(Packet *pkt){
 
 	//Stream End
 	if(!end_stream_list.empty()){
-	cout << "Stream Endddddddd-----------------------" << endl;
+//	cout << "Stream Endddddddd-----------------------" << endl;
 //			cout << "end_stream_list size is :" << end_stream_list.size() << endl;
 		for(list<Stream *>::iterator it=end_stream_list.begin(); it != end_stream_list.end(); it++){
 				delete(*it);
@@ -53,12 +53,12 @@ void PacketClean::Proc(Packet *pkt){
 
 			//Check all stream for timeout.
 			for(list<Stream *>::iterator it=stream_pool->GetStreamFirstIt(); it != stream_pool->GetStreamLastIt(); it++){
-				cout << "Stream timeout-----------------------" << endl;
-				cout << "packet timestamp sec: " << packet_timestamp.tv_sec << endl;
-				cout << "GetLastUpdatedTime: " << (*it)->GetLastUpdatedTime().tv_sec  << endl;
-				cout << "Division: " << packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec  << endl;
-				cout << "gc_removetime: " << gc_remove_time << endl;
-				cout << atoi(config->get("gc_remove_time").c_str()) << endl;
+//				cout << "Stream timeout-----------------------" << endl;
+//				cout << "packet timestamp sec: " << packet_timestamp.tv_sec << endl;
+//				cout << "GetLastUpdatedTime: " << (*it)->GetLastUpdatedTime().tv_sec  << endl;
+//				cout << "Division: " << packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec  << endl;
+//				cout << "gc_removetime: " << gc_remove_time << endl;
+//				cout << atoi(config->get("gc_remove_time").c_str()) << endl;
 				if( packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec >= atoi(config->get("gc_remove_time").c_str()) ){
 					list<Stream *>::iterator it2;
 					it2 = --it;
@@ -72,7 +72,7 @@ void PacketClean::Proc(Packet *pkt){
 
 			//Check all tcpconn for timeout.
 			for(multimap<u_int, TcpConn*>::iterator it=tcp_conn_pool->GetTcpConnFirstIt(); it != tcp_conn_pool->GetTcpConnLastIt(); ++it){
-				cout << "TCP connection timeout-----------------------" << endl;
+//				cout << "TCP connection timeout-----------------------" << endl;
 				if( packet_timestamp.tv_sec - (it->second)->GetLastUpdatedTime().tv_sec >=  atoi(config->get("gc_remove_time").c_str()) ){
 					multimap<u_int, TcpConn*>::iterator it2;
 						it2 = --it;

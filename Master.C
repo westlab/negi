@@ -29,9 +29,9 @@ Master::~Master(){
 }
 int pkt_cnt = 0;
 void Master::Proc(Packet *pkt){
-	pkt_cnt++;
-	cout << pkt_cnt << endl;
-	pkt->Show();
+//	pkt_cnt++;
+//	cout << pkt_cnt << endl;
+//	pkt->Show();
 	MASTER_DEBUG(MSG("Master Proc!"));
 	stream_rebuild->Proc(pkt);
 
