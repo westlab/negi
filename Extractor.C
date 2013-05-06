@@ -169,13 +169,8 @@ void Extractor::Proc(Packet *pkt){
 
 					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
-<<<<<<< HEAD
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
 					<< tstamp << "','" << src_ip << "','" << dst_ip << "','" \
-=======
-					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() <<"','" \
-					<< tstamp << "','" << src_ip << "','" << dst_ip << "','"
->>>>>>> 75da9f36b08979da610213df93d2232ea3ffbd7c
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
 
 					string query = oss.str();
