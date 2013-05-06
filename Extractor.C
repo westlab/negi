@@ -144,6 +144,7 @@ void Extractor::Proc(Packet *pkt){
 				cout << "ResultString: ";
 				RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
 				YELLOW cout << escape_binary((*it)->GetResultString(), (*it)->GetResultSize()) << endl; RESET
+				cout << (*it)->GetResultString() << endl;
 				if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
 					URED cout << "VIRUS DETECTED!! Shut out :"<< inet_ntoa(pkt->GetSrcIP()) << endl; RESET
 					RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
