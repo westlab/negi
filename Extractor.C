@@ -41,6 +41,17 @@ void Extractor::Proc(Packet *pkt){
 				string dst_ip =inet_ntoa(pkt->GetDstIP());
 
 
+//timestamp
+				struct timeval tmp_time = pkt->GetStream()->GetTimestamp();
+				struct tm *tmp = localtime(&tmp_time.tv_sec);
+				ostringstream oss;
+				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
+				string tstamp = oss.str();
+
+				string src_ip =inet_ntoa(pkt->GetSrcIP());
+				string dst_ip =inet_ntoa(pkt->GetDstIP());
+
+
 /*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
 				cerr << "packet of place < 0!!" <<endl;
 
@@ -158,8 +169,13 @@ void Extractor::Proc(Packet *pkt){
 
 					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
+<<<<<<< HEAD
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
 					<< tstamp << "','" << src_ip << "','" << dst_ip << "','" \
+=======
+					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() <<"','" \
+					<< tstamp << "','" << src_ip << "','" << dst_ip << "','"
+>>>>>>> 75da9f36b08979da610213df93d2232ea3ffbd7c
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
 
 					string query = oss.str();
@@ -177,7 +193,7 @@ void Extractor::Proc(Packet *pkt){
 					query += "');";
 					free(temp);
 #endif
-					//cout << query << endl;
+					cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 						file_writer->Write(query);

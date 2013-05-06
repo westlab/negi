@@ -24,7 +24,7 @@ void Proc::Init(){
 }
 
 void Proc::InitManager(){
-	// lock shem 
+	// lock shem
 	// initialize shem
 	// read config
 	// unlock shem

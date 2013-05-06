@@ -10,7 +10,8 @@
  * $Id: Gzip.C,v 5.7 2011-11-18 04:36:19 sin Exp $
  * Note: This is small inputbuffer  stream test!
 */
-
+//Here is bug
+////giwa
 #include "Include.H"
 #include "Gzip.H"
 #include "Global.H"
