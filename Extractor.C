@@ -41,17 +41,6 @@ void Extractor::Proc(Packet *pkt){
 				string dst_ip =inet_ntoa(pkt->GetDstIP());
 
 
-//timestamp
-				struct timeval tmp_time = pkt->GetStream()->GetTimestamp();
-				struct tm *tmp = localtime(&tmp_time.tv_sec);
-				ostringstream oss;
-				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
-				string tstamp = oss.str();
-
-				string src_ip =inet_ntoa(pkt->GetSrcIP());
-				string dst_ip =inet_ntoa(pkt->GetDstIP());
-
-
 /*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
 				cerr << "packet of place < 0!!" <<endl;
 
@@ -177,7 +166,7 @@ void Extractor::Proc(Packet *pkt){
 
 #ifdef USE_POSTGRES
 					query += "','"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
-					cout << query << endl;
+//					cout << query << endl;
 
 #else
 					char * temp = (char *)malloc(sizeof(char)* 100);
