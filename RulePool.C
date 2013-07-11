@@ -41,6 +41,10 @@ void RulePool::Clear(){
 	rule_pool.clear();
 }
 
+void RulePool::DeleteLastRule(){
+	rule_pool.pop_back();
+}
+
 
 void RulePool::AddRule(int _id, string _owner, string _timestamp, string _src_ip, string _src_netmask, int _src_port, string _dst_ip, string _dst_netmask, int _dst_port, string _regexp, string _prefilter_pattern, int _prefilter_offset, int _prefilter_depth, int _save_flag){
 	

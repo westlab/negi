@@ -143,7 +143,11 @@ void Extractor::Proc(Packet *pkt){
 				cout << "Destination IP,port: " << inet_ntoa(pkt->GetDstIP()) << "," <<pkt->GetDstPort()<< endl;
 				cout << "ResultString: ";
 				RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
+#ifdef USE_POSTGRES
 				YELLOW cout << escape_binary((*it)->GetResultString(), (*it)->GetResultSize()) << endl; RESET
+#else
+				YELLOW cout << (*it)->GetResultString()  << endl; RESET
+#endif
 				cout << (*it)->GetResultString() << endl;
 				if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
 					URED cout << "VIRUS DETECTED!! Shut out :"<< inet_ntoa(pkt->GetSrcIP()) << endl; RESET

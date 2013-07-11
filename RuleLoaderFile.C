@@ -42,6 +42,7 @@ int RuleLoaderFile::Proc(){
 		rule_pool->AddRule(id, rule);
 	
 	}
+	rule_pool->DeleteLastRule();
 	stream_id_prev = 0;
 
 	
