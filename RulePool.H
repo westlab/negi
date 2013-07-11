@@ -28,4 +28,5 @@ class RulePool{
 		list<Rule*>::iterator GetRuleLastIt();
 		void ShowRules();
 		void ShowResult();
+		void DeleteLastRule();
 };
