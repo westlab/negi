@@ -2,6 +2,7 @@ config/
 pcap/
 script/
 *.o
+*.pcap
 negi
 output.txt
 makefile.depend
