@@ -14,7 +14,7 @@
 #pragma once
 
 #define SAVE_MAX_SIZE 102400 	//100KB
-#define RESULT_SIZE 50
+#define RESULT_SIZE 100
 //#define MAX_QUEUE_SIZE 625000	//1GB
 //#define MAX_QUEUE_SIZE 6250	//10MB
 #define MAX_QUEUE_SIZE 100	//1GB

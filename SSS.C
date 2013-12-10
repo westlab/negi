@@ -38,4 +38,6 @@ void *thread_sss(void *)
     pthread_mutex_unlock(&sss_cond_mut);
   }
   //	config->show();
+
+	return (void *)0;
 }
