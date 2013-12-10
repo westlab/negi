@@ -20,6 +20,7 @@ Extractor::Extractor(){
 }
 
 
+
 void Extractor::Proc(Packet *pkt){
 //	pkt->GetStream()->GetResultIt();
 
