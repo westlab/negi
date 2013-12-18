@@ -30,6 +30,7 @@ MatchPreFilter::MatchPreFilter(){
 	for (int i=0; i<MAXS; i++){
 		out[i] = new int[MAXN];
 	}
+	initAhoMachine();
 	buildAhoMachine();
 	return;
 }
@@ -46,106 +47,110 @@ MatchPreFilter::~MatchPreFilter(){
 	return;
 }
 
+void MatchPreFilter::initAhoMachine(){
+	for(int i=0; i<MAXS; i++){
+		for(int k=0; k<MAXN; k++){
+			out[i][k] = 0;
+		}
+		for(int j=0; j<MAXC; j++){
+			g[i][j] = -1;
+		}
+	}
+}
+
 void MatchPreFilter::buildAhoMachine(){
-		int *f;
-		f = new int[MAXS];
-		
+	int *f;
+	f = new int[MAXS];
+	
+	for(int i=0; i<MAXS; i++){
+		f[i] = -1;
+	}
 
-		for(int i=0; i<MAXS; i++){
-			//out[i] = 0;
-			f[i] = -1;
-			for(int k=0; k<MAXN; k++){
-				out[i][k] = 0;
+	int states = 1; //root node's state is 0
+	int index = 0;
+	int currentState;
+	connection *conn = pgsql->GetConn();
+	work T(*conn);
+	result *pattern_list;
+	pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
+	//T.commit();
+
+	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
+		string keyword = it[0].as( string() );
+		cout << "pattern = " << it[0].as( string() ) << endl;
+		currentState = 0;
+		for (unsigned int j = 0; j < keyword.size(); j++) {
+			int c = keyword[j];
+			if (g[currentState][c] == -1) { // Allocate a new node
+				g[currentState][c] = states++;
 			}
-			for(int j=0; j<MAXC; j++){
-				g[i][j] = -1;
-			}
+			currentState = g[currentState][c];
 		}
-		
-		int states = 1; //root node's state is 0
-		int index = 0;
-		int currentState;
-		connection *conn = pgsql->GetConn();
-		work T(*conn);
-		result *pattern_list;
-		pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
-		//T.commit();
+		out[currentState][0] = index + 1;
+		index++;
+	}
 
-		for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
-			string keyword = it[0].as( string() );
-			cout << "pattern = " << it[0].as( string() ) << endl;
-			currentState = 0;
-			for (unsigned int j = 0; j < keyword.size(); j++) {
-				int c = keyword[j];
-				if (g[currentState][c] == -1) { // Allocate a new node
-					g[currentState][c] = states++;
-				}
-				currentState = g[currentState][c];
-			}
-			out[currentState][0] = index + 1;
-			index++;
+	int StateNum = states - 1;
+	//State 0 should have an outgoing edge for all characters.
+	for (int c = 0; c < MAXC; ++c) {
+		if (g[0][c] == -1) {
+			g[0][c] = 0;
 		}
+	}
 
-		int MaxState = states - 1;
-		//State 0 should have an outgoing edge for all characters.
-		for (int c = 0; c < MAXC; ++c) {
-			if (g[0][c] == -1) {
-				g[0][c] = 0;
-			}
+	//build the failure function
+	queue<int> q;
+	for (int c=0; c<MAXC; ++c) {
+		if (g[0][c] != 0) {
+			f[g[0][c]] = 0;//failure transition must go state0 at state of depth1
+			q.push(g[0][c]);
 		}
-
-		//build the failure function
-		queue<int> q;
+	}
+	while (q.size()) {
+		int state = q.front();
+		q.pop();
 		for (int c=0; c<MAXC; ++c) {
-			if (g[0][c] != 0) {
-				f[g[0][c]] = 0;//failure transition must go state0 at state of depth1
-				q.push(g[0][c]);
-			}
-		}
-		while (q.size()) {
-			int state = q.front();
-			q.pop();
-			for (int c=0; c<MAXC; ++c) {
-				if (g[state][c] != -1) {
-					int failure = f[state];
-					while (g[failure][c] == -1) {
-						failure = f[failure];
-					}
-					failure = g[failure][c];
-					f[g[state][c]] = failure;
-					for(int i=0; (i<MAXN && out[failure][i]>0); i++){//Merge all output
-						for(int j=0; j<MAXN; j++){
-							if(out[g[state][c]][j] == 0){
-								out[g[state][c]][j] = out[failure][i];
-								break;
-							}
+			if (g[state][c] != -1) {
+				int failure = f[state];
+				while (g[failure][c] == -1) {
+					failure = f[failure];
+				}
+				failure = g[failure][c];
+				f[g[state][c]] = failure;
+				for(int i=0; (i<MAXN && out[failure][i]>0); i++){//Merge all output
+					for(int j=0; j<MAXN; j++){
+						if(out[g[state][c]][j] == 0){
+							out[g[state][c]][j] = out[failure][i];
+							break;
 						}
 					}
-					q.push(g[state][c]);
 				}
+				q.push(g[state][c]);
 			}
 		}
-		//make failure function into goto function
-		for(int i=0; i<MaxState; i++){
-			for(int j=0; j<MAXC; j++){
-				int k = i;
-				int c = j;
-				while(g[k][c] == -1){
-					k = f[k];
-				}
-				g[i][j] = g[k][c];
+	}
+	//make failure function into goto function
+	for(int i=0; i<=StateNum; i++){
+		for(int j=0; j<MAXC; j++){
+			int k = i;
+			int c = j;
+			while(g[k][c] == -1){
+				k = f[k];
+			}
+			g[i][j] = g[k][c];
+		}
+	}
+	//for escape segmentation fault
+	for(int i=0; i<=StateNum; i++){
+		for(int j=0;j<MAXC; j++){
+			if(g[i][j] == -1){
+				g[i][j] = 0;
 			}
 		}
-		//for escape segmentation fault
-		for(int i=0; i<MAXS; i++){
-			for(int j=0;j<MAXC; j++){
-				if(g[i][j] == -1){
-					g[i][j] = 0;
-				}
-			}
-		}
+	}
 
-		delete [] f;
+	delete [] f;
+
 }
 
 int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end){
