@@ -64,11 +64,16 @@ class MatchPreFilter{
 		int **out;
 		int **g;
 		u_char& GetText(int i, u_char *p_content, MatchPreFilterState *state);
+		
+		/*
 		int AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
 		int Slide(int mode, int j, int i, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
 		int BoyerMoore(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end, Rule *rule);
+		*/
+
 		MatchPreFilterState * MakeMatchPreFilterState(Stream *stream);
 		char buffer[BUFF_SIZE];
+		
 		void initAhoMachine();
 		void buildAhoMachine();
 		int AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end);
