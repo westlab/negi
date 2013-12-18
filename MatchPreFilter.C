@@ -69,6 +69,7 @@ void MatchPreFilter::buildAhoMachine(){
 	int states = 1; //root node's state is 0
 	int index = 0;
 	int currentState;
+	
 	connection *conn = pgsql->GetConn();
 	work T(*conn);
 	result *pattern_list;
@@ -259,7 +260,7 @@ u_char& MatchPreFilter::GetText(int i, u_char *p_content, MatchPreFilterState *s
 	else{return state->temp_buf[state->max_prefilter_pattern_size + i];}
 }
 
-
+/*
 int MatchPreFilter::AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content){
 	int result;
 	if(mode == HORS){
@@ -374,22 +375,22 @@ int MatchPreFilter::BoyerMoore(int mode, int start_flag, MatchPreFilterState *st
 //MSG(mode<<": j="<< j <<", AfterMatch"<<AfterMatch(mode, j, match_pre_filter_info, p_content))
 #else
 
-/*
-cout << "==============================================BEGIN"<< endl;
-for(list<PapaResult*>::iterator it = packet->GetStream()->GetPapaResultListFirstIt(); it != packet->GetStream()->GetPapaResultListLastIt(); it++){
-	cout << "this is result!!--------------------" << endl;
-	cout << "Stream id: "<< packet->GetStream() << endl;
-	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
-	cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-	cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-	cout << "Stream Size: " << packet->GetStream()->GetL7RetrievedContentSize() << endl;
-	cout << "Packet Size: " << packet->GetL7ContentSize() << endl;
-	cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-	cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-	cout << "Flag: " << (*it)->GetFinished() << endl;
-}
-cout << "==============================================END"<< endl;
-*/
+
+//cout << "==============================================BEGIN"<< endl;
+//for(list<PapaResult*>::iterator it = packet->GetStream()->GetPapaResultListFirstIt(); it != packet->GetStream()->GetPapaResultListLastIt(); it++){
+//	cout << "this is result!!--------------------" << endl;
+//	cout << "Stream id: "<< packet->GetStream() << endl;
+//	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
+//	cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
+//	cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
+//	cout << "Stream Size: " << packet->GetStream()->GetL7RetrievedContentSize() << endl;
+//	cout << "Packet Size: " << packet->GetL7ContentSize() << endl;
+//	cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
+//	cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
+//	cout << "Flag: " << (*it)->GetFinished() << endl;
+//}
+//cout << "==============================================END"<< endl;
+
 
 			return 1;
 #endif
@@ -401,7 +402,7 @@ cout << "==============================================END"<< endl;
 	}
 	return 0;
 }
-
+*/
 
 MatchPreFilterState * MatchPreFilter::MakeMatchPreFilterState(Stream *stream){
 	MatchPreFilterState *state = new MatchPreFilterState(stream);
