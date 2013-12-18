@@ -69,6 +69,7 @@ class MatchPreFilter{
 		int BoyerMoore(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end, Rule *rule);
 		MatchPreFilterState * MakeMatchPreFilterState(Stream *stream);
 		char buffer[BUFF_SIZE];
+		void initAhoMachine();
 		void buildAhoMachine();
 		int AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end);
 	public:
