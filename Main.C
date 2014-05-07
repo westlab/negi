@@ -44,7 +44,7 @@ if(argc != 2){
 	stream_rebuild = new StreamRebuild;
 	ip_filter = new IpFilter;
 	http_decoder = new HttpDecoder;
-	match_pre_filter = new MatchPreFilter;
+//	match_pre_filter = new MatchPreFilter;
 	extractor = new Extractor;
 	stream_pool = new StreamPool;
 	tcp_conn_pool = new TcpConnPool;
@@ -59,12 +59,15 @@ if(argc != 2){
 	rule_loader_pgsql = new RuleLoaderPgsql;
 
 	pgsql->Connect(config->get("dbname"),config->get("dbuser"),config->get("dbhost"),config->get("dbpass"));
+
 	rule_loader_pgsql->Proc();
 #else
 	rule_loader_file = new RuleLoaderFile;
 	rule_loader_file->Proc();
 #endif
 
+
+	match_pre_filter = new MatchPreFilter;//bashowakaranaiyo-
 	rule_pool->ShowRules();
 
 	//Create threads
