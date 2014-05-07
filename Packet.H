@@ -108,6 +108,8 @@ class Packet
 		bool GetPsh(){return psh;}
 		bool GetRst(){return rst;}
 
+		int ExFlag(){return (fin || syn || urg || psh || rst);}
+
 		list<Packet*>::iterator GetPacketPoolIt(){return packet_pool_it;}
 		void SetPacketPoolIt(list<Packet*>::iterator it){packet_pool_it = it;}
 		list<Packet*>::iterator GetStreamIt(){return stream_packet_list_it;}

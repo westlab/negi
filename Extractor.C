@@ -26,7 +26,8 @@ void Extractor::Proc(Packet *pkt){
 
 	if(pkt->GetStream() != 0){
 		int end_flag = 0;//if this packet is the end of stream, end_flag is 1
-		if(pkt->GetFin() || pkt->GetPsh()){
+		//if(pkt->GetFin() || pkt->GetPsh()){
+		if(pkt->ExFlag()){
 			end_flag = 1;
 		}
 		for(list<PapaResult*>::iterator it = pkt->GetStream()->GetPapaResultListFirstIt(); it != pkt->GetStream()->GetPapaResultListLastIt();){
