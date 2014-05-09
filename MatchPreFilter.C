@@ -78,7 +78,6 @@ void MatchPreFilter::buildAhoMachine(){
 
 	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
 		string keyword = it[0].as( string() );
-		cout << "pattern = " << it[0].as( string() ) << endl;
 		currentState = 0;
 		for (unsigned int j = 0; j < keyword.size(); j++) {
 			int c = keyword[j];
