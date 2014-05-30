@@ -55,8 +55,8 @@ void Master::Proc(Packet *pkt){
 	if(observer_packet_counter > 1000){
 		now_time = time(NULL);
 		if(now_time > prev_time){
-			cout << now_time - start_time << "	" ;
-			observer->ShowMem(pkt->GetTimestamp()); 
+//			cout << now_time - start_time << "	" ;
+//			observer->ShowMem(pkt->GetTimestamp()); 
 	//		MSG("Packet Count: " << all_packet_counter);
 			observer_packet_counter = 0;
 			prev_time = now_time;
