@@ -67,7 +67,7 @@ if(argc != 2){
 #endif
 
 
-	match_pre_filter = new MatchPreFilter;//bashowakaranaiyo-
+	match_pre_filter = new MatchPreFilter;
 	rule_pool->ShowRules();
 
 	//Create threads

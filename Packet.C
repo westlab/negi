@@ -33,6 +33,27 @@ Packet::Packet(PacketCnt *pcnt){
 	dst_ip = ip_header->ip_dst;
 	protocol = ip_header->ip_p;
 
+///*
+	eth_header = (struct ether_header *) packet;
+	stringstream ss;
+	ss.str("");
+	ss.clear(stringstream::goodbit);
+	for(int i = 0; i < 5; i++){
+		ss << hex << setw(2) << setfill('0') <<  (int)eth_header->ether_shost[i] << ":";
+	}
+	ss << hex << setw(2) << setfill('0') << (int)eth_header->ether_shost[5];
+	src_mac_addr = ss.str();
+
+	ss.str("");
+	ss.clear(stringstream::goodbit);
+	for(int i = 0; i < 5; i++){
+		ss << hex << setw(2) << setfill('0') <<  (int)eth_header->ether_dhost[i] << ":";
+	}
+	ss << hex << setw(2) << setfill('0') << (int)eth_header->ether_dhost[5];
+	dst_mac_addr = ss.str();
+//*/
+
+
 	l3_header_size = ip_header->ip_hl*4;
 
 	l4_header = l3_header + ip_header->ip_hl*4; //TCP/UDP header
