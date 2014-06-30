@@ -182,7 +182,7 @@ void Extractor::Proc(Packet *pkt){
 					<< tstamp << "','" << src_ip << "','" << dst_ip << "','" \
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort() << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
 
-				string query = oss.str();
+					string query = oss.str();
 
 #ifdef USE_POSTGRES
 					query += "','"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
