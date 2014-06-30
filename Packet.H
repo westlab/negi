@@ -52,6 +52,10 @@ class Packet
 
 		struct timeval	timestamp;		// Packet reached timestamp(returnd by libpcap)
 
+		struct ether_header* eth_header;
+		string src_mac_addr;
+		string dst_mac_addr;
+
 		unsigned int protocol;			// Transport Protocol(ex: TCP:6)
 		bool ack;						// TCP ACK flag
 		bool fin;						// TCP FIN flag
@@ -99,6 +103,9 @@ class Packet
 		void SetL7ContentSize(unsigned int size);
 		u_int GetL7ContentSize(){return l7_content_size;}
 		struct timeval GetTimestamp();
+
+		string GetSrcMacAddr(){return src_mac_addr;}
+		string GetDstMacAddr(){return dst_mac_addr;}
 
 		u_int GetProtocol(){return protocol;}
 		bool GetAck(){return ack;}
