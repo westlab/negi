@@ -200,12 +200,14 @@ CREATE TABLE save_result (
     pattern text,
     pattern_len integer,
     place integer,
-    result bytea,
+    result text,
     "timestamp" timestamp without time zone,
     src_ip text,
     dst_ip text,
     src_port integer,
-    dst_port integer
+    dst_port integer,
+    src_mac_addr text,
+    dst_mac_addr text
 );
 
 
@@ -301,9 +303,12 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 
 COPY rule (id, owner, expire_date, src_ip, src_netmask, src_port, dst_ip, dst_netmask, dst_port, "timestamp", regexp, prefilter_pattern, prefilter_offset, prefilter_depth, save_flag) FROM stdin;
-478	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	html	0	0	1
-481	hoge	2011-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	<a 	0	0	1
-500	sin	2012-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	VIRUS 	0	0	1
+1	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	GET	0	0	1
+2	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	Host:	0	0	1
+3	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	Referer:	0	0	1
+4	hoge	2011-01-11	\N	\N	\N	\N	\N	\N	2011-01-11 14:40:36.136482	\N	Cookie:	0	0	1
+5	hoge	2011-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	Set-Cookie: 	0	0	1
+6	hoge	2011-09-11	\N	\N	\N	\N	\N	\N	2011-09-11 21:36:39.451221	\N	<title 	0	0	1
 \.
 
 

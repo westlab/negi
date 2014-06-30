@@ -171,14 +171,16 @@ void Extractor::Proc(Packet *pkt){
 					cout << "------------------------------------" << endl;
 //*/
 
+					GREEN cout << "MAC Addr:" << pkt->GetDstMacAddr() << endl; RESET
+
 					ostringstream oss;
 					oss.str("");
 
-					oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port ,result) values "\
+						oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
 					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
 					<< tstamp << "','" << src_ip << "','" << dst_ip << "','" \
-					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort();
+					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort() << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
 
 					string query = oss.str();
 
@@ -195,6 +197,7 @@ void Extractor::Proc(Packet *pkt){
 					query += "');";
 					free(temp);
 #endif
+
 					cout << query << endl;
 
 	#ifdef FILEWRITE_MODE
@@ -217,7 +220,6 @@ void Extractor::Proc(Packet *pkt){
 					catch(...){
 						cerr << "unhandled exception" << endl;
 					}
-
 #endif	//POSTGRES_MODE
 #endif	//USE_POSTGRES
 					oss.str("");
