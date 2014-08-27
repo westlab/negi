@@ -69,9 +69,30 @@ void MatchPreFilter::buildAhoMachine(){
 	int states = 1; //root node's state is 0
 	int index = 0;
 	int currentState;
-	
-	for( list<Rule*>::iterator it = rule_pool->GetRuleFirstIt(); it != rule_pool->GetRuleLastIt(); it++ ){
-		string keyword = (*it)->GetPreFilterPattern();
+
+    /*
+	connection *conn = pgsql->GetConn();
+	work T(*conn);
+	result *pattern_list;
+	pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
+	//T.commit();
+*/
+    for(list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt(); rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
+		string keyword = (*rule_it)->GetPreFilterPattern();
+		currentState = 0;
+		for (unsigned int j = 0; j < keyword.size(); j++) {
+			int c = keyword[j];
+			if (g[currentState][c] == -1) { // Allocate a new node
+				g[currentState][c] = states++;
+			}
+			currentState = g[currentState][c];
+		}
+		out[currentState][0] = index + 1;
+		index++;
+    }
+/*
+	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
+		string keyword = it[0].as( string() );
 		currentState = 0;
 		for (unsigned int j = 0; j < keyword.size(); j++) {
 			int c = keyword[j];
@@ -83,7 +104,7 @@ void MatchPreFilter::buildAhoMachine(){
 		out[currentState][0] = index + 1;
 		index++;
 	}
-
+*/
 	int StateNum = states - 1;
 	//State 0 should have an outgoing edge for all characters.
 	for (int c = 0; c < MAXC; ++c) {
