@@ -51,6 +51,7 @@ void Master::Proc(Packet *pkt){
 
 	static time_t prev_time;
 	static time_t now_time;
+	static unsigned int time_counter;
 
 	if(observer_packet_counter > 1000){
 		now_time = time(NULL);
@@ -60,6 +61,13 @@ void Master::Proc(Packet *pkt){
 	//		MSG("Packet Count: " << all_packet_counter);
 			observer_packet_counter = 0;
 			prev_time = now_time;
+			time_counter++;
+		}
+		if(time_counter >10){
+			if(rule_loader_pgsql->UpdateCheck()){
+				rule_loader_pgsql->Proc();
+			}
+			time_counter = 0;
 		}
 	}else{
 		observer_packet_counter++;

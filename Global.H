@@ -100,8 +100,10 @@ extern FileWriter *file_writer;
 extern void packetcap();
 extern void pcap_signal();
 
-
 extern pthread_mutex_t sss_cond_mut;
 extern pthread_cond_t sss_cond;
 extern Packet* sss_send_value;
+
+extern void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6);
+extern void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4);
 

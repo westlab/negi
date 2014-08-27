@@ -17,9 +17,9 @@ CC=g++
 #OPT=-Wall -O9
 #OPT=-Wall -g -ggdb -pg -O9 -fno-inline
 #OPT=-Wall -m32
-#OPT=-Wall -g -ggdb -O0 -fno-inline
+OPT=-Wall -g -ggdb -O0 -fno-inline
 #OPT=-Wall -g -ggdb -pg -fpermissive -Wunused-but-set-variable
-OPT=-Wall -g
+#OPT=-Wall -g
 INC=
 #LIB=-lpqxx -lpcap -pthread -lboost_thread -lz
 LIB=-lpqxx -lpcap -lz
@@ -76,7 +76,7 @@ tar:
 	tar cvzf $(TARGET).tar.gz *.cc *.h makefile
 
 trunc:
-	psql -h localhost -Utest yourDBname -c "truncate table save_stream; truncate table save_result; select setval('save_result_id_seq',1);select setval('save_data_id_seq',1);"
+	psql -h localhost -Uyourname yourDBname -c "truncate table save_stream; truncate table save_result; truncate table save_history; select setval('save_result_id_seq',1);select setval('save_data_id_seq',1);"
 
 debug:
 	make trunc

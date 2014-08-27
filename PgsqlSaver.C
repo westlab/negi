@@ -25,10 +25,6 @@ PgsqlSaver::PgsqlSaver(){
 
 void PgsqlSaver::Proc(Stream * stream){
 
-	string src_ip_str, dst_ip_str;
-	src_ip_str = inet_ntoa(stream->GetSrcIP());
-	dst_ip_str = inet_ntoa(stream->GetDstIP());
-
 	//add
 	struct timeval tmp_time = stream->GetTimestamp();
 	struct tm *tmp = localtime(&tmp_time.tv_sec);
@@ -51,7 +47,7 @@ void PgsqlSaver::Proc(Stream * stream){
 	<<"match_str, stream, stream_org, "
 	<<"after_ipfilter, after_prefilter, prefilter_log"
 	<<") values ('"
-	<< stream->GetStreamId() << "','2.2','"<<src_ip_str<<"','"<<dst_ip_str<<"','"<<stream->GetSrcPort()<<"','"<<stream->GetDstPort()<<"','"<<tstamp<<"','"
+	<< stream->GetStreamId() << "','2.2','"<<stream->GetSrcIPStr()<<"','"<<stream->GetDstIPStr()<<"','"<<stream->GetSrcPort()<<"','"<<stream->GetDstPort()<<"','"<<tstamp<<"','"
 	<< stream->GetDirection() <<"','"<< stream->GetTruncated() <<"','"<< stream->GetRuleIds() <<"','"
 //	<< stream->GetDirection() <<"','"<< stream->GetTruncated() <<"','""','"
 	<< stream->GetStreamSize() <<"','"<<  stream->GetOrgStreamSize() <<"','"
@@ -101,8 +97,8 @@ void PgsqlSaver::Proc(Stream * stream){
 	connection *conn = pgsql->GetConn();
 	work T(*conn);
 	try{
-		T.exec(query);
-		T.commit();
+//		T.exec(query);
+//		T.commit();
 	}
 	catch(const exception &e){
 		cerr << e.what() << endl;
@@ -117,9 +113,6 @@ void PgsqlSaver::Proc(Stream * stream){
 }
 
 void PgsqlSaver::ProcPacket(Packet * pkt){
-	string src_ip_str, dst_ip_str;
-	src_ip_str = inet_ntoa(pkt->GetSrcIP());
-	dst_ip_str = inet_ntoa(pkt->GetDstIP());
 
 	ostringstream oss;
 
@@ -138,7 +131,7 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 	oss.str("");
 	oss << "insert into save_packet (id , src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
 	protocol, packet_size, packet_size_org, content_size, flag, content) values (\
-	default,'"<< src_ip_str <<"','"<<dst_ip_str <<"','"<< pkt->GetSrcPort() <<"','"\
+	default,'"<< pkt->GetSrcIPStr() <<"','"<<pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"\
 	<<pkt->GetDstPort() <<"','"<< tstamp <<"','"<<pkt->GetProtocol()<<"','"<< pkt->GetPacketSize() <<"','"<< pkt->GetPacketSizeOrg() <<"','"\
 	<< pkt->GetContentSize();
 	string query = oss.str();

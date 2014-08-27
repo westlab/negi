@@ -68,7 +68,7 @@ class Stream
 		TcpConn *tcp_conn;						// pointer to tcp connection that stream belong to
 		unsigned int stream_id;					// (temporally used) stream id number
 		struct timeval timestamp;				// first stream packet reach time.
-		struct in_addr src_ip, dst_ip;			// Source IP, Destination IP
+		struct in6_addr src_ip, dst_ip;			// Source IP, Destination IP
 		u_int src_port,dst_port;				// Source Port, Destination Port
 		Direction direction;					// transport direction(S2C: server->client, C2S: client-> server)
 		unsigned int last_seq_no;				// last reached packet's sequence number(for packet drop detection)
@@ -76,8 +76,8 @@ class Stream
 		bool disorder_flag;						// packet disorder flag(internally used only)
 		bool truncated;							// not used.
 		string error;							// error messages
-		string src_ip_str;						// Source IP in string type(for display only)
-		string dst_ip_str;						// Destination IP in string type(for display only)
+		char src_ip_str[INET6_ADDRSTRLEN];
+		char dst_ip_str[INET6_ADDRSTRLEN]; 		
 		State state;							// status of TCP stream(START,CONTINUE,FINISHED)
 
 		list<Packet*> packet_list;				// list of *packet belong to this stream
@@ -133,10 +133,10 @@ class Stream
 		unsigned int GetL7RetrievedContentSize(){return l7_retrieved_content_size;}
 		void SetL7RetrievedContentSize(u_int size){l7_retrieved_content_size = size;}
 		struct timeval GetTimestamp(){ return timestamp;}
-		struct in_addr GetSrcIP(){return src_ip;}
-		struct in_addr GetDstIP(){return dst_ip;}
-		string GetSrcIPStr(){return src_ip_str;}
-		string GetDstIPStr(){return dst_ip_str;}
+		struct in6_addr GetSrcIP(){return src_ip;}
+		struct in6_addr GetDstIP(){return dst_ip;}
+		char* GetSrcIPStr(){return src_ip_str;}
+		char* GetDstIPStr(){return dst_ip_str;}
 		unsigned int GetSrcPort(){return src_port;}
 		unsigned int GetDstPort(){return dst_port;}
 		unsigned int GetLastSeqNo(){return last_seq_no;}
