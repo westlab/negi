@@ -70,14 +70,8 @@ void MatchPreFilter::buildAhoMachine(){
 	int index = 0;
 	int currentState;
 	
-	connection *conn = pgsql->GetConn();
-	work T(*conn);
-	result *pattern_list;
-	pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
-	T.commit();
-
-	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
-		string keyword = it[0].as( string() );
+	for( list<Rule*>::iterator it = rule_pool->GetRuleFirstIt(); it != rule_pool->GetRuleLastIt(); it++ ){
+		string keyword = (*it)->GetPreFilterPattern();
 		currentState = 0;
 		for (unsigned int j = 0; j < keyword.size(); j++) {
 			int c = keyword[j];
