@@ -22,7 +22,8 @@ CC=g++
 OPT=-Wall -g
 INC=
 #LIB=-lpqxx -lpcap -pthread -lboost_thread -lz
-LIB=-lpqxx -lpcap -lz
+LIB=-lpcap -lz
+#LIB=-lpqxx -lpcap -lz
 #LIB= -pthread -lpcap -lz
 
 #------------------------------------------------------

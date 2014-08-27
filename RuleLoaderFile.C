@@ -39,6 +39,7 @@ int RuleLoaderFile::Proc(){
 
 		is >> id >> rule;
 		cout << rule << endl;
+        cout << "Start add rule loop" << endl;
 		rule_pool->AddRule(id, rule);
 	
 	}
