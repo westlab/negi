@@ -74,7 +74,7 @@ void MatchPreFilter::buildAhoMachine(){
 	work T(*conn);
 	result *pattern_list;
 	pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
-	//T.commit();
+	T.commit();
 
 	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
 		string keyword = it[0].as( string() );
