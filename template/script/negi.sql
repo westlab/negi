@@ -301,30 +301,6 @@ SELECT pg_catalog.setval('config_id_seq', 3, true);
 --
 
 COPY error (id, error, "timestamp") FROM stdin;
-1	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-2	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-3	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-4	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-5	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-6	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-7	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-8	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-9	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-10	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-11	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-12	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-13	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-14	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-15	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-16	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-17	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-18	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-19	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-20	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-21	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-22	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-23	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
-24	regexp_syntax[0]: Empty expression	2009-05-28 21:38:22.943183
 \.
 
 
