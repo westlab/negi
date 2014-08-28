@@ -36,6 +36,7 @@
 #else
 #include "RuleLoaderFile.H"
 #endif
+#include "Sqlite.H"
 
 #include "PacketClean.H"
 #include "Observer.H"
@@ -89,6 +90,7 @@ extern Pgsql *pgsql;
 #else
 extern RuleLoaderFile *rule_loader_file;
 #endif
+extern Sqlite *sqlite;
 extern TcpConnPool *tcp_conn_pool;
 extern Master *master;
 extern PacketClean *packet_clean;

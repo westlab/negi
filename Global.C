@@ -57,6 +57,7 @@ RuleLoaderPgsql *rule_loader_pgsql;
 #else
 RuleLoaderFile *rule_loader_file;
 #endif
+Sqlite *sqlite;
 Master *master;
 TcpConnPool *tcp_conn_pool;
 PacketClean *packet_clean;
