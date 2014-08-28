@@ -64,6 +64,12 @@ if(argc != 2){
 #else
 	rule_loader_file = new RuleLoaderFile;
 	rule_loader_file->Proc();
+    sqlite = new Sqlite;
+    sqlite->Connect(config->get("dbname"));
+    if (config->get("sql_table") != 0){
+        sqlite->CreateTable();
+    }
+
 #endif
 
 
