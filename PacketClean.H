@@ -10,8 +10,8 @@
  * $Id: PacketClean.H,v 5.0 2010-10-13 08:47:16 sin Exp $
 */
 #pragma once
-#include "Packet.H"
 #include "Include.H"
+#include "Packet.H"
 
 class PacketClean
 {
