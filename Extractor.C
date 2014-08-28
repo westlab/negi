@@ -195,9 +195,12 @@ void Extractor::Proc(Packet *pkt){
 					memcpy(temp, (char *)((*it)->GetResultString()), 99);
 					temp[99] = '\0';
 					query += "','";
-					query += temp;
+                    string hit_result(temp);
+                    sqlite_dao->EscapeSingleQuote(hit_result);
+					query += hit_result;
 					query += "');";
 					free(temp);
+					cout << query << endl;
                     sqlite_dao->ExecBatchSql(query);
 #endif
 

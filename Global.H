@@ -28,6 +28,7 @@
 #include "Extractor.H"
 #include "ResultSaver.H"
 #include "ResultPool.H"
+#include "Util.H"
 
 #ifdef USE_POSTGRES
 #include "PgsqlSaver.H"
