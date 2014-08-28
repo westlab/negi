@@ -12,4 +12,4 @@ class SqliteSaver{
         SqliteSaver();
         void Proc(Stream * stream);
         void ProcPacket(Packet * pkt);
-}
+};

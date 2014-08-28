@@ -173,8 +173,10 @@ void Extractor::Proc(Packet *pkt){
 					ostringstream oss;
 					oss.str("");
 
-						oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
-					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
+					//<< "(default'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
+                   
+						oss << "insert into save_result(stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
+					<< "('" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
 					<< tstamp << "','" <<  pkt->GetSrcIPStr() << "','" <<  pkt->GetDstIPStr() << "','" \
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort() << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
@@ -193,11 +195,12 @@ void Extractor::Proc(Packet *pkt){
 					query += temp;
 					query += "');";
 					free(temp);
+                    sqlite_dao->ExecBatchSql(query);
 #endif
 
 //					cout << query << endl;
 
-	#ifdef FILEWRITE_MODE
+#ifdef FILEWRITE_MODE
 					file_writer->Write(query);
 #endif
 

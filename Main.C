@@ -64,11 +64,10 @@ if(argc != 2){
 #else
 	rule_loader_file = new RuleLoaderFile;
 	rule_loader_file->Proc();
-    sqlite = new Sqlite;
-    sqlite->Connect(config->get("dbname"));
-    if (config->get("sql_table") != 0){
-        sqlite->CreateTable();
-    }
+    sqlite_dao = new SqliteDao;
+    sqlite_dao->Connect(config->get("dbname"));
+    sqlite_dao->CreateTableFromFile(config->get("sql_table"));
+    sqlite_saver = new SqliteSaver;
 
 #endif
 
@@ -97,5 +96,3 @@ if(argc != 2){
 
     return 0;
 }
-
- 

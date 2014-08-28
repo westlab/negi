@@ -92,10 +92,12 @@ void Master::Proc(Packet *pkt){
 #ifdef USE_POSTGRES
 				pgsql_saver->Proc(*it);
 #endif
+                sqlite_saver->Proc(*it);
 			}else if(atoi(config->get("save_all").c_str())){
 #ifdef USE_POSTGRES
 				pgsql_saver->Proc(*it);
 #endif
+                sqlite_saver->Proc(*it);
 			}
 
 		}

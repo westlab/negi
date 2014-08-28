@@ -4,7 +4,7 @@
 
 #ifdef USE_SQLITE
 
-SqliteSaver::SqliteSaer(){
+SqliteSaver::SqliteSaver(){
     return;
 }
 
@@ -49,10 +49,12 @@ void SqliteSaver::Proc(Stream * stream){
 
 	//match_str
 	//query += "',E'"+T.esc_raw(stream->GetMatchString())+"'";
-	query += "',E'"+escape_binary(stream->GetMatchString())+"'";
+	//query += "',E'"+escape_binary(stream->GetMatchString())+"'";
+    //string match_string((char*) stream->GetMatchString());
+	query += "','"+stream->GetMatchString()+"'";
 	//stream
 	if(!no_stream_save){
-		query += ",E'";
+		query += ",'";
 //		for(list<Packet*>::iterator it = stream->GetPacketFirstIt(); it != stream->GetPacketLastIt(); it++){
 //			query += T.esc_raw((*it)->GetContent(), (*it)->GetContentSize());
 //		}
@@ -78,12 +80,14 @@ void SqliteSaver::Proc(Stream * stream){
 	}
 
 	query += ");";
+    cout << "save stream" << endl;
+    cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 		file_writer->Write(query);
 #endif
 #ifdef SQLITE_MODE
-    sqlite->ExecSql(query);
+    sqlite_dao->ExecSql(query);
 #endif
 	oss.str("");
 
@@ -111,9 +115,9 @@ void SqliteSaver::ProcPacket(Packet * pkt){
 
 
 	oss.str("");
-	oss << "insert into save_packet (id , src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
+	oss << "insert into save_packet (src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
 	protocol, packet_size, packet_size_org, content_size, flag, content) values (\
-	default,'"<< src_ip_str <<"','"<<dst_ip_str <<"','"<< pkt->GetSrcPort() <<"','"\
+	,'"<< src_ip_str <<"','"<<dst_ip_str <<"','"<< pkt->GetSrcPort() <<"','"\
 	<<pkt->GetDstPort() <<"','"<< tstamp <<"','"<<pkt->GetProtocol()<<"','"<< pkt->GetPacketSize() <<"','"<< pkt->GetPacketSizeOrg() <<"','"\
 	<< pkt->GetContentSize();
 	string query = oss.str();
@@ -128,9 +132,13 @@ void SqliteSaver::ProcPacket(Packet * pkt){
 	}
 
 	//query += "',E'"+T.esc_raw(pkt->GetContent(), pkt->GetContentSize())+"');";
-	query += "',E'"+escape_binary(pkt->GetContent(), pkt->GetContentSize())+"');";
+	//query += "',E'"+escape_binary(pkt->GetContent(), pkt->GetContentSize())+"');";
+    string content((char*) pkt->GetContent());
+	query += "','"+content+"');";
+    cout << "save packet" << endl;
+    cout << query << endl;
 
-    sqlite->ExecSql(query);
+    sqlite_dao->ExecBatchSql(query);
 	oss.str("");
 
 	return;
