@@ -1,5 +1,6 @@
 #include "Include.H"
 #include "Global.H"
+#include "Util.H"
 
 #include "SqliteDao.H"
 
@@ -37,7 +38,7 @@ sqlite3_stmt* SqliteDao::ExecSql(const string &sql){
 
 // Execute write only sql
 void SqliteDao::ExecBatchSql(const string &sql, int limit){
-    sqlite3_stmt *statment;
+    sqlite3_stmt *statement;
     int status=0;
     // Compile SQL
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
@@ -53,12 +54,16 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
             break;
         }else if(status == SQLITE_BUSY){
             cout << "sqlite is busy" << endl;
+            cout << sqlite3_errmsg(conn_) << endl;
         }else if(status == SQLITE_ROW){
-            cout << "sql returns row. this Operator is supposed to be used read only operation" << endl;
+            cout << "sql returns row. this Operator is supposed to be used for read only operation" << endl;
         }else if(status == SQLITE_MISUSE){
             cout << "sql is used in wrong way" << endl;
+            cout << sqlite3_errmsg(conn_) << endl;
+            sleep(2);
         }else{
             cout << "sql returns unkown error" << endl;
+            cout << sqlite3_errmsg(conn_) << endl;
         }
         if (loop++>limit){
             cout << "sqlite execution loop reached max." << endl;
@@ -91,6 +96,10 @@ void SqliteDao::CreateTableFromFile(const string &file_path){
     while ((pos = sqls.find(delimiter)) != string::npos) {
         sql = sqls.substr(0, pos);
         sqls.erase(0, pos + delimiter.length());
-        ExecBatchSql(sql);
+        ExecBatchSql(sql, 2);
     }
+}
+
+void SqliteDao::EscapeSingleQuote(string &target){
+    find_and_replace(target, "'", "''");
 }
