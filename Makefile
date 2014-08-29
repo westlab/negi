@@ -22,7 +22,8 @@ OPT=-Wall -g -ggdb -O0 -fno-inline
 #OPT=-Wall -g
 INC=
 #LIB=-lpqxx -lpcap -pthread -lboost_thread -lz
-LIB=-lpqxx -lpcap -lz
+LIB=-lpcap -lz -lsqlite3
+#LIB=-lpqxx -lpcap -lz
 #LIB= -pthread -lpcap -lz
 
 #------------------------------------------------------

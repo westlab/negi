@@ -25,7 +25,9 @@
 //for MatchPreFilter
 #define STRING_MATCH_NUM 3
 
-#define USE_POSTGRES
+//#define USE_POSTGRES
+#define USE_SQLITE
+#define SQLITE_MODE
 #define POSTGRES_MODE
 //#define FILEWRITE_MODE
 #define DEBUG
