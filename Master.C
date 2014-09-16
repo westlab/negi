@@ -57,9 +57,6 @@ void Master::Proc(Packet *pkt){
 	if(observer_packet_counter > 1000){
 		now_time = time(NULL);
 		if(now_time > prev_time){
-//			cout << now_time - start_time << "	" ;
-//			observer->ShowMem(pkt->GetTimestamp()); 
-	//		MSG("Packet Count: " << all_packet_counter);
 			observer_packet_counter = 0;
 			prev_time = now_time;
 			time_counter++;
@@ -72,22 +69,8 @@ void Master::Proc(Packet *pkt){
 		}
 	}else{
 		observer_packet_counter++;
-//		all_packet_counter++;
 	}
 #endif
-//	river_gate->ProcPacket(pkt);
-	
-/*
-	if(pkt->GetProtocol() == IPPROTO_TCP && !(pkt->GetAck()) && (pkt->GetSyn() || pkt->GetFin())){
-		pthread_mutex_lock(&sss_cond_mut);
-		sss_send_value = new Packet(pkt->GetPacketContainer());
-		pthread_cond_signal(&sss_cond);
-		pthread_mutex_unlock(&sss_cond_mut);
-	//	pkt->Show();
-	}
-*/
-
-
 	if(!end_stream_list.empty()){
 		for(list<Stream *>::iterator it=end_stream_list.begin(); it != end_stream_list.end(); it++){
 			if((*it)->GetSaveFlag()){
@@ -104,7 +87,6 @@ void Master::Proc(Packet *pkt){
 
 		}
 	}
-//	pgsql_saver.ProcPacket(pkt);
 	packet_clean->Proc(pkt);
 //	MASTER_DEBUG(observer.Show());
 }

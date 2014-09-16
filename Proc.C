@@ -44,9 +44,6 @@ void Proc::InitManager(){
 	tcp_conn_pool = new TcpConnPool;
 	packet_clean = new PacketClean;
 	observer = new Observer;
-//	packet_queue = new PacketQueue;
-	//river_gate = new RiverGate;
-
 }
 
 void Proc::InitPacket(){
@@ -56,7 +53,3 @@ void Proc::InitPacket(){
 void Proc::InitMaster(){
 	//wait shem unlock
 }
-
-
-
-

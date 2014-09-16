@@ -44,7 +44,6 @@ if(argc != 2){
 	stream_rebuild = new StreamRebuild;
 	ip_filter = new IpFilter;
 	http_decoder = new HttpDecoder;
-//	match_pre_filter = new MatchPreFilter;
 	extractor = new Extractor;
 	stream_pool = new StreamPool;
 	tcp_conn_pool = new TcpConnPool;
@@ -57,9 +56,7 @@ if(argc != 2){
 	pgsql = new Pgsql;
 	pgsql_saver = new PgsqlSaver;
 	rule_loader_pgsql = new RuleLoaderPgsql;
-
 	pgsql->Connect(config->get("dbname"),config->get("dbuser"),config->get("dbhost"),config->get("dbpass"));
-
 	rule_loader_pgsql->Proc();
 #else
 	rule_loader_file = new RuleLoaderFile;
@@ -70,29 +67,10 @@ if(argc != 2){
     sqlite_saver = new SqliteSaver;
 
 #endif
-
-
 	match_pre_filter = new MatchPreFilter;
 	rule_pool->ShowRules();
 
-	//Create threads
-	//SSS thread
-/*
-	pthread_t thread_sss_t;
-	pthread_create(&thread_sss_t, NULL, thread_sss, NULL);
-	pthread_detach(thread_sss_t);
-	sleep(1);
-*/
-
-///*
 	packetcap();
-//*/
-
-/*
-	//Capture thread
-	pthread_t thread_cap;
-	status=pthread_create(&thread_cap, NULL, thread_packetcap, NULL);
-*/
 
     return 0;
 }
