@@ -289,8 +289,6 @@ void Packet::Show(){
 	cout << "[L4 Header size: " << l4_header_size << "] ";
 	cout << "[Contents: " << content_size << "] " << endl;
 
-
-
 	if(protocol == IPPROTO_TCP){
 		cout << "TcpFlag: " ;
 		if(ack) cout << "[ACK]";
@@ -301,18 +299,6 @@ void Packet::Show(){
 		if(rst) cout << "[RST]";
 		cout << endl; RESET
 		cout << "[Sequence No: " << seq_no << "] " << endl;
-
-
-/*
-		cout << "Content: ["; RESET
-//		for(u_int i=0; i <content_size ; i++){
-//			cout << *(content + i) ;
-//		}
-		for(u_int i=0; i <packet_size ; i++){
-			cout << *(packet + i) ;
-		}
-		YELLOW cout << "]" <<endl; RESET
-*/
 	}
 
 	return;

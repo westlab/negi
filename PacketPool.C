@@ -19,12 +19,6 @@ PacketPool::PacketPool(){
 }
 
 PacketPool::~PacketPool(){
-	//Clear all saved packet memory
-	/*
-	for(list<Packet*>::iterator it = ++packet_pool.begin(); it != packet_pool.end(); it++){
-		delete (*it);
-	}
-	*/
 	return;
 }
 Packet* PacketPool::AddPacket(Packet* pkt){
