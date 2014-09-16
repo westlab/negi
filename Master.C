@@ -11,7 +11,6 @@
 */
 #include "Master.H"
 #include "Global.H"
-#include "SSS.H"
 
 Master::Master(){
 
