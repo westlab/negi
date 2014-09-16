@@ -15,7 +15,6 @@
 #include "Test.H"
 #include "TestRule.H"
 #include "Observer.H"
-#include "SSS.H"
 
 #include <functional>
 #include <utility>
