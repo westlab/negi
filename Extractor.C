@@ -116,9 +116,7 @@ void Extractor::Proc(Packet *pkt){
 
 				if((*it)->GetFinished()){
 					//Lets save it to PGSQL
-	///
 					cout << "this is result!!--------------------" << endl;
-	//				pkt->Show();
 				//	cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
 				//	cout << "Stream p: "<< pkt->GetStream() << endl;
 				//	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
@@ -133,8 +131,6 @@ void Extractor::Proc(Packet *pkt){
 				//	cout << "Flag: " << (*it)->GetFinished() << endl;
 					if(pkt->GetStream()->GetHttpCompress()==2){
 					BLUE	cout << "HTTP Encode: " << "GZIP--------------" << endl;RESET
-	//					cout << pkt->GetL7Content() << endl;
-	//				BLUE	cout << "-------------------------------" << endl;RESET
 					}else{
 						cout << "HTTP Encode: " << "None" << endl;
 					}
@@ -149,12 +145,10 @@ void Extractor::Proc(Packet *pkt){
 	#else
 					YELLOW cout << (*it)->GetResultString()  << endl; RESET
 	#endif
-					//cout << (*it)->GetResultString() << endl;
 					if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
 						URED cout << "VIRUS DETECTED!! Shut out :"<< pkt->GetSrcIPStr() << endl; RESET
 						RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
 					}
-
 					cout << "------------------------------------" << endl;
 //*/
 
