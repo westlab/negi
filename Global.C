@@ -36,8 +36,6 @@ list<Stream *> end_stream_list;
 
 pcap_t *pcap_descriptor;
 
-//map<string,string> sql_config;
-
 SaveMode savemode;
 MallocMode mallocmode;
 
@@ -65,10 +63,8 @@ PacketClean *packet_clean;
 Observer *observer;
 Gzip *gzip;
 FileWriter *file_writer;
-
 ResultPool *result_pool;
 
-//RiverGate *river_gate;
 
 pthread_mutex_t sss_cond_mut = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t sss_cond =  PTHREAD_COND_INITIALIZER;

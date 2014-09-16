@@ -22,19 +22,15 @@ Extractor::Extractor(){
 
 
 void Extractor::Proc(Packet *pkt){
-//	pkt->GetStream()->GetResultIt();
 
 	if(pkt->GetStream() != 0){
 		int end_flag = 0;//if this packet is the end of stream, end_flag is 1
-		//if(pkt->GetFin() || pkt->GetPsh()){
 		if(pkt->ExFlag()){
 			end_flag = 1;
 		}
 		for(list<PapaResult*>::iterator it = pkt->GetStream()->GetPapaResultListFirstIt(); it != pkt->GetStream()->GetPapaResultListLastIt();){
 			int error_flag = 0;
 			if((*it)->GetPRule()->GetSaveFlag()){
-//				pkt->GetStream()->SetSaveFlag();
-				//u_int result_start_num = (*it)->GetPatLen() + (*it)->GetPlaceOfPacket();//for Boyer Moore?
 				u_int result_start_num = (*it)->GetPlaceOfPacket() + 1;//for Aho Corasick
 				u_int result_end_num = result_start_num + RESULT_SIZE;
 
@@ -44,12 +40,6 @@ void Extractor::Proc(Packet *pkt){
 				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
 				string tstamp = oss.str();
 
-
-/*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
-				cerr << "packet of place < 0!!" <<endl;
-
-				}else
-				*/
 				if((*it)->GetResultOffset() > 0){
 					//this means results crosses packets.
 
@@ -173,7 +163,6 @@ void Extractor::Proc(Packet *pkt){
 					ostringstream oss;
 					oss.str("");
 
-					//<< "(default'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
                    
 						oss << "insert into save_result(stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
 					<< "('" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
@@ -185,7 +174,6 @@ void Extractor::Proc(Packet *pkt){
 
 #ifdef USE_POSTGRES
 					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
-//					cout << query << endl;
 
 #else
 					char * temp = (char *)malloc(sizeof(char)* RESULT_SIZE);
@@ -201,7 +189,6 @@ void Extractor::Proc(Packet *pkt){
                     sqlite_dao->ExecBatchSql(query);
 #endif
 
-//					cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 					file_writer->Write(query);
