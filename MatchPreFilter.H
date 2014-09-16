@@ -16,6 +16,7 @@
 #include "Rule.H"
 class Stream;
 class Packet;
+class Rule;
 
 #ifdef MPF_DEBUG_EN
 #define MPF_DEBUG(x)  x ;

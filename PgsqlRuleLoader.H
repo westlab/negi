@@ -21,4 +21,5 @@ class PgsqlRuleLoader
 	public:
 		PgsqlRuleLoader();
 		int Proc();
+		int UpdateCheck();
 };

@@ -165,9 +165,6 @@ void Stream::Show(){
 }
 
 void Stream::ShowStreamInfo(){
-	string src_ip_str, dst_ip_str;
-	src_ip_str = inet_ntoa(src_ip);
-	dst_ip_str = inet_ntoa(dst_ip);
 	struct tm * tmp = localtime(&(timestamp.tv_sec));
 	YELLOW cout << "Date:"<<tmp->tm_year+1900<<"/"<< tmp->tm_mon+1<<"/"<<tmp->tm_mday<<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec<<" "<<timestamp.tv_usec <<endl;
 	cout << "IP: " << src_ip_str << ":" << src_port << " -> " << dst_ip_str << ":" << dst_port <<endl;
