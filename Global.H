@@ -28,6 +28,7 @@
 #include "Extractor.H"
 #include "ResultSaver.H"
 #include "ResultPool.H"
+#include "Util.H"
 
 #ifdef USE_POSTGRES
 #include "PgsqlSaver.H"
@@ -36,6 +37,8 @@
 #else
 #include "RuleLoaderFile.H"
 #endif
+#include "SqliteDao.H"
+#include "SqliteSaver.H"
 
 #include "PacketClean.H"
 #include "Observer.H"
@@ -89,6 +92,8 @@ extern Pgsql *pgsql;
 #else
 extern RuleLoaderFile *rule_loader_file;
 #endif
+extern SqliteDao *sqlite_dao;
+extern SqliteSaver *sqlite_saver;
 extern TcpConnPool *tcp_conn_pool;
 extern Master *master;
 extern PacketClean *packet_clean;
@@ -100,8 +105,10 @@ extern FileWriter *file_writer;
 extern void packetcap();
 extern void pcap_signal();
 
-
 extern pthread_mutex_t sss_cond_mut;
 extern pthread_cond_t sss_cond;
 extern Packet* sss_send_value;
+
+extern void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6);
+extern void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4);
 

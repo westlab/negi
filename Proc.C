@@ -33,7 +33,7 @@ void Proc::InitManager(){
 	rule_pool = new RulePool;
 	stream_rebuild = new StreamRebuild;
 	ip_filter = new IpFilter;
-	//match_pre_filter = new MatchPreFilter;
+	match_pre_filter = new MatchPreFilter;
 	extractor = new Extractor;
 	stream_pool = new StreamPool;
 #ifdef USE_POSTGRES
@@ -41,7 +41,6 @@ void Proc::InitManager(){
 	pgsql_saver = new PgsqlSaver;
 	rule_loader_pgsql = new RuleLoaderPgsql;
 #endif
-	match_pre_filter = new MatchPreFilter;
 	tcp_conn_pool = new TcpConnPool;
 	packet_clean = new PacketClean;
 	observer = new Observer;

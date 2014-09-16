@@ -14,7 +14,7 @@
 #include "Global.H"
 #include "SSS.H"
 
-void *thread_sss(void *)
+void thread_sss(void *)
 {
   Packet* pkt;
   int dstport;
@@ -38,6 +38,4 @@ void *thread_sss(void *)
     pthread_mutex_unlock(&sss_cond_mut);
   }
   //	config->show();
-
-	return (void *)0;
 }

@@ -44,9 +44,6 @@ void Extractor::Proc(Packet *pkt){
 				oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
 				string tstamp = oss.str();
 
-				string src_ip =inet_ntoa(pkt->GetSrcIP());
-				string dst_ip =inet_ntoa(pkt->GetDstIP());
-
 
 /*				if((*it)->GetPlaceOfPacket() < 0 || pkt->GetL7ContentSize() == 0 || (*it)->GetPlaceOfPacket() > pkt->GetL7ContentSize()){
 				cerr << "packet of place < 0!!" <<endl;
@@ -153,8 +150,8 @@ void Extractor::Proc(Packet *pkt){
 					}
 
 
-					cout << "Source IP,port:      " << inet_ntoa(pkt->GetSrcIP()) << ","<< pkt->GetSrcPort()<< endl;
-					cout << "Destination IP,port: " << inet_ntoa(pkt->GetDstIP()) << "," <<pkt->GetDstPort()<< endl;
+					cout << "Source IP,port:      " << pkt->GetSrcIPStr() << ","<< pkt->GetSrcPort()<< endl;
+					cout << "Destination IP,port: " << pkt->GetDstIPStr() << "," <<pkt->GetDstPort()<< endl;
 					cout << "ResultString: ";
 					RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
 	#ifdef USE_POSTGRES
@@ -164,7 +161,7 @@ void Extractor::Proc(Packet *pkt){
 	#endif
 					//cout << (*it)->GetResultString() << endl;
 					if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
-						URED cout << "VIRUS DETECTED!! Shut out :"<< inet_ntoa(pkt->GetSrcIP()) << endl; RESET
+						URED cout << "VIRUS DETECTED!! Shut out :"<< pkt->GetSrcIPStr() << endl; RESET
 						RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
 					}
 
@@ -176,31 +173,37 @@ void Extractor::Proc(Packet *pkt){
 					ostringstream oss;
 					oss.str("");
 
-						oss << "insert into save_result(id, stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
-					<< "(default,'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
+					//<< "(default'" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
+                   
+						oss << "insert into save_result(stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
+					<< "('" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
 					<< (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
-					<< tstamp << "','" << src_ip << "','" << dst_ip << "','" \
+					<< tstamp << "','" <<  pkt->GetSrcIPStr() << "','" <<  pkt->GetDstIPStr() << "','" \
 					<< pkt->GetSrcPort() << "','" << pkt->GetDstPort() << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
 
 					string query = oss.str();
 
 #ifdef USE_POSTGRES
-					query += "','"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
+					query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 //					cout << query << endl;
 
 #else
-					char * temp = (char *)malloc(sizeof(char)* 100);
-					memcpy(temp, (char *)((*it)->GetResultString()), 99);
-					temp[99] = '\0';
+					char * temp = (char *)malloc(sizeof(char)* RESULT_SIZE);
+					memcpy(temp, (char *)((*it)->GetResultString()), RESULT_SIZE - 1);
+					temp[RESULT_SIZE - 1] = '\0';
 					query += "','";
-					query += temp;
+                    string hit_result(temp);
+                    sqlite_dao->EscapeSingleQuote(hit_result);
+					query += hit_result;
 					query += "');";
 					free(temp);
+					cout << query << endl;
+                    sqlite_dao->ExecBatchSql(query);
 #endif
 
-					cout << query << endl;
+//					cout << query << endl;
 
-	#ifdef FILEWRITE_MODE
+#ifdef FILEWRITE_MODE
 					file_writer->Write(query);
 #endif
 

@@ -14,7 +14,7 @@
 #pragma once
 
 #define SAVE_MAX_SIZE 102400 	//100KB
-#define RESULT_SIZE 100
+#define RESULT_SIZE 200
 //#define MAX_QUEUE_SIZE 625000	//1GB
 //#define MAX_QUEUE_SIZE 6250	//10MB
 #define MAX_QUEUE_SIZE 100	//1GB
@@ -25,9 +25,11 @@
 //for MatchPreFilter
 #define STRING_MATCH_NUM 3
 
-#define USE_POSTGRES
+//#define USE_POSTGRES
+#define USE_SQLITE
+#define SQLITE_MODE
 #define POSTGRES_MODE
-#define FILEWRITE_MODE
+//#define FILEWRITE_MODE
 #define DEBUG
 
 enum Trunc{
@@ -61,3 +63,5 @@ enum StringMatch{
 enum ProcList{
 	MANAGER, MASTER, CAPTURE
 };
+
+

@@ -9,8 +9,10 @@
 /*
  * $Id: PacketClean.C,v 5.12 2012-07-04 03:41:22 sin Exp $
 */
-#include "PacketClean.H"
+
+
 #include "Global.H"
+#include "PacketClean.H"
 
 PacketClean::PacketClean(){
 	last_gc_time.tv_sec = 0;

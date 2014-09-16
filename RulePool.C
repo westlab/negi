@@ -56,6 +56,7 @@ MPF_DEBUG(rule_p->Show();)
 void RulePool::AddRule(int id, string rule){
 	Rule* rule_p = new Rule(id, "", "", "", "", 0, "", "", 0, "", rule, 0, 0, 1);
 	cout << "this is addrule" << endl;
+    cout << rule << endl;
 MPF_DEBUG(rule_p->Show();)
 	rule_pool.push_back(rule_p);
 }

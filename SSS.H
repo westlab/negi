@@ -12,4 +12,4 @@
 
 #pragma once
 
-extern void *thread_sss(void *);
+extern void thread_sss(void *);
