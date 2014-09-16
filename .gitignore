@@ -1,6 +1,5 @@
 config/
 pcap/
-script/
 *.o
 *.pcap
 *.conf
