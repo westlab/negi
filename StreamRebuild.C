@@ -33,18 +33,6 @@ void StreamRebuild::SearchStream(Packet * pkt){
 	//find map using src or dst port 
 	
 	unsigned int port_map_key;
-	
-	/*
-	unsigned int uint_srcip = (unsigned int)((pkt->GetSrcIP()).s_addr);
-	unsigned int uint_dstip = (unsigned int)((pkt->GetDstIP()).s_addr);
-
-	if(uint_srcip > uint_dstip){
-		//use Bigger port number to connection map key.
-		port_map_key = uint_srcip;
-	}else{
-		port_map_key = uint_dstip;
-	}
-	*/
 
 	if(pkt->GetSrcPort() > pkt->GetDstPort()){
 		//use Bigger port number to connection map key.
