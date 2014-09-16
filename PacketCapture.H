@@ -23,16 +23,6 @@
 #include <pcap.h>
 
 
-/*
-typedef struct pcap_packet_t{
-	u_int caplen;
-	u_int len;
-	timeval ts;
-	unsigned char packet[1600];
-} pcap_packet;
-*/
-
-
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 void packetcap();
 

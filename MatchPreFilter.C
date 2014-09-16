@@ -70,13 +70,6 @@ void MatchPreFilter::buildAhoMachine(){
 	int index = 0;
 	int currentState;
 
-    /*
-	connection *conn = pgsql->GetConn();
-	work T(*conn);
-	result *pattern_list;
-	pattern_list = new result( T.exec("select prefilter_pattern from rule order by id") );
-	//T.commit();
-*/
     for(list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt(); rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
 		string keyword = (*rule_it)->GetPreFilterPattern();
 		currentState = 0;
@@ -90,21 +83,7 @@ void MatchPreFilter::buildAhoMachine(){
 		out[currentState][0] = index + 1;
 		index++;
     }
-/*
-	for( result::const_iterator it = pattern_list->begin(); it != pattern_list->end(); it++ ){
-		string keyword = it[0].as( string() );
-		currentState = 0;
-		for (unsigned int j = 0; j < keyword.size(); j++) {
-			int c = keyword[j];
-			if (g[currentState][c] == -1) { // Allocate a new node
-				g[currentState][c] = states++;
-			}
-			currentState = g[currentState][c];
-		}
-		out[currentState][0] = index + 1;
-		index++;
-	}
-*/
+
 	int StateNum = states - 1;
 	//State 0 should have an outgoing edge for all characters.
 	for (int c = 0; c < MAXC; ++c) {
@@ -171,14 +150,10 @@ void MatchPreFilter::buildAhoMachine(){
 int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end){
 	list<ActiveRule*>::iterator active_rule_it = state->active_rule_list.begin();
 	int content_size = (int)packet->GetL7ContentSize();
-//	string pattern = rule->GetPreFilterPattern();
 	string pattern;
 	MatchPreFilterInfo *match_pre_filter_info = (*(*active_rule_it)->rule_it)->GetMatchPreFilterInfo();
-//	int pat_len = (int)match_pre_filter_info->pat_len;
 	int pat_len;
-//    int* bm_bc = match_pre_filter_info->bm_bc;
 	int j;//pointer of input data
-//cout << "harashima start Packet Size: " << content_size << ", pattern = " << pattern <<endl;
 
 	//for algorithm test
 	int* match_try = match_pre_filter_info->match_try;
@@ -227,38 +202,20 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 					temp_result->SetPatLen(pat_len);
 					temp_result->SetPlaceOfPacket(j);//at the end of pattern
 					packet->GetStream()->AddPapaResult(temp_result);
-//cout << "harashima MSG " << packet->GetStream() <<", "<< rule <<", "<< rule->GetId() <<", "<< pat_len <<", "<< j << endl;
+                    //cout << "harashima MSG " << packet->GetStream() <<", "<< rule <<", "<< rule->GetId() <<", "<< pat_len <<", "<< j << endl;
 					active_rule_it = state->active_rule_list.begin();
 				}
 			}
 #ifdef MATCH_ALL
 			//j += AfterMatch(mode, j, match_pre_filter_info, p_content);
 			//j++;
-//MSG(mode<<": j="<< j <<", AfterMatch"<<AfterMatch(mode, j, match_pre_filter_info, p_content))
+            //MSG(mode<<": j="<< j <<", AfterMatch"<<AfterMatch(mode, j, match_pre_filter_info, p_content))
 #else
-
-/*
-cout << "==============================================BEGIN"<< endl;
-for(list<PapaResult*>::iterator it = packet->GetStream()->GetPapaResultListFirstIt(); it != packet->GetStream()->GetPapaResultListLastIt(); it++){
-	cout << "this is result!!--------------------" << endl;
-	cout << "Stream id: "<< packet->GetStream() << endl;
-	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
-	cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-	cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-	cout << "Stream Size: " << packet->GetStream()->GetL7RetrievedContentSize() << endl;
-	cout << "Packet Size: " << packet->GetL7ContentSize() << endl;
-	cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-	cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-	cout << "Flag: " << (*it)->GetFinished() << endl;
-}
-cout << "==============================================END"<< endl;
-*/
-
 			return 1;
 #endif
 		}else{ //found miss
 			read_table[mode]++;
-//MSG(mode<<": j="<< j <<", Slide"<<Slide(mode, j, i, match_pre_filter_info, p_content))
+            //MSG(mode<<": j="<< j <<", Slide"<<Slide(mode, j, i, match_pre_filter_info, p_content))
 		}
 
 		j++;
