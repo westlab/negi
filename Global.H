@@ -100,7 +100,6 @@ extern PacketClean *packet_clean;
 extern Observer *observer;
 extern Gzip *gzip;
 extern FileWriter *file_writer;
-//extern RiverGate *river_gate;
 
 extern void packetcap();
 extern void pcap_signal();
