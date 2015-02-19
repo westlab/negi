@@ -415,10 +415,45 @@ MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7Conten
 	cout << "Harashima PacketNum:" <<  stream->GetPacketNum() << " retrieved_content_size: " << retrieved_content_size << " content_size: " << content_size << endl;
 	}
 
+#ifdef MATCH_ALL
+		int start_flag = 0;
+//unused!!
+//		int end_flag = 0;
+		int offset = 0;
+		int depth = 0;
+		if(depth == 0){
+			depth = INT_MAX;
+		}
+		int start = offset;
+		int end = start + depth - 1;
+		u_char *p_content = NULL, *p_content_end = NULL;
+		int start_place = 0;
+		
+		if(start <= retrieved_content_size - 1){ //start packet
+				start_flag = 1;
+				start_place = start - (retrieved_content_size - content_size);
+				p_content = packet->GetL7Content() + start_place;
+		}
+
+		if(start_flag == 0){
+				start_place = 0;
+				p_content = packet->GetL7Content();
+		}
+		
+		if(end <= retrieved_content_size - 1){ //end packet    korenani?
+			p_content_end = packet->GetL7Content() + end - (retrieved_content_size - content_size);
+			AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
+		}else{
+			p_content_end = packet->GetL7Content() + content_size - 1;
+			AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
+		}
+
+#else
+
 //MSG("MPFilter: ----------process start----------"<<packet->GetL7ContentSize())
 	//single pattern
 	list<ActiveRule*>::iterator active_rule_it = state->active_rule_list.begin();
-//	while(active_rule_it != state->active_rule_list.end()){
+	while(active_rule_it != state->active_rule_list.end()){
 		int start_flag = 0;
 //unused!!
 //		int end_flag = 0;
@@ -463,6 +498,7 @@ MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7Conten
 //unused!!
 //				end_flag = 1;
 				p_content_end = packet->GetL7Content() + end - (retrieved_content_size - content_size);
+/*
 #ifdef MATCH_ALL
 ////				BoyerMoore(HORS, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
 				//BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
@@ -471,10 +507,9 @@ MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7Conten
 				(*active_rule_it)->rule_state_flag = 2;
 
 #else //MATCH_ALL
-
+*/
 //				BoyerMoore(HORS, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
-				//if(BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it)){
-				if(AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end)){
+				if(BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it)){
 					(*active_rule_it)->rule_state_flag = 3;
 					after_pre_filter++;
 					MPF_DEBUG(((*(*active_rule_it)->rule_it)->GetMatchPreFilterInfo())->ShowResult());
@@ -490,33 +525,37 @@ MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7Conten
 //					state->active_rule_list.erase(it);
 //					continue;
 				}
-#endif //MATCH_ALL
+//#endif //MATCH_ALL
 
 
 			}else{ //not end packet
 				p_content_end = packet->GetL7Content() + content_size - 1;
+/*
 #ifdef MATCH_ALL
 ////				BoyerMoore(HORS, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
 				//BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
 				AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
 //
 #else //MATCH_ALL
+*/
 //				BoyerMoore(HORS, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it);
-				//if(BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it)){
-				if(AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end)){
+				if(BoyerMoore(SUND, start_flag, state, packet, start_place, p_content, p_content_end, *(*active_rule_it)->rule_it)){
 					(*active_rule_it)->rule_state_flag = 3;
 					after_pre_filter++;
 				}
-#endif
+//#endif
 			}
 		}
 		MPF_DEBUG((*(*active_rule_it)->rule_it)->GetMatchPreFilterInfo()->ShowResult());
 		//active_rule_it++;
-//	}
+	}
 
 	//for BoyerMoore
-	//size_t copy_size = (size_t)state->max_prefilter_pattern_size;
-	//memcpy(state->temp_buf, packet->GetL7Content() +  content_size - copy_size, copy_size);
+	size_t copy_size = (size_t)state->max_prefilter_pattern_size;
+	memcpy(state->temp_buf, packet->GetL7Content() +  content_size - copy_size, copy_size);
+
+#endif
+
 
 #ifndef MATCH_ALL
 	state->after_pre_filter = after_pre_filter;
@@ -552,6 +591,8 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
 	temp_buf = new u_char[max_prefilter_pattern_size + 1];
 	observer->MPFTempBufMallocd(max_prefilter_pattern_size * sizeof(unsigned char));
 	OBSERVER_DEBUG(BLUE cout << "MPFTempBufMallocd :" << max_prefilter_pattern_size * sizeof(unsigned char) << endl;RESET);
+
+	tmpState = 0;
 }
 
 
