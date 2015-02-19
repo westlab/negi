@@ -10,12 +10,12 @@
  * $Id: MatchPreFilter.H,v 5.3 2012-03-25 13:21:19 sin Exp $
 */
 #pragma once
-#include "BasePacketBlock.H"
 #include "Packet.H"
 #include "Stream.H"
 #include "Rule.H"
 class Stream;
 class Packet;
+class Rule;
 
 #ifdef MPF_DEBUG_EN
 #define MPF_DEBUG(x)  x ;

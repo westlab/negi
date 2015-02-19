@@ -1,29 +1,18 @@
-/*
- * ** Copyright (C) 2012 Shinichi Ishida, All Rights Reserved.
- * **
- * ** Please see the LICENSE file distributed with this source
- * ** code archive for information covering the modification and
- * ** redistribution of this file and binaries built from it.
- * */
-
-/*
- * $Id: PgsqlSaver.C,v 5.11 2012-05-09 17:24:13 sin Exp $
-*/
-
 #include "Include.H"
 #include "Global.H"
 #include "Stream.H"
 
-#ifdef USE_POSTGRES
+#ifdef USE_SQLITE
 
-#include "PgsqlSaver.H"
-
-PgsqlSaver::PgsqlSaver(){
-	return;
+SqliteSaver::SqliteSaver(){
+    return;
 }
 
 
-void PgsqlSaver::Proc(Stream * stream){
+void SqliteSaver::Proc(Stream * stream){
+//	string src_ip_str, dst_ip_str;
+//	src_ip_str = inet_ntoa(stream->GetSrcIP());
+//	dst_ip_str = inet_ntoa(stream->GetDstIP());
 
 	//add
 	struct timeval tmp_time = stream->GetTimestamp();
@@ -60,10 +49,12 @@ void PgsqlSaver::Proc(Stream * stream){
 
 	//match_str
 	//query += "',E'"+T.esc_raw(stream->GetMatchString())+"'";
-	query += "',E'"+escape_binary(stream->GetMatchString())+"'";
+	//query += "',E'"+escape_binary(stream->GetMatchString())+"'";
+    //string match_string((char*) stream->GetMatchString());
+	query += "','"+stream->GetMatchString()+"'";
 	//stream
 	if(!no_stream_save){
-		query += ",E'";
+		query += ",'";
 //		for(list<Packet*>::iterator it = stream->GetPacketFirstIt(); it != stream->GetPacketLastIt(); it++){
 //			query += T.esc_raw((*it)->GetContent(), (*it)->GetContentSize());
 //		}
@@ -89,31 +80,22 @@ void PgsqlSaver::Proc(Stream * stream){
 	}
 
 	query += ");";
+    cout << "save stream" << endl;
+    cout << query << endl;
 
 #ifdef FILEWRITE_MODE
 		file_writer->Write(query);
 #endif
-#ifdef POSTGRES_MODE
-	connection *conn = pgsql->GetConn();
-	work T(*conn);
-	try{
-//		T.exec(query);
-//		T.commit();
-	}
-	catch(const exception &e){
-		cerr << e.what() << endl;
-	}
-	catch(...){
-		cerr << "unhandled exception" << endl;
-	}
+#ifdef SQLITE_MODE
+    sqlite_dao->ExecSql(query);
 #endif
 	oss.str("");
 
 	return;
 }
 
-void PgsqlSaver::ProcPacket(Packet * pkt){
 
+void SqliteSaver::ProcPacket(Packet * pkt){
 	ostringstream oss;
 
 	if(pkt->GetProtocol() != IPPROTO_TCP){return;}
@@ -129,9 +111,9 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 
 
 	oss.str("");
-	oss << "insert into save_packet (id , src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
+	oss << "insert into save_packet (src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
 	protocol, packet_size, packet_size_org, content_size, flag, content) values (\
-	default,'"<< pkt->GetSrcIPStr() <<"','"<<pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"\
+	,'"<< pkt->GetSrcIPStr() <<"','"<< pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"\
 	<<pkt->GetDstPort() <<"','"<< tstamp <<"','"<<pkt->GetProtocol()<<"','"<< pkt->GetPacketSize() <<"','"<< pkt->GetPacketSizeOrg() <<"','"\
 	<< pkt->GetContentSize();
 	string query = oss.str();
@@ -146,26 +128,18 @@ void PgsqlSaver::ProcPacket(Packet * pkt){
 	}
 
 	//query += "',E'"+T.esc_raw(pkt->GetContent(), pkt->GetContentSize())+"');";
-	query += "',E'"+escape_binary(pkt->GetContent(), pkt->GetContentSize())+"');";
+	//query += "',E'"+escape_binary(pkt->GetContent(), pkt->GetContentSize())+"');";
+    string content((char*) pkt->GetContent());
+	query += "','"+content+"');";
+    cout << "save packet" << endl;
+    cout << query << endl;
 
-	connection *conn = pgsql->GetConn();
-	work T(*conn);
-
-	try{
-//		T.exec(query);
-//		T.commit();
-	}
-	catch(const exception &e){
-		cerr << e.what() << endl;
-	}
-	catch(...){
-		cerr << "unhandled exception" << endl;
-	}
-
-//	pgsql.ExecSql(query);
+    sqlite_dao->ExecBatchSql(query);
 	oss.str("");
 
 	return;
 }
 
-#endif //USE_POSTGRES
+#endif //USE_SQLITE
+
+

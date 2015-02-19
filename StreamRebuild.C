@@ -33,18 +33,6 @@ void StreamRebuild::SearchStream(Packet * pkt){
 	//find map using src or dst port 
 	
 	unsigned int port_map_key;
-	
-	/*
-	unsigned int uint_srcip = (unsigned int)((pkt->GetSrcIP()).s_addr);
-	unsigned int uint_dstip = (unsigned int)((pkt->GetDstIP()).s_addr);
-
-	if(uint_srcip > uint_dstip){
-		//use Bigger port number to connection map key.
-		port_map_key = uint_srcip;
-	}else{
-		port_map_key = uint_dstip;
-	}
-	*/
 
 	if(pkt->GetSrcPort() > pkt->GetDstPort()){
 		//use Bigger port number to connection map key.
@@ -80,8 +68,18 @@ void StreamRebuild::SearchStream(Packet * pkt){
 			multimap<unsigned int, TcpConn *>::iterator tcp_conn_map_it = tcp_conn_pool->FindTcpConn(port_map_key);
 			for(u_int i=0; i < tcp_conn_num; i++, tcp_conn_map_it++){
 				tcp_conn = tcp_conn_map_it->second;
+
+				struct in6_addr packet_src_ip, packet_dst_ip;
+				struct in6_addr tcpconn_src_ip, tcpconn_dst_ip;
+
+				packet_src_ip = pkt->GetSrcIP();
+				packet_dst_ip = pkt->GetDstIP();
+				tcpconn_src_ip = tcp_conn->GetSrcIP();
+				tcpconn_dst_ip = tcp_conn->GetDstIP();
+
 				if(pkt->GetSrcPort() == tcp_conn->GetSrcPort() && pkt->GetDstPort() == tcp_conn->GetDstPort()){
-					if(pkt->GetSrcIP().s_addr == tcp_conn->GetSrcIP().s_addr && pkt->GetDstIP().s_addr == tcp_conn->GetDstIP().s_addr){
+					if(!memcmp(&packet_src_ip, &tcpconn_src_ip, sizeof(struct in6_addr)) &&	\
+						!memcmp(&packet_dst_ip, &tcpconn_dst_ip, sizeof(struct in6_addr))){
 						ST_REBUILD_DEBUG( BLUE cout << "Entry matched! Client -> Server" << endl; RESET);
 
 
@@ -140,7 +138,8 @@ void StreamRebuild::SearchStream(Packet * pkt){
 					}
 
 				}else if(pkt->GetSrcPort() == tcp_conn->GetDstPort() && pkt->GetDstPort() == tcp_conn->GetSrcPort()){
-					if(pkt->GetSrcIP().s_addr == tcp_conn->GetDstIP().s_addr && pkt->GetDstIP().s_addr == tcp_conn->GetSrcIP().s_addr){
+					if(!memcmp(&packet_src_ip, &tcpconn_dst_ip, sizeof(struct in6_addr)) &&	\
+						!memcmp(&packet_dst_ip, &tcpconn_src_ip, sizeof(struct in6_addr))){
 						ST_REBUILD_DEBUG( BLUE cout << "Entry matched! Server -> Client" << endl; RESET);
 
 

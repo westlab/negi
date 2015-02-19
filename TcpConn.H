@@ -19,7 +19,7 @@ class Packet;
 
 class TcpConn{
 	private:
-		struct in_addr src_ip,dst_ip;							// Source/Destination IP address
+		struct in6_addr src_ip,dst_ip;							// Source/Destination IP address
 		u_int src_port,dst_port;								// Source/Destination Port
 		struct timeval timestamp;								// first packet reach time
 		struct timeval last_updated_time;						// last packet reach time(used for gabage collection)
@@ -33,8 +33,8 @@ class TcpConn{
 		TcpConn(unsigned int port_map_key, Packet * pkt);
 		~TcpConn();
 		void AddStream(Stream * stream);
-		struct in_addr GetSrcIP(){return src_ip;}
-		struct in_addr GetDstIP(){return dst_ip;}
+		struct in6_addr GetSrcIP(){return src_ip;}
+		struct in6_addr GetDstIP(){return dst_ip;}
 		u_int GetSrcPort(){return src_port;}
 		u_int GetDstPort(){return dst_port;}
 		void SetState(State st){state = st;}

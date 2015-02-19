@@ -19,6 +19,7 @@ using namespace std;
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <netinet/ip6.h>
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <netinet/in_systm.h>
@@ -50,6 +51,7 @@ using namespace std;
 #include <utility>
 #include <pthread.h>
 #include <sstream>
+#include "vlan_hdr.h"
 
 #ifdef USE_POSTGRES
 #include <pqxx/pqxx>

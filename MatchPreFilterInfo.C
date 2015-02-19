@@ -40,41 +40,22 @@ void MatchPreFilterInfo::MakeBmBc(){
 		bm_bc_plus[(int)pattern[i]] = pat_len - i;
 	}
 	bm_bc_plus[(int)pattern[pat_len - 1]] = 1;
-//    for(int i = 0; i < 0x100; i++){
-//	for(int i = 48; i <= 122; i++){
-//		cout << (char)i << " = " << bm_bc[i] << endl;
-//	}
-//    for(int i = 0; i < (int)pat_len; i++){
-//        cout << i << " = " << pattern[i] << " = " << bm_bc[(int)pattern[i]] << endl;
-//    }
 }
 
 
 
 void MatchPreFilterInfo::ShowResult(){
-//    cout << pattern <<",match_try,";
-//    cout <<"match_try,";
 	for(int i = 0; i < STRING_MATCH_NUM; i++){
 		cout << match_try[i] <<",";
 	}
-//    cout <<"read_table,";
 	for(int i = 0; i < STRING_MATCH_NUM; i++){
 		cout << read_table[i] <<",";
 	}
-//    cout <<"match,";
 	for(int i = 0; i < STRING_MATCH_NUM; i++){
 		cout << match[i] <<",";
 	}
-//    cout <<"sum_slide,";
 	for(int i = 0; i < STRING_MATCH_NUM; i++){
 		cout << sum_slide[i] <<",";
 	}
 	cout << endl;
-//    YELLOW cout << "-----MatchPreFilterResult-----" << endl;RESET
-//MSG(pattern)
-//    int i;
-//    i = 0, cout << "KMP: try = " << match_try[i] << ", read_table = " << read_table[i] << ", match = " << match[i] << endl;
-//    i = 1, cout << "BM1: try = " << match_try[i] << ", read_table = " << read_table[i] << ", match = " << match[i] << endl;
-//    i = 2, cout << "BM2: try = " << match_try[i] << ", read_table = " << read_table[i] << ", match = " << match[i] << endl;
-//    i = 3, cout << "HAR: try = " << match_try[i] << ", read_table = " << read_table[i] << ", match = " << match[i] << endl;
 }
