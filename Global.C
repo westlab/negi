@@ -36,8 +36,6 @@ list<Stream *> end_stream_list;
 
 pcap_t *pcap_descriptor;
 
-//map<string,string> sql_config;
-
 SaveMode savemode;
 MallocMode mallocmode;
 
@@ -57,17 +55,27 @@ RuleLoaderPgsql *rule_loader_pgsql;
 #else
 RuleLoaderFile *rule_loader_file;
 #endif
+SqliteDao *sqlite_dao;
+SqliteSaver *sqlite_saver;
 Master *master;
 TcpConnPool *tcp_conn_pool;
 PacketClean *packet_clean;
 Observer *observer;
 Gzip *gzip;
 FileWriter *file_writer;
-
 ResultPool *result_pool;
 
-//RiverGate *river_gate;
 
 pthread_mutex_t sss_cond_mut = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t sss_cond =  PTHREAD_COND_INITIALIZER;
 Packet* sss_send_value;
+
+void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6){
+	unsigned char v6char[] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0,0,0,0};
+	memcpy(v6char+12, (unsigned char *)v4, 4);
+	memcpy(v6, v6char, 16);
+}
+
+void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4){
+	memcpy(v4, (unsigned char*)v6+12,4);
+}

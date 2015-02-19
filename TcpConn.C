@@ -33,40 +33,26 @@ TcpConn::TcpConn(unsigned int port_map_key, Packet * pkt){
 TcpConn::~TcpConn(){
 	//Count tcpconn deletion
 	observer->TcpConnDeleted();
-
 	destructing_flag=1;
 
 	tcp_conn_pool->RemoveTcpConnIt(tcp_conn_pool_it);
-
-//	cout << "TcpConn Destructor!! stream num: " << stream_list.size() << endl;
-
 	if(stream_list.size() !=0){
 		list<Stream *>::iterator it= stream_list.begin();
 		list<Stream *>::iterator it2;
 		while(it != stream_list.end()){
-//			if(it == stream_list.begin()){
-//				it2 = it;
-//			}else{
 				it2 = --it;
 				++it;
-//			}
-//			MSG("Steam removing!!");
-//			cout << "Stream ID is:" <<(*it)->GetStreamId() << endl;
 			if(it != stream_list.end()){
 				delete *it;
 			}
 			it = it2;
 		}
 	}
-//	cout << "TcpConn Destructed"<< endl;
-
 }
 
 void TcpConn::AddStream( Stream *stream){
 	last_updated_time = stream->GetTimestamp();
 	stream->SetTcpConnIt(stream_list.insert(stream_list.end(),stream));
-//	stream_list.push_back(stream);
-//	stream->SetTcpConnIt(--stream_list.end());
 	stream->SetTcpConn(this);
 }
 
@@ -77,11 +63,12 @@ void TcpConn::SetPrevDirection(u_char dir){
 list<Stream*>::iterator TcpConn::GetStreamFirstIt(){
 	return stream_list.begin();
 };
+
 list<Stream*>::iterator TcpConn::GetStreamLastIt(){
 	return stream_list.end();
 };
+
 list<Stream*>::iterator TcpConn::RemoveStreamIt(list<Stream*>::iterator it){
-	//cout << "Erace stream_list entry. Stream ID is:" <<(*it)->GetStreamId() << endl;
 	stream_list.erase(it);
 	if(stream_list.size() == 0 && destructing_flag == 0){
 		//cout << "deleting myself!" << endl;

@@ -41,7 +41,6 @@ Stream::Stream(Packet *pkt){
 	last_seq_no = pkt->GetSeqNo();
 	packet_list.push_back(pkt);
 	packet_num = 0;
-//	retrieved_content_size = pkt->GetContentSize();
 	retrieved_content_size = 0;
 	l7_retrieved_content_size = 0;
 	state = BEGIN;
@@ -113,8 +112,6 @@ Stream::~Stream(){
 	}else if(savemode == STREAM){
 		list<Packet *>::iterator it= packet_list.begin();
 		while(it != packet_list.end()){
-//		for(list<Packet *>::iterator it=packet_list.begin(); it != packet_list.end(); it++){
-//			MSG("Steam packets removing!!");
 			delete *it;
 			it = packet_list.erase((*it)->GetStreamIt());
 		}
@@ -165,9 +162,6 @@ void Stream::Show(){
 }
 
 void Stream::ShowStreamInfo(){
-	string src_ip_str, dst_ip_str;
-	src_ip_str = inet_ntoa(src_ip);
-	dst_ip_str = inet_ntoa(dst_ip);
 	struct tm * tmp = localtime(&(timestamp.tv_sec));
 	YELLOW cout << "Date:"<<tmp->tm_year+1900<<"/"<< tmp->tm_mon+1<<"/"<<tmp->tm_mday<<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec<<" "<<timestamp.tv_usec <<endl;
 	cout << "IP: " << src_ip_str << ":" << src_port << " -> " << dst_ip_str << ":" << dst_port <<endl;
@@ -203,8 +197,6 @@ void Stream::AddPacket(Packet *pkt){
 			//out of order
 			pkt->SetError();
 			if(disorder_flag != 1){
-	//			cout << "disorder!!" << endl;
-	//			cout << "last:"<< last_seq_no << " now: " << pkt->GetSeqNo() << endl;
 				disorder_flag = 1;
 				observer->StreamDisorderd();
 			}
@@ -213,20 +205,14 @@ void Stream::AddPacket(Packet *pkt){
 	}
 
 	if(disorder_flag == 1){
-		//diosrder recoverd by retransmit
-	//	cout << "disorder recoverd!!" << endl;
 		observer->StreamDisorderRecoverd();
 		disorder_flag = 0;
 	}
 
 	last_seq_no = pkt->GetSeqNo();
-//	packet_list.push_back(pkt);
 	pkt->SetStreamIt(packet_list.insert(packet_list.end(),pkt));
 	pkt->SetStream(this);
 	packet_num++;
-//	if(retrieved_content_size == 0){
-//		cout << "Stream.C packet_num:" <<  packet_num << " retrieved_content_size: " << retrieved_content_size << " content_size: " << pkt->GetContentSize() << endl;
-//	}
 	retrieved_content_size += pkt->GetContentSize();
 	l7_retrieved_content_size += pkt->GetContentSize();
 	last_updated_time = pkt->GetTimestamp();
@@ -239,7 +225,6 @@ void Stream::AddPacket(Packet *pkt){
 
 void Stream::RemovePacketIt(list<Packet *>::iterator it){
 	packet_list.erase(it);
-//	packet_num--;
 }
 
 MatchPreFilterState* Stream::GetMatchPreFilterState(){
@@ -260,21 +245,3 @@ string Stream::GetRuleIds(){
 	}
 	return res;
 }
-
-/*
-void Stream::GabageDelete(){
-	gc_deleted = 1;
-	observer->StreamDeleted();
-	observer->StreamFreed(sizeof(*this), stream_packet_size);
-	};
-	*/
-/*
-void Stream::Reconstruct(){
-	stream = (unsigned char *)malloc(retrieved_content_size);
-	unsigned char *p_st;
-	for(list<Packet *>::iterator it=packet_list.begin(); it != packet_list.end(); it++){
-		memcpy(p_st, (*it)->GetContent(), (*it)->GetContentSize());
-		p_st += (*it)->GetContentSize();
-	}
-}
-*/
