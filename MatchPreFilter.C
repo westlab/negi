@@ -231,7 +231,7 @@ u_char& MatchPreFilter::GetText(int i, u_char *p_content, MatchPreFilterState *s
 	else{return state->temp_buf[state->max_prefilter_pattern_size + i];}
 }
 
-/*
+#ifndef MATCH_ALL
 int MatchPreFilter::AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content){
 	int result;
 	if(mode == HORS){
@@ -373,7 +373,7 @@ int MatchPreFilter::BoyerMoore(int mode, int start_flag, MatchPreFilterState *st
 	}
 	return 0;
 }
-*/
+#endif
 
 MatchPreFilterState * MatchPreFilter::MakeMatchPreFilterState(Stream *stream){
 	MatchPreFilterState *state = new MatchPreFilterState(stream);
