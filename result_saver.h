@@ -7,13 +7,18 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: ResultSaver.H,v 5.0 2010-10-13 08:47:16 sin Exp $
 */
-
+#pragma once
+#include "packet.h"
 #include "include.h"
-#include "RegExpFilter.H"
 
-RegExpFilter::RegExpFilter(){
-	return;
-}
+class ResultSaver
+{
+	private:
 
+	public:
+		ResultSaver();
+		~ResultSaver();
+		void Proc(Packet *pkt);
+};

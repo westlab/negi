@@ -7,13 +7,19 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: FileWriter.C,v 1.3 2012-04-30 07:15:00 sin Exp $
 */
 
 #include "include.h"
-#include "RegExpFilter.H"
+#include "global.h"
+#include "file_writer.h"
 
-RegExpFilter::RegExpFilter(){
+FileWriter::FileWriter(){
+	ofs.open("./output.txt", ios::trunc | ios::binary);
 	return;
 }
 
+
+void FileWriter::Write(const string& str){
+	ofs << str << endl;
+}

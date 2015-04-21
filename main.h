@@ -7,13 +7,11 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
-*/
+ *$Id: srim.H,v 5.0 2010-10-13 08:47:17 sin Exp $
+ */
+
+#pragma once
 
 #include "include.h"
-#include "RegExpFilter.H"
-
-RegExpFilter::RegExpFilter(){
-	return;
-}
-
+#include "global.h"
+#include "main.h"

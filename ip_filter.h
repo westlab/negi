@@ -7,13 +7,17 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: IpFilter.H,v 5.0 2010-10-13 08:47:15 sin Exp $
 */
+#pragma once
 
-#include "include.h"
-#include "RegExpFilter.H"
+#include "packet.h"
 
-RegExpFilter::RegExpFilter(){
-	return;
-}
+class IpFilter
+{
+	private:
 
+	public:
+		IpFilter();
+		void Proc(Packet *pkt);
+};

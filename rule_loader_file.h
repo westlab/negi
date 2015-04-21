@@ -7,13 +7,21 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: RuleLoaderFile.H,v 5.1 2012-08-22 08:13:16 sin Exp $
 */
 
-#include "include.h"
-#include "RegExpFilter.H"
+#pragma once
 
-RegExpFilter::RegExpFilter(){
-	return;
-}
+#include "stream.h"
 
+#ifdef USE_POSTGRES
+using namespace pqxx;
+#endif
+
+class RuleLoaderFile
+{
+	private:
+	public:
+		RuleLoaderFile();
+		int Proc();
+};

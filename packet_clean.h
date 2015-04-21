@@ -7,13 +7,19 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: PacketClean.H,v 5.0 2010-10-13 08:47:16 sin Exp $
 */
-
+#pragma once
 #include "include.h"
-#include "RegExpFilter.H"
+#include "packet.h"
 
-RegExpFilter::RegExpFilter(){
-	return;
-}
+class PacketClean
+{
+	private:
+		struct timeval last_gc_time;
 
+	public:
+		PacketClean();
+		~PacketClean();
+		void Proc(Packet *pkt);
+};
