@@ -6,3 +6,5 @@ pcap/
 negi
 output.txt
 makefile.depend
+CMakeFiles/
+.idea/
