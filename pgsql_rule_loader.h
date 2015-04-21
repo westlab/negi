@@ -7,13 +7,19 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: PgsqlRuleLoader.H,v 5.0 2010-10-13 08:47:16 sin Exp $
 */
 
-#include "include.h"
-#include "RegExpFilter.H"
+#pragma once
 
-RegExpFilter::RegExpFilter(){
-	return;
-}
+#include "stream.H"
+using namespace pqxx;
 
+class PgsqlRuleLoader
+{
+	private:
+	public:
+		PgsqlRuleLoader();
+		int Proc();
+		int UpdateCheck();
+};

@@ -7,13 +7,19 @@
  * */
 
 /*
- * $Id: RegExpFilter.C,v 5.0 2010-10-13 08:47:16 sin Exp $
+ * $Id: IpFilter.C,v 5.0 2010-10-13 08:47:15 sin Exp $
 */
 
 #include "include.h"
-#include "RegExpFilter.H"
+#include "ip_filter.h"
 
-RegExpFilter::RegExpFilter(){
+IpFilter::IpFilter(){
 	return;
 }
 
+void IpFilter::Proc(Packet *pkt){
+	Stream *stream = pkt->GetStream();
+	if(stream->GetPacketNum() == 1){
+	}
+	return;
+}
