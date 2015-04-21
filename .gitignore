@@ -7,4 +7,11 @@ negi
 output.txt
 makefile.depend
 CMakeFiles/
-.idea/
+.idea/*
+
+# ignore for cmake
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
