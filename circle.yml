@@ -1,7 +1,7 @@
 ## Customize the test machine
 machine:
   timezone:
-    Japan/Tokyo # Set the timezone
+    Asia/Tokyo # Set the timezone
 
 dependencies:
   pre:
