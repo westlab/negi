@@ -1,0 +1,11 @@
+## Customize the test machine
+machine:
+
+  timezone:
+    Japan/Tokyo # Set the timezone
+
+dependencies:
+  pre:
+   - sudo apt-get update; sudo apt-get install  libpcap-dev zlib1g-dev  libsqlite3-dev
+  override:
+   - cmake .; make
