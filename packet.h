@@ -92,7 +92,14 @@ class Packet
 
     public:
         Packet(PacketCnt *pcnt);
-        Packet(string timestamp_str, string content_size_str, string src_ip_str, string src_port_str, string dst_ip_str, string dst_port_str, string flag_str, string content_str);
+        Packet(string timestamp_str,
+               string content_size_str,
+               string src_ip_str,
+               string src_port_str,
+               string dst_ip_str,
+               string dst_port_str,
+               string flag_str,
+               string content_str);
         ~Packet();
         void SetStream(Stream *p_stream);
         Stream *GetStream();

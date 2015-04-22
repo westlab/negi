@@ -165,7 +165,6 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
     j = start_place;
 
     if(start_flag == 1){
-        //cout << "something start place :" <<start_place << endl;
         if(start_place < 0){
             ERROR_DEBUG(cout << "something error on start place :" <<start_place << endl;)
             return 1;
@@ -605,13 +604,3 @@ MatchPreFilterState::~MatchPreFilterState(){
     observer->MPFTempBufDeleted(max_prefilter_pattern_size * sizeof(unsigned char));
     OBSERVER_DEBUG(BLUE cout << "MPFTempBufDeleted :" << max_prefilter_pattern_size * sizeof(unsigned char) << endl;RESET);
 }
-
-
-#ifdef MATCH_PRE_FILTER_LOCAL
-
-int main(){
-    new Test();
-    return 0;
-}
-
-#endif //MATCH_PRE_FILTER_LOCAL

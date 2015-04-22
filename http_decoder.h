@@ -43,14 +43,6 @@ class HttpDecoder{
         char* msg_buf;
         Gzip gzip;
         u_char *localbuf;
-        /*
-        boost::regex reg_gzip;
-        boost::regex reg_deflate;
-        boost::regex reg_length;
-        boost::regex reg_chunk;
-        boost::regex reg_header;
-        boost::cmatch res;
-        */
         unsigned int header_size;
         HttpCompress msg_cmp;
         int msg_chunked;
