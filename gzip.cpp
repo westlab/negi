@@ -72,7 +72,6 @@ int Gzip::dec_gzip(u_char* outbuf, u_char* inbuf, int len, z_stream *z){
 }
 
 int Gzip::dec_zlib(u_char* outbuf, u_char* inbuf, int len, z_stream *z){
-
     //zlib header is 2byte constant.
     return 2;
 }

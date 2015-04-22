@@ -47,7 +47,6 @@ Packet::Packet(PacketCnt *pcnt){
     ss << hex << setw(2) << setfill('0') << (int)eth_header->ether_dhost[5];
     dst_mac_addr = ss.str();
 
-//*/
 
     if(ntohs(eth_header->ether_type) == ETH_P_8021Q){
         l3_header = packet + sizeof(struct vlan_ethhdr);
@@ -58,7 +57,6 @@ Packet::Packet(PacketCnt *pcnt){
         ether_proto = ntohs(eth_header->ether_type);
     }
 
-//	Show();
     switch (ether_proto){
         case ETH_P_IP:
             PACKET_DEBUG(RED cout << "IPv4!" << endl ;RESET);
@@ -84,7 +82,6 @@ Packet::Packet(PacketCnt *pcnt){
 
             break;
 
-///*
         case ETH_P_IPV6:
             PACKET_DEBUG(RED cout << "IPv6!" << endl ;RESET);
             version = 6;
@@ -103,7 +100,6 @@ Packet::Packet(PacketCnt *pcnt){
 
             ip_header = NULL;
             break;
-//*/
 
         default:
             PACKET_DEBUG(RED    cout << "This is not IPv4 or IPv6 packet!!" <<endl; RESET);

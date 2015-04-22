@@ -40,7 +40,6 @@ void Extractor::Proc(Packet *pkt){
 
                 if((*it)->GetResultOffset() > 0){
                     //this means results crosses packets.
-
                     if( (*it)->GetResultOffset() <= pkt->GetL7ContentSize()){
                         (*it)->SetResultString(pkt->GetL7Content() , RESULT_SIZE - (*it)->GetResultOffset(), (*it)->GetResultOffset());
                         (*it)->SetResultSize(RESULT_SIZE);
@@ -98,8 +97,6 @@ void Extractor::Proc(Packet *pkt){
                         (*it)->SetResultSize(RESULT_SIZE);
                         (*it)->SetFinished(1);
                     }else{
-                    // if( pkt->GetL7ContentSize() <= result_end_num ){//the result string after pattern crosses multiple packets
-                        //cout << "PaketSize < Result start!!" << endl;
                         (*it)->SetResultString(pkt->GetL7Content() + result_start_num, 0, pkt->GetL7ContentSize() - result_start_num);
                         (*it)->SetResultSize(RESULT_SIZE - (result_end_num - pkt->GetL7ContentSize()));
                         (*it)->SetResultOffset(result_end_num - pkt->GetL7ContentSize());

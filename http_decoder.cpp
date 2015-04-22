@@ -182,7 +182,7 @@ void HttpDecoder::DecodeChunk(Packet *packet){
         if(chunk_size == 8){
 //				cout << "error content: "<<content << endl;
 //				cout << "error p_content_work: "<<p_content_work << endl;
-            }
+        }
 
         if(chunk_size == 0){
             //message is end.

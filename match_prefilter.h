@@ -77,7 +77,14 @@ class MatchPreFilter{
 
         void initAhoMachine();
         void buildAhoMachine();
-        int AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end);
+        int AhoSearch(
+                int mode,
+                int start_flag,
+                MatchPreFilterState *state,
+                Packet *packet,
+                int start_place,
+                u_char *p_content,
+                u_char *p_content_end);
     public:
         MatchPreFilter();
         ~MatchPreFilter();
