@@ -30,16 +30,16 @@
 #define RESERVED     0xE0 /* bits 5..7: reserved */
 
 class Gzip{
-	public:
-		u_char outbuffer[SAVE_MAX_SIZE];
-		Gzip();
-		~Gzip();
-		int dec_init(z_stream *z);
-		int dec_gzip(u_char* outbuf, u_char* inbuf, int len, z_stream *z);
-		int dec_zlib(u_char* outbuf, u_char* inbuf, int len, z_stream *z);
-		int dec_deflate(u_char* outbuf, u_char* inbuf, int size, z_stream *z);
+    public:
+        u_char outbuffer[SAVE_MAX_SIZE];
+        Gzip();
+        ~Gzip();
+        int dec_init(z_stream *z);
+        int dec_gzip(u_char* outbuf, u_char* inbuf, int len, z_stream *z);
+        int dec_zlib(u_char* outbuf, u_char* inbuf, int len, z_stream *z);
+        int dec_deflate(u_char* outbuf, u_char* inbuf, int size, z_stream *z);
 
-	private:
+    private:
 
 };
 

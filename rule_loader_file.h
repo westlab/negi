@@ -20,8 +20,8 @@ using namespace pqxx;
 
 class RuleLoaderFile
 {
-	private:
-	public:
-		RuleLoaderFile();
-		int Proc();
+    private:
+    public:
+        RuleLoaderFile();
+        int Proc();
 };

@@ -23,15 +23,15 @@
 #include <pcap.h>
 
 class PacketFileReader {
-	friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
+    friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
-	private:
+    private:
 
-	public:
-		PacketFileReader();
-		void Init();
-		void StartLoop();
-		void Loop();
+    public:
+        PacketFileReader();
+        void Init();
+        void StartLoop();
+        void Loop();
 };
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 

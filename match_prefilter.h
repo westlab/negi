@@ -28,58 +28,65 @@ const int MAXS = 200000;//max number of states < the number of characters of pat
 const int MAXC = 256;//ascii code
 
 class ActiveRule{
-	friend class MatchPreFilterState;
-	friend class MatchPreFilter;
-	private:
+    friend class MatchPreFilterState;
+    friend class MatchPreFilter;
+    private:
 //        Rule *p_rule;
-		list<Rule*>::iterator rule_it;
-		int rule_state_flag;
-		//for kmp
-		int kmp_state;
+        list<Rule*>::iterator rule_it;
+        int rule_state_flag;
+        //for kmp
+        int kmp_state;
 };
 
 class MatchPreFilterState{
-	friend class MatchPreFilter;
-	private:
-		list<ActiveRule*> active_rule_list;
-		int max_prefilter_pattern_size;
-		int after_ip_filter;
-		int after_pre_filter;
-		string match_pre_filter_log;
+    friend class MatchPreFilter;
+    private:
+        list<ActiveRule*> active_rule_list;
+        int max_prefilter_pattern_size;
+        int after_ip_filter;
+        int after_pre_filter;
+        string match_pre_filter_log;
 
-		//for BM
-		u_char *temp_buf;
-		//for Aho
-		int tmpState;
+        //for BM
+        u_char *temp_buf;
+        //for Aho
+        int tmpState;
 
-	public:
-		MatchPreFilterState(Stream *stream);
-		~MatchPreFilterState();
-		int GetAfterIpFilter(){return after_ip_filter;}
-		int GetAfterPreFilter(){return after_pre_filter;}
-		string GetMatchPreFilterLog(){return match_pre_filter_log;}
+    public:
+        MatchPreFilterState(Stream *stream);
+        ~MatchPreFilterState();
+        int GetAfterIpFilter(){return after_ip_filter;}
+        int GetAfterPreFilter(){return after_pre_filter;}
+        string GetMatchPreFilterLog(){return match_pre_filter_log;}
 };
 
 class MatchPreFilter{
-	private:
-		int **out;
-		int **g;
-		u_char& GetText(int i, u_char *p_content, MatchPreFilterState *state);
+    private:
+        int **out;
+        int **g;
+        u_char& GetText(int i, u_char *p_content, MatchPreFilterState *state);
 
 #ifndef MATCH_ALL
-		int AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
-		int Slide(int mode, int j, int i, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
-		int BoyerMoore(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end, Rule *rule);
+        int AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
+        int Slide(int mode, int j, int i, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content);
+        int BoyerMoore(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end, Rule *rule);
 #endif
 
-		MatchPreFilterState * MakeMatchPreFilterState(Stream *stream);
-		char buffer[BUFF_SIZE];
+        MatchPreFilterState * MakeMatchPreFilterState(Stream *stream);
+        char buffer[BUFF_SIZE];
 
-		void initAhoMachine();
-		void buildAhoMachine();
-		int AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end);
-	public:
-		MatchPreFilter();
-		~MatchPreFilter();
-		int Proc(Packet *packet);
+        void initAhoMachine();
+        void buildAhoMachine();
+        int AhoSearch(
+                int mode,
+                int start_flag,
+                MatchPreFilterState *state,
+                Packet *packet,
+                int start_place,
+                u_char *p_content,
+                u_char *p_content_end);
+    public:
+        MatchPreFilter();
+        ~MatchPreFilter();
+        int Proc(Packet *packet);
 };

@@ -14,12 +14,12 @@
 #include "ip_filter.h"
 
 IpFilter::IpFilter(){
-	return;
+    return;
 }
 
 void IpFilter::Proc(Packet *pkt){
-	Stream *stream = pkt->GetStream();
-	if(stream->GetPacketNum() == 1){
-	}
-	return;
+    Stream *stream = pkt->GetStream();
+    if(stream->GetPacketNum() == 1){
+    }
+    return;
 }

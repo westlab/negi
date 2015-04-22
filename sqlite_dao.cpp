@@ -75,13 +75,13 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
 
 // Get SQL from a file and create table.
 void SqliteDao::CreateTableFromFile(const string &file_path){
-	ifstream is;
-	is.open(file_path.c_str());
+    ifstream is;
+    is.open(file_path.c_str());
 
-	if(!is){
-		cout << "Config: Can't open " << file_path << "."<< endl;
-		exit(1);
-	}
+    if(!is){
+        cout << "Config: Can't open " << file_path << "."<< endl;
+        exit(1);
+    }
 
     string sqls;
     for (string line; getline(is, line);){

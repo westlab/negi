@@ -5,6 +5,17 @@ machine:
 
 dependencies:
   pre:
-   - sudo apt-get update; sudo apt-get install  libpcap-dev zlib1g-dev  libsqlite3-dev
+   - sudo apt-get update
+   - sudo apt-get install libpcap-dev
+   - sudo apt-get install libsqlite3-dev
+   - sudo apt-get install cmake
+   - sudo apt-get install -y autoconf automake libtool make gcc-4.8 g++-4.8
+   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+   - sudo apt-get install libgoogle-glog-dev
   override:
-   - cmake .; make
+   - cmake .
+   - cmake --build . --target negi -- -j 4
+
+test:
+  override:
+    - exit 0

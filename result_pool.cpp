@@ -19,7 +19,13 @@ ResultPool::ResultPool(){
 ResultPool::~ResultPool(){
 }
 
-void ResultPool::AddResult(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string){
-	result_pool.push_back(new Result(pstream, fid, sof_size, poffset_size, pcontent_size, r_string));
+void ResultPool::AddResult(
+        Stream *pstream,
+        unsigned int fid,
+        unsigned long int sof_size,
+        unsigned int poffset_size,
+        unsigned int pcontent_size,
+        unsigned char* r_string){
+    result_pool.push_back(new Result(pstream, fid, sof_size, poffset_size, pcontent_size, r_string));
 
 }
