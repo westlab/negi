@@ -30,7 +30,7 @@
 #define SQLITE_MODE
 #define POSTGRES_MODE
 //#define FILEWRITE_MODE
-#define DEBUG
+//#define DEBUG
 
 enum Trunc{
 	FULL, TRUNCATED

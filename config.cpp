@@ -18,7 +18,7 @@ int Config::init(const string filename){
     ifstream is;
     is.open(filename.c_str());
     if(!is){
-        cout << "Config: Can't open " << filename << "."<< endl;
+        cerr << "Config: Can't open " << filename << "."<< endl;
         exit(1);
     }
     while(!is.eof()){
@@ -38,7 +38,7 @@ void Config::set(const string index, const string value){
 
 string Config::get(const string index){
     if(config_map.find(index) == config_map.end()){
-        cout << "Config: "<< index << "No such config value." << endl;
+        cerr << "Config: "<< index << "No such config value." << endl;
         return 0;
     }else{
         return config_map[index];

@@ -16,17 +16,17 @@
 
 #include <functional>
 #include <utility>
-
+#include "glog/logging.h"
 
 
 int main(int argc, char *argv[]){
 //	signal(SIGINT, signal_handler);
-
+    google::InitGoogleLogging("negi");
+    LOG(INFO) << "start negi";
 if(argc != 2){
     cerr << "Usage: " << argv[0] << " config_file" << endl;
     return 1;
 }
-
     //Read arguments
     string config_file = argv[1];
 

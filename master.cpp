@@ -11,6 +11,7 @@
 */
 #include "master.h"
 #include "global.h"
+#include "glog/logging.h"
 
 Master::Master(){
 
@@ -27,18 +28,17 @@ Master::~Master(){
     return;
 }
 void Master::Proc(Packet *pkt){
-    MASTER_DEBUG(MSG("Master Proc!"));
+    LOG(INFO) << "Master Proc";
     stream_rebuild->Proc(pkt);
 
     if(pkt->GetError() == 0){
-        //ip_filter.Proc(pkt);
-    MASTER_DEBUG(MSG("http_decode"));
+        LOG(INFO) << "Http Decode";
         http_decoder->Proc(pkt);
 
-    MASTER_DEBUG(MSG("match_pre"));
+        LOG(INFO) << "Match Prefilter";
         match_pre_filter->Proc(pkt);
 
-    MASTER_DEBUG(MSG("extract"));
+        LOG(INFO) << "Extract";
         extractor->Proc(pkt);
     }
 

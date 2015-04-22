@@ -15,8 +15,6 @@
 #include "packet.h"
 #include <ext/stdio_filebuf.h>
 
-
-
 #ifdef MASTER_DEBUG_EN
 #define MASTER_DEBUG(x)  x ;
 #else
