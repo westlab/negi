@@ -8,5 +8,6 @@ add_executable(negi ${negiSrcs})
 target_link_libraries(negi pcap)
 target_link_libraries(negi z)
 target_link_libraries(negi sqlite3)
+target_link_libraries(negi glog)
 
 
