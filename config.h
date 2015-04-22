@@ -20,18 +20,18 @@
 
 class Config
 {
-	private:
-		map<string, string> config_map;
-		void setDefault();
+    private:
+        map<string, string> config_map;
+        void setDefault();
 
-	public:
-		Config(const string filename);
-		Config();
-		int init(const string filename);
-		string get(const string index);
-		void set(const string index, const string value);
-		string operator[](const string index);
-		string operator[](const char *);
-		void show();
+    public:
+        Config(const string filename);
+        Config();
+        int init(const string filename);
+        string get(const string index);
+        void set(const string index, const string value);
+        string operator[](const string index);
+        string operator[](const char *);
+        void show();
 };
 #endif

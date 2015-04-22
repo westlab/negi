@@ -15,11 +15,11 @@
 #include "file_writer.h"
 
 FileWriter::FileWriter(){
-	ofs.open("./output.txt", ios::trunc | ios::binary);
-	return;
+    ofs.open("./output.txt", ios::trunc | ios::binary);
+    return;
 }
 
 
 void FileWriter::Write(const string& str){
-	ofs << str << endl;
+    ofs << str << endl;
 }

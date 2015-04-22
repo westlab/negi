@@ -17,9 +17,9 @@ using namespace pqxx;
 
 class PgsqlRuleLoader
 {
-	private:
-	public:
-		PgsqlRuleLoader();
-		int Proc();
-		int UpdateCheck();
+    private:
+    public:
+        PgsqlRuleLoader();
+        int Proc();
+        int UpdateCheck();
 };

@@ -23,19 +23,19 @@
 
 class StreamRebuild
 {
-	private:
-		void SearchStream(Packet * pkt);
-		struct keyvalue{
-			struct in_addr src_ip;
-			struct in_addr dst_ip;
-			unsigned int src_port;
-			unsigned int dst_port;
-		};
+    private:
+        void SearchStream(Packet * pkt);
+        struct keyvalue{
+            struct in_addr src_ip;
+            struct in_addr dst_ip;
+            unsigned int src_port;
+            unsigned int dst_port;
+        };
 
 
 
-	public:
-		StreamRebuild();
-		void Proc(Packet *pkt);
-		void Init(Packet *pkt);
+    public:
+        StreamRebuild();
+        void Proc(Packet *pkt);
+        void Init(Packet *pkt);
 };

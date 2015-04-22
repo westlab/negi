@@ -19,35 +19,35 @@
 #include "rule_loader_file.h"
 
 RuleLoaderFile::RuleLoaderFile(){
-	return;
+    return;
 }
 
 int RuleLoaderFile::Proc(){
-	rule_pool->Clear();
+    rule_pool->Clear();
 
-	ifstream is;
-	is.open( config->get("rule_file").c_str());
+    ifstream is;
+    is.open( config->get("rule_file").c_str());
 
-	if(!is){
-		cout << "Config: Can't open " << config->get("rule_file") << "."<< endl;
-		exit(1);
-	}
-	while(!is.eof()){
-		int id;
-		string rule;
+    if(!is){
+        cout << "Config: Can't open " << config->get("rule_file") << "."<< endl;
+        exit(1);
+    }
+    while(!is.eof()){
+        int id;
+        string rule;
 
-		is >> id >> rule;
-		cout << rule << endl;
+        is >> id >> rule;
+        cout << rule << endl;
         cout << "Start add rule loop" << endl;
-		rule_pool->AddRule(id, rule);
+        rule_pool->AddRule(id, rule);
 
-	}
-	rule_pool->DeleteLastRule();
-	stream_id_prev = 0;
+    }
+    rule_pool->DeleteLastRule();
+    stream_id_prev = 0;
 
 
 
-	return 0;
+    return 0;
 }
 
 #endif //USE_POSTGRES

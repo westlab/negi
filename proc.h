@@ -26,15 +26,15 @@
 
 class Proc
 {
-	private:
-		int observer_packet_counter;
+    private:
+        int observer_packet_counter;
 
-	public:
-		Proc();
-		~Proc();
-		void Init();
-		void InitPacket();
-		void InitManager();
-		void InitMaster();
+    public:
+        Proc();
+        ~Proc();
+        void Init();
+        void InitPacket();
+        void InitManager();
+        void InitMaster();
 
 };

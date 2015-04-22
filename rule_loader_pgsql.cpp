@@ -19,89 +19,89 @@
 #include "RuleLoaderPgsql.H"
 
 RuleLoaderPgsql::RuleLoaderPgsql(){
-	return;
+    return;
 }
 
 
 int RuleLoaderPgsql::Proc(){
-	rule_pool->Clear();
+    rule_pool->Clear();
 
-	string	sql = 	"select id,owner,timestamp, ";
-			sql +=	"src_ip, src_netmask ,src_port, ";
-			sql +=	"dst_ip, dst_netmask ,dst_port, ";
-			sql +=	"regexp, prefilter_pattern, ";
-			sql +=	"prefilter_offset, prefilter_depth, ";
-			sql +=	"save_flag ";
-			sql +=	" from rule order by id";
-	try{
-		result res = pgsql->ExecSql(sql);
-		for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
-			rule_pool->AddRule(	c[0].as(u_int()), c[1].as(string()), c[2].as(string()), c[3].as(string()), \
-			c[4].as(string()), c[5].as(u_int()), c[6].as(string()), c[7].as(string()), c[8].as(u_int()), \
-			c[9].as(string()),c[10].as(string()),c[11].as(u_int()), c[12].as(u_int()), c[13].as(u_int()));
+    string	sql = 	"select id,owner,timestamp, ";
+            sql +=	"src_ip, src_netmask ,src_port, ";
+            sql +=	"dst_ip, dst_netmask ,dst_port, ";
+            sql +=	"regexp, prefilter_pattern, ";
+            sql +=	"prefilter_offset, prefilter_depth, ";
+            sql +=	"save_flag ";
+            sql +=	" from rule order by id";
+    try{
+        result res = pgsql->ExecSql(sql);
+        for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
+            rule_pool->AddRule(	c[0].as(u_int()), c[1].as(string()), c[2].as(string()), c[3].as(string()), \
+            c[4].as(string()), c[5].as(u_int()), c[6].as(string()), c[7].as(string()), c[8].as(u_int()), \
+            c[9].as(string()),c[10].as(string()),c[11].as(u_int()), c[12].as(u_int()), c[13].as(u_int()));
 
-		}
-	}
-	catch (const exception& e){
-		cerr << e.what() << endl;
-	}
-	catch (...){
-		cerr << "unhandled exception" << endl;
-	}
+        }
+    }
+    catch (const exception& e){
+        cerr << e.what() << endl;
+    }
+    catch (...){
+        cerr << "unhandled exception" << endl;
+    }
 
-	sql = 	"select max(id) from save_stream";
-	try{
-		result res = pgsql->ExecSql(sql);
-		for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
-			stream_id_prev = c[0].as(u_int());
+    sql = 	"select max(id) from save_stream";
+    try{
+        result res = pgsql->ExecSql(sql);
+        for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
+            stream_id_prev = c[0].as(u_int());
 //			cout << "STREAM MAX ID: " << stream_id_prev << endl;
-		}
-	return 0;
-	}
-	catch (const exception& e){
-		cerr << e.what() << endl;
-	}
-	catch (...){
-		cerr << "unhandled exception" << endl;
-	}
+        }
+    return 0;
+    }
+    catch (const exception& e){
+        cerr << e.what() << endl;
+    }
+    catch (...){
+        cerr << "unhandled exception" << endl;
+    }
 
 
 
-	return 0;
+    return 0;
 }
 
 int RuleLoaderPgsql::UpdateCheck(){
-	int update_flag;
-	string sql;
-	sql = 	"select updated from update_check where value = 'rule'";
-	try{
-		result res = pgsql->ExecSql(sql);
-		for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
-			update_flag = c[0].as(u_int());
+    int update_flag;
+    string sql;
+    sql = 	"select updated from update_check where value = 'rule'";
+    try{
+        result res = pgsql->ExecSql(sql);
+        for( result::const_iterator c = res.begin(); c != res.end(); ++c ) {
+            update_flag = c[0].as(u_int());
 //			cout << "STREAM MAX ID: " << stream_id_prev << endl;
-		}
-	}
-	catch (const exception& e){
-		cerr << e.what() << endl;
-	}
-	catch (...){
-		cerr << "unhandled exception" << endl;
-	}
-	if(update_flag == 1){
-		cout << "Rule is updated!!" << endl;
-		sql = 	"update update_check set updated = 0 where value = 'rule'";
-		try{
-			result res = pgsql->ExecSql(sql);
-		}
-		catch (const exception& e){
-			cerr << e.what() << endl;
-		}
-		catch (...){
-			cerr << "unhandled exception" << endl;
-		}
-	}
+        }
+    }
+    catch (const exception& e){
+        cerr << e.what() << endl;
+    }
+    catch (...){
+        cerr << "unhandled exception" << endl;
+    }
+    if(update_flag == 1){
+        cout << "Rule is updated!!" << endl;
+        sql = 	"update update_check set updated = 0 where value = 'rule'";
+        try{
+            result res = pgsql->ExecSql(sql);
+        }
+        catch (const exception& e){
+            cerr << e.what() << endl;
+        }
+        catch (...){
+            cerr << "unhandled exception" << endl;
+        }
+    }
 
-	return update_flag;
+    return update_flag;
 }
 
 

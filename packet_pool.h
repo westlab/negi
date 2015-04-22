@@ -15,20 +15,20 @@
 
 class PacketPool
 {
-	private:
-		list<Packet*> packet_pool;
+    private:
+        list<Packet*> packet_pool;
 
-	public:
-		PacketPool();
-		~PacketPool();
+    public:
+        PacketPool();
+        ~PacketPool();
 
-		void RefreshPacket();
+        void RefreshPacket();
 
-		list<Packet*>::iterator GetPacketFirstIt();
-		list<Packet*>::iterator GetPacketLastIt();
-		list<Packet*>::iterator RemovePacketIt(list<Packet*>::iterator it);
+        list<Packet*>::iterator GetPacketFirstIt();
+        list<Packet*>::iterator GetPacketLastIt();
+        list<Packet*>::iterator RemovePacketIt(list<Packet*>::iterator it);
 
-		Packet * AddPacket(Packet* pkt);
-		Packet* AddPacket( string content_size, string src_ip, string src_port, string dst_ip, string dst_port, string flag, string content);
-		void ShowPackets();
+        Packet * AddPacket(Packet* pkt);
+        Packet* AddPacket( string content_size, string src_ip, string src_port, string dst_ip, string dst_port, string flag, string content);
+        void ShowPackets();
 };

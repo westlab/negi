@@ -20,10 +20,10 @@ using namespace pqxx;
 
 class PgsqlSaver
 {
-	private:
-		char timetemp[100];
-	public:
-		PgsqlSaver();
-		void Proc(Stream * stream);
-		void ProcPacket(Packet * pkt);
+    private:
+        char timetemp[100];
+    public:
+        PgsqlSaver();
+        void Proc(Stream * stream);
+        void ProcPacket(Packet * pkt);
 };

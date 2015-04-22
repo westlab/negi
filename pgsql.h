@@ -16,23 +16,23 @@ using namespace pqxx;
 
 class Pgsql
 {
-	private:
-		connection *conn;
-		result res;
-		int SelectSqlInt(const string& sql);
-		map<int,string> SelectSqlIntStr(const string& sql);
-		map<string,string> SelectSqlStrStr(const string& sql);
-	public:
-		Pgsql();
-		int Connect(const string& dbname, const string& dbuser = "", const string& dbhost = "", const string& dbpass = "");
-		int Disconnect();
-		result ExecSql(const string& sql);
-		connection *GetConn(){return conn;}
-		int CheckFilter();
-		int SelectFilter();
-		int Proc();
-		map<int,string> SelectRegexp();
-		map<string,string> SelectConfig();
+    private:
+        connection *conn;
+        result res;
+        int SelectSqlInt(const string& sql);
+        map<int,string> SelectSqlIntStr(const string& sql);
+        map<string,string> SelectSqlStrStr(const string& sql);
+    public:
+        Pgsql();
+        int Connect(const string& dbname, const string& dbuser = "", const string& dbhost = "", const string& dbpass = "");
+        int Disconnect();
+        result ExecSql(const string& sql);
+        connection *GetConn(){return conn;}
+        int CheckFilter();
+        int SelectFilter();
+        int Proc();
+        map<int,string> SelectRegexp();
+        map<string,string> SelectConfig();
 };
 
 #endif

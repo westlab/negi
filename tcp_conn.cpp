@@ -15,70 +15,70 @@
 #include "tcp_conn.h"
 
 TcpConn::TcpConn(unsigned int port_map_key, Packet * pkt){
-	//Count tcpconn cleation
-	observer->TcpConnCreated();
-	timestamp = pkt->GetTimestamp();
-	last_updated_time = pkt->GetTimestamp();
-	src_ip = pkt->GetSrcIP();
-	src_port = pkt->GetSrcPort();
-	dst_ip = pkt->GetDstIP();
-	dst_port = pkt->GetDstPort();
+    //Count tcpconn cleation
+    observer->TcpConnCreated();
+    timestamp = pkt->GetTimestamp();
+    last_updated_time = pkt->GetTimestamp();
+    src_ip = pkt->GetSrcIP();
+    src_port = pkt->GetSrcPort();
+    dst_ip = pkt->GetDstIP();
+    dst_port = pkt->GetDstPort();
 
-	prev_direction = NEW;
-	destructing_flag = 0;
+    prev_direction = NEW;
+    destructing_flag = 0;
 
-	tcp_conn_pool_it = tcp_conn_pool->AddTcpConn(port_map_key, this);
+    tcp_conn_pool_it = tcp_conn_pool->AddTcpConn(port_map_key, this);
 }
 
 TcpConn::~TcpConn(){
-	//Count tcpconn deletion
-	observer->TcpConnDeleted();
-	destructing_flag=1;
+    //Count tcpconn deletion
+    observer->TcpConnDeleted();
+    destructing_flag=1;
 
-	tcp_conn_pool->RemoveTcpConnIt(tcp_conn_pool_it);
-	if(stream_list.size() !=0){
-		list<Stream *>::iterator it= stream_list.begin();
-		list<Stream *>::iterator it2;
-		while(it != stream_list.end()){
-				it2 = --it;
-				++it;
-			if(it != stream_list.end()){
-				delete *it;
-			}
-			it = it2;
-		}
-	}
+    tcp_conn_pool->RemoveTcpConnIt(tcp_conn_pool_it);
+    if(stream_list.size() !=0){
+        list<Stream *>::iterator it= stream_list.begin();
+        list<Stream *>::iterator it2;
+        while(it != stream_list.end()){
+                it2 = --it;
+                ++it;
+            if(it != stream_list.end()){
+                delete *it;
+            }
+            it = it2;
+        }
+    }
 }
 
 void TcpConn::AddStream( Stream *stream){
-	last_updated_time = stream->GetTimestamp();
-	stream->SetTcpConnIt(stream_list.insert(stream_list.end(),stream));
-	stream->SetTcpConn(this);
+    last_updated_time = stream->GetTimestamp();
+    stream->SetTcpConnIt(stream_list.insert(stream_list.end(),stream));
+    stream->SetTcpConn(this);
 }
 
 void TcpConn::SetPrevDirection(u_char dir){
-	prev_direction = dir;
+    prev_direction = dir;
 }
 
 list<Stream*>::iterator TcpConn::GetStreamFirstIt(){
-	return stream_list.begin();
+    return stream_list.begin();
 };
 
 list<Stream*>::iterator TcpConn::GetStreamLastIt(){
-	return stream_list.end();
+    return stream_list.end();
 };
 
 list<Stream*>::iterator TcpConn::RemoveStreamIt(list<Stream*>::iterator it){
-	stream_list.erase(it);
-	if(stream_list.size() == 0 && destructing_flag == 0){
-		//cout << "deleting myself!" << endl;
-		delete this;
-	}
-	return it;
+    stream_list.erase(it);
+    if(stream_list.size() == 0 && destructing_flag == 0){
+        //cout << "deleting myself!" << endl;
+        delete this;
+    }
+    return it;
 };
 
 void TcpConn::Show(){
-	for(list<Stream*>::iterator it = stream_list.begin(); it != stream_list.end(); it++){
-		(*it)->Show();
-	}
+    for(list<Stream*>::iterator it = stream_list.begin(); it != stream_list.end(); it++){
+        (*it)->Show();
+    }
 }
