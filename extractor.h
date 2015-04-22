@@ -17,9 +17,9 @@
 
 class Extractor
 {
-	private:
+    private:
 
-	public:
-		Extractor();
-		void Proc(Packet *pkt);
+    public:
+        Extractor();
+        void Proc(Packet *pkt);
 };

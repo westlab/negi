@@ -6,63 +6,63 @@
 
 
 Config::Config(const string filename){
-	init(filename);
+    init(filename);
 }
 
 Config::Config(){
 }
 
 int Config::init(const string filename){
-	setDefault();
+    setDefault();
 
-	ifstream is;
-	is.open(filename.c_str());
-	if(!is){
-		cout << "Config: Can't open " << filename << "."<< endl;
-		exit(1);
-	}
-	while(!is.eof()){
-		string index;
-		string value;
+    ifstream is;
+    is.open(filename.c_str());
+    if(!is){
+        cout << "Config: Can't open " << filename << "."<< endl;
+        exit(1);
+    }
+    while(!is.eof()){
+        string index;
+        string value;
 
-		is >> index >> value;
+        is >> index >> value;
 
-		config_map[index] = value;
-	}
-	return 0;
+        config_map[index] = value;
+    }
+    return 0;
 }
 
 void Config::set(const string index, const string value){
-	config_map[index] = value;
+    config_map[index] = value;
 }
 
 string Config::get(const string index){
-	if(config_map.find(index) == config_map.end()){
-		cout << "Config: "<< index << "No such config value." << endl;
-		return 0;
-	}else{
-		return config_map[index];
-	}
+    if(config_map.find(index) == config_map.end()){
+        cout << "Config: "<< index << "No such config value." << endl;
+        return 0;
+    }else{
+        return config_map[index];
+    }
 }
 
 string Config::operator[](const string index){
-	return get(index);
+    return get(index);
 }
 
 string Config::operator[](const char *index){
-	string temp(index);
-	return get(temp);
+    string temp(index);
+    return get(temp);
 }
 
 
 void Config::show(){
-	for(map<string, string>::iterator it=config_map.begin();it != config_map.end(); it++){
-	cout << "config["<<it->first<<"] = "<<it->second << endl;
-	}
+    for(map<string, string>::iterator it=config_map.begin();it != config_map.end(); it++){
+    cout << "config["<<it->first<<"] = "<<it->second << endl;
+    }
 }
 
 void Config::setDefault(){
-	config_map["ip_packet_mode"] = "false";
+    config_map["ip_packet_mode"] = "false";
     config_map["rule_file"] = "";
     config_map["pcap_filter"] = "";
     config_map["savemode"] = "packet";

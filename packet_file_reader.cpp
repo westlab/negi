@@ -16,31 +16,31 @@
 #include "packet_file_reader.h"
 
 PacketFileReader::PacketFileReader(){
-	return;
+    return;
 }
 
 void PacketFileReader::Init(){
 
-	ifstream is;
-	is.open(config->get("filename").c_str());
-	if(!is){
-		cout << "PacketFileReader: Can't open " << config->get("filename") << "."<< endl;
-		exit(1);
-	}
-	while(!is.eof()){
-		string timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content;
+    ifstream is;
+    is.open(config->get("filename").c_str());
+    if(!is){
+        cout << "PacketFileReader: Can't open " << config->get("filename") << "."<< endl;
+        exit(1);
+    }
+    while(!is.eof()){
+        string timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content;
 
-		is >> timestamp >> content_size >> src_ip >> src_port >> dst_ip >> dst_port >> flag >> content;
-		if(content_size == "0"){
-			observer->Show();
-			exit(0);
+        is >> timestamp >> content_size >> src_ip >> src_port >> dst_ip >> dst_port >> flag >> content;
+        if(content_size == "0"){
+            observer->Show();
+            exit(0);
 
-			}
+            }
 
-		Packet *pkt = new Packet( timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content);
-		master->Proc(pkt);
-	}
+        Packet *pkt = new Packet( timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content);
+        master->Proc(pkt);
+    }
 
-	exit(0);
+    exit(0);
 
 }

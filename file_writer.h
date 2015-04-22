@@ -15,11 +15,11 @@
 
 class FileWriter
 {
-	private:
-		ofstream ofs;
-	public:
-		FileWriter();
-		void Write(const string& str);
+    private:
+        ofstream ofs;
+    public:
+        FileWriter();
+        void Write(const string& str);
 };
 
 #endif

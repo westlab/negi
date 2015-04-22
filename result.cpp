@@ -13,16 +13,16 @@
 #include "global.h"
 
 Result::Result(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char * r_string){
-		parent_stream = pstream;
-		filter_id = fid;
-		stream_offset_size = sof_size;
-		packet_offset_size = poffset_size;
-		packet_content_size = pcontent_size;
-		memcpy(r_string, result_string, RESULT_SIZE);
+        parent_stream = pstream;
+        filter_id = fid;
+        stream_offset_size = sof_size;
+        packet_offset_size = poffset_size;
+        packet_content_size = pcontent_size;
+        memcpy(r_string, result_string, RESULT_SIZE);
 
-	return;
+    return;
 }
 
 Result::~Result(){
-	return;
+    return;
 }

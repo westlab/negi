@@ -13,43 +13,43 @@
 #include "global.h"
 
 Proc::Proc(){
-	return;
+    return;
 }
 
 Proc::~Proc(){
-	return;
+    return;
 }
 
 void Proc::Init(){
 }
 
 void Proc::InitManager(){
-	// lock shem
-	// initialize shem
-	// read config
-	// unlock shem
-	config = new Config;
-	packet_pool = new PacketPool;
-	rule_pool = new RulePool;
-	stream_rebuild = new StreamRebuild;
-	ip_filter = new IpFilter;
-	match_pre_filter = new MatchPreFilter;
-	extractor = new Extractor;
-	stream_pool = new StreamPool;
+    // lock shem
+    // initialize shem
+    // read config
+    // unlock shem
+    config = new Config;
+    packet_pool = new PacketPool;
+    rule_pool = new RulePool;
+    stream_rebuild = new StreamRebuild;
+    ip_filter = new IpFilter;
+    match_pre_filter = new MatchPreFilter;
+    extractor = new Extractor;
+    stream_pool = new StreamPool;
 #ifdef USE_POSTGRES
-	pgsql = new Pgsql;
-	pgsql_saver = new PgsqlSaver;
-	rule_loader_pgsql = new RuleLoaderPgsql;
+    pgsql = new Pgsql;
+    pgsql_saver = new PgsqlSaver;
+    rule_loader_pgsql = new RuleLoaderPgsql;
 #endif
-	tcp_conn_pool = new TcpConnPool;
-	packet_clean = new PacketClean;
-	observer = new Observer;
+    tcp_conn_pool = new TcpConnPool;
+    packet_clean = new PacketClean;
+    observer = new Observer;
 }
 
 void Proc::InitPacket(){
-	//wait shem unlock
+    //wait shem unlock
 }
 
 void Proc::InitMaster(){
-	//wait shem unlock
+    //wait shem unlock
 }

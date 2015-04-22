@@ -26,14 +26,14 @@
 
 class Master
 {
-	private:
-		int observer_packet_counter;
-		long long all_packet_counter;
-		time_t start_time;
+    private:
+        int observer_packet_counter;
+        long long all_packet_counter;
+        time_t start_time;
 
-	public:
-		Master();
-		~Master();
-		void Loop();
-		void Proc(Packet *pkt);
+    public:
+        Master();
+        ~Master();
+        void Loop();
+        void Proc(Packet *pkt);
 };

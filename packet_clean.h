@@ -15,11 +15,11 @@
 
 class PacketClean
 {
-	private:
-		struct timeval last_gc_time;
+    private:
+        struct timeval last_gc_time;
 
-	public:
-		PacketClean();
-		~PacketClean();
-		void Proc(Packet *pkt);
+    public:
+        PacketClean();
+        ~PacketClean();
+        void Proc(Packet *pkt);
 };

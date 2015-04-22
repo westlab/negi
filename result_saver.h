@@ -15,10 +15,10 @@
 
 class ResultSaver
 {
-	private:
+    private:
 
-	public:
-		ResultSaver();
-		~ResultSaver();
-		void Proc(Packet *pkt);
+    public:
+        ResultSaver();
+        ~ResultSaver();
+        void Proc(Packet *pkt);
 };

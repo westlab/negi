@@ -16,13 +16,13 @@
 
 class ResultPool
 {
-	private:
-		list<Result*> result_pool;
+    private:
+        list<Result*> result_pool;
 
-	public:
-		ResultPool();
-		~ResultPool();
-		void AddResult(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string);
-		list<Result *>::iterator GetResultFirstIt(){return result_pool.begin();};
-		list<Result *>::iterator GetResultLastIt(){return result_pool.end();};
+    public:
+        ResultPool();
+        ~ResultPool();
+        void AddResult(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string);
+        list<Result *>::iterator GetResultFirstIt(){return result_pool.begin();};
+        list<Result *>::iterator GetResultLastIt(){return result_pool.end();};
 };

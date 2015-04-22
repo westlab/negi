@@ -14,50 +14,50 @@
 
 ResultSaver::ResultSaver(){
 
-	return;
+    return;
 }
 ResultSaver::~ResultSaver(){
-	return;
+    return;
 }
 
 void ResultSaver::Proc(Packet *pkt){
-	for(list<Result *>::iterator it=result_pool->GetResultFirstIt(); it != result_pool->GetResultLastIt(); it++){
-		ostringstream oss;
-		oss.str("");
+    for(list<Result *>::iterator it=result_pool->GetResultFirstIt(); it != result_pool->GetResultLastIt(); it++){
+        ostringstream oss;
+        oss.str("");
 
-		oss << "insert into save_result(id, stream_id, date, rule_id, result) values "\
-		<< "NULL" << "," << (*it)->GetParentStream()->GetStreamId() << "," << (*it)->GetFilterId() << "," \
-		<< (*it)->GetStreamOffsetSize() << "," << (*it)->GetPacketOffsetSize() << "," << (*it)->GetPacketContentSize() ;
+        oss << "insert into save_result(id, stream_id, date, rule_id, result) values "\
+        << "NULL" << "," << (*it)->GetParentStream()->GetStreamId() << "," << (*it)->GetFilterId() << "," \
+        << (*it)->GetStreamOffsetSize() << "," << (*it)->GetPacketOffsetSize() << "," << (*it)->GetPacketContentSize() ;
 
-		string query = oss.str();
+        string query = oss.str();
 
 #ifdef USE_POSTGRES
-		query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
+        query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
 #endif
 
 #ifdef FILEWRITE_MODE
-			file_writer->Write(query);
+            file_writer->Write(query);
 #endif
 
 #ifdef USE_POSTGRES
 #ifdef POSTGRES_MODE
-		connection *conn = pgsql->GetConn();
-		work T(*conn);
+        connection *conn = pgsql->GetConn();
+        work T(*conn);
 
-		try{
-			T.exec(query);
-			T.commit();
-		}
-		catch(const exception &e){
-			cerr << e.what() << endl;
-		}
-		catch(...){
-			cerr << "unhandled exception" << endl;
-		}
+        try{
+            T.exec(query);
+            T.commit();
+        }
+        catch(const exception &e){
+            cerr << e.what() << endl;
+        }
+        catch(...){
+            cerr << "unhandled exception" << endl;
+        }
 #endif	//POSTGRES_MODE
 #endif	//USE_POSTGRES
 
-		oss.str("");
+        oss.str("");
 
-	}
+    }
 }

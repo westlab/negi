@@ -15,9 +15,9 @@
 
 class IpFilter
 {
-	private:
+    private:
 
-	public:
-		IpFilter();
-		void Proc(Packet *pkt);
+    public:
+        IpFilter();
+        void Proc(Packet *pkt);
 };
