@@ -122,11 +122,7 @@ void Extractor::Proc(Packet *pkt){
                     LOG(INFO) << "Source IP,port:      " << pkt->GetSrcIPStr() << ","<< pkt->GetSrcPort()<< endl;
                     LOG(INFO) << "Destination IP,port: " << pkt->GetDstIPStr() << "," <<pkt->GetDstPort()<< endl;
                     LOG(INFO) << "ResultString: " << (*it)->GetPRule()->GetPreFilterPattern();
-    #ifdef USE_POSTGRES
-                    LOG(INFO) << escape_binary((*it)->GetResultString(), (*it)->GetResultSize());
-    #else
                     LOG(INFO) << (*it)->GetResultString();
-    #endif
                     LOG(INFO) << "------------------------------------";
 
                     LOG(INFO) << "MAC Addr:" << pkt->GetDstMacAddr();
@@ -143,10 +139,6 @@ void Extractor::Proc(Packet *pkt){
 
                     string query = oss.str();
 
-#ifdef USE_POSTGRES
-                    query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
-
-#else
                     char * temp = (char *)malloc(sizeof(char)* RESULT_SIZE);
                     memcpy(temp, (char *)((*it)->GetResultString()), RESULT_SIZE - 1);
                     temp[RESULT_SIZE - 1] = '\0';
@@ -158,31 +150,10 @@ void Extractor::Proc(Packet *pkt){
                     free(temp);
                     LOG(INFO) << query;
                     sqlite_dao->ExecBatchSql(query);
-#endif
-
 
 #ifdef FILEWRITE_MODE
                     file_writer->Write(query);
 #endif
-
-#ifdef USE_POSTGRES
-#ifdef POSTGRES_MODE
-                    connection *conn = pgsql->GetConn();
-                    work T(*conn);
-
-                    try{
-
-                        T.exec(query);
-                        T.commit();
-                    }
-                    catch(const exception &e){
-                        cerr << e.what();
-                    }
-                    catch(...){
-                        cerr << "unhandled exception" << endl;
-                    }
-#endif	//POSTGRES_MODE
-#endif	//USE_POSTGRES
                     oss.str("");
                     it = pkt->GetStream()->DeletePapaResultIt(it);
                 }else if(error_flag){

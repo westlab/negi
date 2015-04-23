@@ -32,7 +32,9 @@ class Rule {
         MatchPreFilterInfo *match_pre_filter_info;
 
     public:
-        Rule(int _id, string _owner, string _timestamp, string _src_ip, string _src_netmask, int _src_port, string _dst_ip, string _dst_netmask, int _dst_port, string _regexp, string _prefilter_pattern, int _prefilter_offset, int _prefilter_depth, int _save_flag);
+        Rule(int _id, string _owner, string _timestamp, string _src_ip, string _src_netmask, int _src_port,
+             string _dst_ip, string _dst_netmask, int _dst_port, string _regexp, string _prefilter_pattern,
+             int _prefilter_offset, int _prefilter_depth, int _save_flag);
         ~Rule();
         int GetRegExpSize();
         string GetPreFilterPattern();

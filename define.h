@@ -28,7 +28,7 @@
 //#define USE_POSTGRES
 #define USE_SQLITE
 #define SQLITE_MODE
-#define POSTGRES_MODE
+// #define POSTGRES_MODE
 //#define FILEWRITE_MODE
 //#define DEBUG
 

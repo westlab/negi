@@ -48,38 +48,13 @@ void Master::Proc(Packet *pkt){
     static time_t now_time;
     static unsigned int time_counter;
 
-#ifdef USE_POSTGRES
-    if(observer_packet_counter > 1000){
-        now_time = time(NULL);
-        if(now_time > prev_time){
-            observer_packet_counter = 0;
-            prev_time = now_time;
-            time_counter++;
-        }
-        if(time_counter >10){
-            if(rule_loader_pgsql->UpdateCheck()){
-                rule_loader_pgsql->Proc();
-            }
-            time_counter = 0;
-        }
-    }else{
-        observer_packet_counter++;
-    }
-#endif
     if(!end_stream_list.empty()){
         for(list<Stream *>::iterator it=end_stream_list.begin(); it != end_stream_list.end(); it++){
             if((*it)->GetSaveFlag()){
-#ifdef USE_POSTGRES
-                pgsql_saver->Proc(*it);
-#endif
                 sqlite_saver->Proc(*it);
             }else if(atoi(config->get("save_all").c_str())){
-#ifdef USE_POSTGRES
-                pgsql_saver->Proc(*it);
-#endif
                 sqlite_saver->Proc(*it);
             }
-
         }
     }
     packet_clean->Proc(pkt);
