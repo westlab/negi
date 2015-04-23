@@ -14,8 +14,6 @@
 #include "global.h"
 #include "stream.h"
 
-#ifndef USE_POSTGRES
-
 #include "rule_loader_file.h"
 #include "glog/logging.h"
 
@@ -50,5 +48,3 @@ int RuleLoaderFile::Proc(){
 
     return 0;
 }
-
-#endif //USE_POSTGRES

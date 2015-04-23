@@ -31,32 +31,9 @@ void ResultSaver::Proc(Packet *pkt){
 
         string query = oss.str();
 
-#ifdef USE_POSTGRES
-        query += "',E'"+escape_binary((*it)->GetResultString(), (*it)->GetResultSize())+"');";
-#endif
-
 #ifdef FILEWRITE_MODE
             file_writer->Write(query);
 #endif
-
-#ifdef USE_POSTGRES
-#ifdef POSTGRES_MODE
-        connection *conn = pgsql->GetConn();
-        work T(*conn);
-
-        try{
-            T.exec(query);
-            T.commit();
-        }
-        catch(const exception &e){
-            cerr << e.what() << endl;
-        }
-        catch(...){
-            cerr << "unhandled exception" << endl;
-        }
-#endif	//POSTGRES_MODE
-#endif	//USE_POSTGRES
-
         oss.str("");
 
     }

@@ -46,14 +46,6 @@ if(argc != 2){
     observer = new Observer;
     gzip = new Gzip;
     file_writer = new FileWriter;
-
-#ifdef USE_POSTGRES
-    pgsql = new Pgsql;
-    pgsql_saver = new PgsqlSaver;
-    rule_loader_pgsql = new RuleLoaderPgsql;
-    pgsql->Connect(config->get("dbname"),config->get("dbuser"),config->get("dbhost"),config->get("dbpass"));
-    rule_loader_pgsql->Proc();
-#else
     rule_loader_file = new RuleLoaderFile;
     rule_loader_file->Proc();
     sqlite_dao = new SqliteDao;
@@ -61,7 +53,6 @@ if(argc != 2){
     sqlite_dao->CreateTableFromFile(config->get("sql_table"));
     sqlite_saver = new SqliteSaver;
 
-#endif
     match_pre_filter = new MatchPreFilter;
     rule_pool->ShowRules();
 
