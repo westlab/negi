@@ -18,7 +18,7 @@ include_directories ("${CMAKE_CURRENT_SOURCE_DIR}")
 
 # add db
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/db")
-include_directories(db)
+# include_directories(db)
 
 # db
 #set(DB "${CMAKE_CURRENT_SOURCE_DIR}/db/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/db/*.h")
