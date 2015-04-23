@@ -5,6 +5,7 @@ pcap/
 *.conf
 negi
 output.txt
+*.sqlite3
 makefile.depend
 .idea/*
 
