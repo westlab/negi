@@ -32,7 +32,6 @@ void Proc::InitManager(){
     packet_pool = new PacketPool;
     rule_pool = new RulePool;
     stream_rebuild = new StreamRebuild;
-    ip_filter = new IpFilter;
     match_pre_filter = new MatchPreFilter;
     extractor = new Extractor;
     stream_pool = new StreamPool;

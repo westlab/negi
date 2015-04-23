@@ -37,7 +37,6 @@ if(argc != 2){
     master = new Master;
     rule_pool = new RulePool;
     stream_rebuild = new StreamRebuild;
-    ip_filter = new IpFilter;
     http_decoder = new HttpDecoder;
     extractor = new Extractor;
     stream_pool = new StreamPool;

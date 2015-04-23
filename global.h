@@ -21,7 +21,6 @@
 #include "packet_file_reader.h"
 #include "tcp_conn_pool.h"
 #include "config.h"
-#include "ip_filter.h"
 #include "http_decoder.h"
 #include "master.h"
 #include "match_prefilter.h"
@@ -77,7 +76,6 @@ extern PacketPool *packet_pool;
 extern StreamPool *stream_pool;
 extern RulePool *rule_pool;
 extern StreamRebuild *stream_rebuild;
-extern IpFilter *ip_filter;
 extern HttpDecoder *http_decoder;
 extern PacketFileReader *packet_file_reader;
 extern MatchPreFilter *match_pre_filter;

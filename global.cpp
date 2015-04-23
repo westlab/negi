@@ -43,7 +43,6 @@ Config *config;
 PacketPool *packet_pool;
 RulePool *rule_pool;
 StreamRebuild *stream_rebuild;
-IpFilter *ip_filter;
 HttpDecoder *http_decoder;
 MatchPreFilter *match_pre_filter;
 Extractor *extractor;
