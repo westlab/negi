@@ -17,17 +17,17 @@ TcpConnPool::TcpConnPool(){
 }
 
 multimap<u_int, TcpConn*>::iterator TcpConnPool::AddTcpConn(u_int key, TcpConn *tcpconn){
-    return tcp_conn_pool.insert(multimap<u_int, TcpConn*>::value_type(key, tcpconn));
+    return tcp_conn_pool_.insert(multimap<u_int, TcpConn*>::value_type(key, tcpconn));
 }
 
 
 void TcpConnPool::RemoveTcpConnIt(multimap<u_int, TcpConn*>::iterator it){
-    tcp_conn_pool.erase(it);
+    tcp_conn_pool_.erase(it);
     return ;
 }
 
 void TcpConnPool::ShowTcpConnPool(){
-    for(multimap<u_int, TcpConn*>::iterator it = tcp_conn_pool.begin(); it!=tcp_conn_pool.end(); it++){
+    for(multimap<u_int, TcpConn*>::iterator it = tcp_conn_pool_.begin(); it!=tcp_conn_pool_.end(); it++){
         (it->second)->Show();
     }
 }

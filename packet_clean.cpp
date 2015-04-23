@@ -16,8 +16,8 @@
 #include "glog/logging.h"
 
 PacketClean::PacketClean(){
-    last_gc_time.tv_sec = 0;
-    last_gc_time.tv_usec = 0;
+    last_gc_time_.tv_sec = 0;
+    last_gc_time_.tv_usec = 0;
     return;
 }
 PacketClean::~PacketClean(){
@@ -48,7 +48,7 @@ void PacketClean::Proc(Packet *pkt){
     }
 
     //Gabage collect is enough 1 sec. each.
-    if(packet_timestamp.tv_sec - last_gc_time.tv_sec >= 1){
+    if(packet_timestamp.tv_sec - last_gc_time_.tv_sec >= 1){
     //Check all stream for timeout.
     for(list<Stream *>::iterator it=stream_pool->GetStreamFirstIt(); it != stream_pool->GetStreamLastIt(); it++){
         LOG(INFO) << "Stream timeout-----------------------";
@@ -83,7 +83,7 @@ void PacketClean::Proc(Packet *pkt){
             }
         }
 
-        last_gc_time.tv_sec = packet_timestamp.tv_sec;
+        last_gc_time_.tv_sec = packet_timestamp.tv_sec;
     }
 
 }

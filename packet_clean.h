@@ -16,7 +16,7 @@
 class PacketClean
 {
     private:
-        struct timeval last_gc_time;
+        struct timeval last_gc_time_;
 
     public:
         PacketClean();

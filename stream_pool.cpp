@@ -17,16 +17,16 @@ StreamPool::StreamPool(){
 }
 
 list<Stream*>::iterator StreamPool::AddStream(Stream *stream){
-    return stream_pool.insert(stream_pool.end(), stream);
+    return stream_pool_.insert(stream_pool_.end(), stream);
 }
 
 list<Stream*>::iterator StreamPool::RemoveStreamIt(list<Stream*>::iterator it){
-    if(it == stream_pool.end() ){return stream_pool.end();}
-    return stream_pool.erase(it);
+    if(it == stream_pool_.end() ){return stream_pool_.end();}
+    return stream_pool_.erase(it);
 }
 
 void StreamPool::ShowStreams(){
-    for(list<Stream*>::iterator it = stream_pool.begin(); it!=stream_pool.end(); it++){
+    for(list<Stream*>::iterator it = stream_pool_.begin(); it!=stream_pool_.end(); it++){
         (*it)->Show();
     }
 }

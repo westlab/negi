@@ -16,8 +16,8 @@
 
 class RulePool{
     private:
-        list<Rule *> rule_pool;
-        time_t update_time;
+        list<Rule *> rule_pool_;
+        time_t update_time_;
 
     public:
         RulePool();

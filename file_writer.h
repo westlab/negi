@@ -16,7 +16,7 @@
 class FileWriter
 {
     private:
-        ofstream ofs;
+        ofstream ofs_;
     public:
         FileWriter();
         void Write(const string& str);

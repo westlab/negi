@@ -19,17 +19,17 @@
 class TcpConnPool
 {
     private:
-        multimap<unsigned int, TcpConn*> tcp_conn_pool;
+        multimap<unsigned int, TcpConn*> tcp_conn_pool_;
 
     public:
         TcpConnPool();
         multimap<u_int, TcpConn*>::iterator AddTcpConn(u_int key, TcpConn *tcpconn);
 
-        u_int GetTcpConnCount(u_int key){return tcp_conn_pool.count(key);}
-        u_int GetSize(){return tcp_conn_pool.size();}
-        multimap<u_int, TcpConn*>::iterator FindTcpConn(u_int key){return tcp_conn_pool.find(key);}
-        multimap<u_int, TcpConn*>::iterator GetTcpConnFirstIt(){return tcp_conn_pool.begin();}
-        multimap<u_int, TcpConn*>::iterator GetTcpConnLastIt(){return tcp_conn_pool.end();}
+        u_int GetTcpConnCount(u_int key){return tcp_conn_pool_.count(key);}
+        u_int GetSize(){return tcp_conn_pool_.size();}
+        multimap<u_int, TcpConn*>::iterator FindTcpConn(u_int key){return tcp_conn_pool_.find(key);}
+        multimap<u_int, TcpConn*>::iterator GetTcpConnFirstIt(){return tcp_conn_pool_.begin();}
+        multimap<u_int, TcpConn*>::iterator GetTcpConnLastIt(){return tcp_conn_pool_.end();}
         void RemoveTcpConnIt(multimap<u_int, TcpConn*>::iterator it);
         void ShowTcpConnPool();
 };

@@ -20,12 +20,12 @@
 
 
 HttpDecoder::HttpDecoder(){
-    localbuf = (u_char *)malloc(sizeof(SAVE_MAX_SIZE));
+    localbuf_ = (u_char *)malloc(sizeof(SAVE_MAX_SIZE));
     return;
 }
 
 HttpDecoder::~HttpDecoder(){
-    free(localbuf);
+    free(localbuf_);
     return;
 }
 
@@ -229,23 +229,23 @@ void HttpDecoder::DecodeGzip(Packet *packet){
     if(stream->GetGzipOnlyHttpHeader() == 1){
         z = (z_stream*)malloc(sizeof(z_stream));
         stream->SetGzipZ(z);
-        gzip.dec_init(z);
+        gzip_.dec_init(z);
     }else if(stream->GetGzipOnlyHttpHeader() == 2){
         if( stream->GetHttpCompress() == GZIP){
             LOG(INFO) << "only http header dec gzip-------------";
-            offset = gzip.dec_gzip(localbuf, p_dec_start, insize, z);
+            offset = gzip_.dec_gzip(localbuf_, p_dec_start, insize, z);
         }
     }else if(stream->GetState() == BEGIN){
         insize -= stream->GetHttpHeaderSize();
         p_dec_start += stream->GetHttpHeaderSize();
         z = (z_stream*)malloc(sizeof(z_stream));
         stream->SetGzipZ(z);
-        gzip.dec_init(z);
+        gzip_.dec_init(z);
 
         if( stream->GetHttpCompress() == GZIP){
-            offset = gzip.dec_gzip(localbuf, p_dec_start, insize, z);
+            offset = gzip_.dec_gzip(localbuf_, p_dec_start, insize, z);
         }else if( stream->GetHttpCompress() == DEFLATE){
-            offset = gzip.dec_zlib(localbuf, p_dec_start, insize, z);
+            offset = gzip_.dec_zlib(localbuf_, p_dec_start, insize, z);
         }
         if(offset <= 0){
             stream->SetL7Error(1);
@@ -256,7 +256,7 @@ void HttpDecoder::DecodeGzip(Packet *packet){
 
     //WARINIG!! localbuf is not used!!
     if(stream->GetGzipOnlyHttpHeader() != 1){
-        outsize = gzip.dec_deflate(localbuf, p_dec_start+offset, insize - offset, z);
+        outsize = gzip_.dec_deflate(localbuf_, p_dec_start+offset, insize - offset, z);
     }
     //second packet after Gzip only HttpHeader
     if(stream->GetGzipOnlyHttpHeader() >= 1){
@@ -280,12 +280,12 @@ void HttpDecoder::DecodeGzip(Packet *packet){
         if(stream->GetState() == BEGIN){
             l7content = (u_char *)malloc(outsize + stream->GetHttpHeaderSize());
             memcpy(l7content, content , stream->GetHttpHeaderSize());
-            memcpy(l7content + stream->GetHttpHeaderSize(), gzip.outbuffer , outsize);
+            memcpy(l7content + stream->GetHttpHeaderSize(), gzip_.outbuffer , outsize);
             packet->SetL7Content(l7content);
             packet->SetL7ContentSize(stream->GetHttpHeaderSize() + outsize);
         }else{
             l7content = (u_char *)malloc(outsize + stream->GetHttpHeaderSize());
-            memcpy(l7content, gzip.outbuffer, outsize);
+            memcpy(l7content, gzip_.outbuffer, outsize);
             packet->SetL7Content(l7content);
             packet->SetL7ContentSize(outsize);
         }
