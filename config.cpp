@@ -27,21 +27,21 @@ int Config::init(const string filename){
 
         is >> index >> value;
 
-        config_map[index] = value;
+        config_map_[index] = value;
     }
     return 0;
 }
 
 void Config::set(const string index, const string value){
-    config_map[index] = value;
+    config_map_[index] = value;
 }
 
 string Config::get(const string index){
-    if(config_map.find(index) == config_map.end()){
+    if(config_map_.find(index) == config_map_.end()){
         cerr << "Config: "<< index << "No such config value." << endl;
         return 0;
     }else{
-        return config_map[index];
+        return config_map_[index];
     }
 }
 
@@ -56,22 +56,22 @@ string Config::operator[](const char *index){
 
 
 void Config::show(){
-    for(map<string, string>::iterator it=config_map.begin();it != config_map.end(); it++){
+    for(map<string, string>::iterator it=config_map_.begin();it != config_map_.end(); it++){
     cout << "config["<<it->first<<"] = "<<it->second << endl;
     }
 }
 
 void Config::setDefault(){
-    config_map["ip_packet_mode"] = "false";
-    config_map["rule_file"] = "";
-    config_map["pcap_filter"] = "";
-    config_map["savemode"] = "packet";
-    config_map["mallocmode"] = "malloc";
-    config_map["gc_remove_time"] = "10000000";
-    config_map["sim_time"] = "2592000"; //60*60*24*3
-    config_map["dbpass"] = "";
-    config_map["dbname"] = "";
-    config_map["dbuser"] = "";
-    config_map["dbhost"] = "";
-    config_map["save_all"] = "0";
+    config_map_["ip_packet_mode"] = "false";
+    config_map_["rule_file"] = "";
+    config_map_["pcap_filter"] = "";
+    config_map_["savemode"] = "packet";
+    config_map_["mallocmode"] = "malloc";
+    config_map_["gc_remove_time"] = "10000000";
+    config_map_["sim_time"] = "2592000"; //60*60*24*3
+    config_map_["dbpass"] = "";
+    config_map_["dbname"] = "";
+    config_map_["dbuser"] = "";
+    config_map_["dbhost"] = "";
+    config_map_["save_all"] = "0";
 }

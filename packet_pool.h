@@ -16,7 +16,7 @@
 class PacketPool
 {
     private:
-        list<Packet*> packet_pool;
+        list<Packet*> packet_pool_;
 
     public:
         PacketPool();

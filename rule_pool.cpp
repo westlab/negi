@@ -17,32 +17,32 @@ RulePool::RulePool(){
 
 
 list<Rule*>::iterator RulePool::GetRuleFirstIt(){
-    return rule_pool.begin();
+    return rule_pool_.begin();
 }
 
 list<Rule*>::iterator RulePool::GetRuleLastIt(){
-    return rule_pool.end();
+    return rule_pool_.end();
 }
 
 void RulePool::ShowRules(){
-    for(list<Rule*>::iterator it = rule_pool.begin(); it!= rule_pool.end(); it++){
+    for(list<Rule*>::iterator it = rule_pool_.begin(); it!= rule_pool_.end(); it++){
         (*it)->Show();
     }
 }
 void RulePool::ShowResult(){
-    for(list<Rule*>::iterator it = rule_pool.begin(); it!= rule_pool.end(); it++){
+    for(list<Rule*>::iterator it = rule_pool_.begin(); it!= rule_pool_.end(); it++){
         (*it)->ShowResult();
     }
 }
 void RulePool::Clear(){
-    for(list<Rule*>::iterator it = rule_pool.begin(); it!= rule_pool.end(); it++){
+    for(list<Rule*>::iterator it = rule_pool_.begin(); it!= rule_pool_.end(); it++){
         delete *it;
     }
-    rule_pool.clear();
+    rule_pool_.clear();
 }
 
 void RulePool::DeleteLastRule(){
-    rule_pool.pop_back();
+    rule_pool_.pop_back();
 }
 
 
@@ -53,7 +53,7 @@ void RulePool::AddRule(int _id, string _owner, string _timestamp, string _src_ip
     Rule* rule_p = new Rule(_id, _owner, _timestamp, _src_ip, _src_netmask, _src_port, _dst_ip, _dst_netmask,
                             _dst_port, _regexp, _prefilter_pattern,_prefilter_offset, _prefilter_depth, _save_flag);
 MPF_DEBUG(rule_p->Show();)
-    rule_pool.push_back(rule_p);
+    rule_pool_.push_back(rule_p);
 }
 
 void RulePool::AddRule(int id, string rule){
@@ -61,5 +61,5 @@ void RulePool::AddRule(int id, string rule){
     cout << "this is addrule" << endl;
     cout << rule << endl;
 MPF_DEBUG(rule_p->Show();)
-    rule_pool.push_back(rule_p);
+    rule_pool_.push_back(rule_p);
 }

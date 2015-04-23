@@ -21,7 +21,7 @@
 class Config
 {
     private:
-        map<string, string> config_map;
+        map<string, string> config_map_;
         void setDefault();
 
     public:

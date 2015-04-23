@@ -16,20 +16,20 @@
 
 class Rule {
     private:
-        int id;
-        string owner;
-        struct tm timestamp;
-        struct in_addr src_ip, src_netmask, dst_ip, dst_netmask;
-        int src_port, dst_port;
+        int id_;
+        string owner_;
+        struct tm timestamp_;
+        struct in_addr src_ip_, src_netmask_, dst_ip_, dst_netmask_;
+        int src_port_, dst_port_;
 
-        string regexp;
-        char pattern[100];
+        string regexp_;
+        char pattern_[100];
 
-        string prefilter_pattern;
-        int offset, depth;
-        int save_flag;
+        string prefilter_pattern_;
+        int offset_, depth_;
+        int save_flag_;
 
-        MatchPreFilterInfo *match_pre_filter_info;
+        MatchPreFilterInfo *match_pre_filter_info_;
 
     public:
         Rule(int _id, string _owner, string _timestamp, string _src_ip, string _src_netmask, int _src_port,
@@ -40,8 +40,8 @@ class Rule {
         string GetPreFilterPattern();
         int GetPreFilterOffset();
         int GetPreFilterDepth();
-        int GetId(){return id;}
-        int GetSaveFlag(){return save_flag;}
+        int GetId(){return id_;}
+        int GetSaveFlag(){return save_flag_;}
 
         void Show();
         void ShowResult();

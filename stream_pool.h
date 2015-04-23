@@ -19,15 +19,15 @@
 class StreamPool
 {
     private:
-        list<Stream*> stream_pool;
+        list<Stream*> stream_pool_;
 
     public:
         StreamPool();
 
         list<Stream*>::iterator AddStream(Stream *stream);
-        list<Stream*>::iterator GetStreamFirstIt(){return stream_pool.begin();}
-        list<Stream*>::iterator GetStreamLastIt(){return stream_pool.end();}
+        list<Stream*>::iterator GetStreamFirstIt(){return stream_pool_.begin();}
+        list<Stream*>::iterator GetStreamLastIt(){return stream_pool_.end();}
         list<Stream*>::iterator RemoveStreamIt(list<Stream*>::iterator it);
-        unsigned int GetSize(){return stream_pool.size();};
+        unsigned int GetSize(){return stream_pool_.size();};
         void ShowStreams();
 };

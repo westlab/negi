@@ -35,19 +35,19 @@ class HttpDecoder{
 
     private:
         int decode();
-        char* chunk_buf;		//temporary buffer for data process
-        char* st_work;		//private copied original token data
-        char* p_st_work;	//current pos. of st_work
-        char* p_st_bin;		//current pos. of token's "cooked" buffer
-        unsigned int st_work_size;	//current size of yet not decoded data
-        char* msg_buf;
-        Gzip gzip;
-        u_char *localbuf;
-        unsigned int header_size;
-        HttpCompress msg_cmp;
-        int msg_chunked;
-        int msg_end;
-        int offset;
+        char* chunk_buf_;		//temporary buffer for data process
+        char* st_work_;		//private copied original token data
+        char* p_st_work_;	//current pos. of st_work
+        char* p_st_bin_;		//current pos. of token's "cooked" buffer
+        unsigned int st_work_size_;	//current size of yet not decoded data
+        char* msg_buf_;
+        Gzip gzip_;
+        u_char *localbuf_;
+        unsigned int header_size_;
+        HttpCompress msg_cmp_;
+        int msg_chunked_;
+        int msg_end_;
+        int offset_;
 
         void HeaderCheck();
 

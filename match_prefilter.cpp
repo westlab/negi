@@ -22,13 +22,13 @@
 #define MATCH_ALL
 
 MatchPreFilter::MatchPreFilter(){
-    g = new int*[MAXS];
+    g_ = new int*[MAXS];
     for(int i=0; i<MAXS; i++){
-        g[i] = new int[MAXC];
+        g_[i] = new int[MAXC];
     }
-    out = new int*[MAXS];
+    out_ = new int*[MAXS];
     for (int i=0; i<MAXS; i++){
-        out[i] = new int[MAXN];
+        out_[i] = new int[MAXN];
     }
     initAhoMachine();
     buildAhoMachine();
@@ -37,23 +37,23 @@ MatchPreFilter::MatchPreFilter(){
 
 MatchPreFilter::~MatchPreFilter(){
     for(int j=0; j<MAXS; j++){
-        delete [] g[j];
+        delete [] g_[j];
     }
-    delete [] g;
+    delete [] g_;
     for(int j=0; j<MAXS; j++){
-        delete [] out[j];
+        delete [] out_[j];
     }
-    delete [] out;
+    delete [] out_;
     return;
 }
 
 void MatchPreFilter::initAhoMachine(){
     for(int i=0; i<MAXS; i++){
         for(int k=0; k<MAXN; k++){
-            out[i][k] = 0;
+            out_[i][k] = 0;
         }
         for(int j=0; j<MAXC; j++){
-            g[i][j] = -1;
+            g_[i][j] = -1;
         }
     }
 }
@@ -75,52 +75,52 @@ void MatchPreFilter::buildAhoMachine(){
         currentState = 0;
         for (unsigned int j = 0; j < keyword.size(); j++) {
             int c = keyword[j];
-            if (g[currentState][c] == -1) { // Allocate a new node
-                g[currentState][c] = states++;
+            if (g_[currentState][c] == -1) { // Allocate a new node
+                g_[currentState][c] = states++;
             }
-            currentState = g[currentState][c];
+            currentState = g_[currentState][c];
         }
-        out[currentState][0] = index + 1;
+        out_[currentState][0] = index + 1;
         index++;
     }
 
     int StateNum = states - 1;
     //State 0 should have an outgoing edge for all characters.
     for (int c = 0; c < MAXC; ++c) {
-        if (g[0][c] == -1) {
-            g[0][c] = 0;
+        if (g_[0][c] == -1) {
+            g_[0][c] = 0;
         }
     }
 
     //build the failure function
     queue<int> q;
     for (int c=0; c<MAXC; ++c) {
-        if (g[0][c] != 0) {
+        if (g_[0][c] != 0) {
             //failure transition must go state0 at state of depth1
-            f[g[0][c]] = 0;
-            q.push(g[0][c]);
+            f[g_[0][c]] = 0;
+            q.push(g_[0][c]);
         }
     }
     while (q.size()) {
         int state = q.front();
         q.pop();
         for (int c=0; c<MAXC; ++c) {
-            if (g[state][c] != -1) {
+            if (g_[state][c] != -1) {
                 int failure = f[state];
-                while (g[failure][c] == -1) {
+                while (g_[failure][c] == -1) {
                     failure = f[failure];
                 }
-                failure = g[failure][c];
-                f[g[state][c]] = failure;
-                for(int i=0; (i<MAXN && out[failure][i]>0); i++){//Merge all output
+                failure = g_[failure][c];
+                f[g_[state][c]] = failure;
+                for(int i=0; (i<MAXN && out_[failure][i]>0); i++){//Merge all output
                     for(int j=0; j<MAXN; j++){
-                        if(out[g[state][c]][j] == 0){
-                            out[g[state][c]][j] = out[failure][i];
+                        if(out_[g_[state][c]][j] == 0){
+                            out_[g_[state][c]][j] = out_[failure][i];
                             break;
                         }
                     }
                 }
-                q.push(g[state][c]);
+                q.push(g_[state][c]);
             }
         }
     }
@@ -129,17 +129,17 @@ void MatchPreFilter::buildAhoMachine(){
         for(int j=0; j<MAXC; j++){
             int k = i;
             int c = j;
-            while(g[k][c] == -1){
+            while(g_[k][c] == -1){
                 k = f[k];
             }
-            g[i][j] = g[k][c];
+            g_[i][j] = g_[k][c];
         }
     }
     //for escape segmentation fault
     for(int i=0; i<=StateNum; i++){
         for(int j=0;j<MAXC; j++){
-            if(g[i][j] == -1){
-                g[i][j] = 0;
+            if(g_[i][j] == -1){
+                g_[i][j] = 0;
             }
         }
     }
@@ -149,10 +149,10 @@ void MatchPreFilter::buildAhoMachine(){
 }
 
 int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end){
-    list<ActiveRule*>::iterator active_rule_it = state->active_rule_list.begin();
+    list<ActiveRule*>::iterator active_rule_it = state->active_rule_list_.begin();
     int content_size = (int)packet->GetL7ContentSize();
     string pattern;
-    MatchPreFilterInfo *match_pre_filter_info = (*(*active_rule_it)->rule_it)->GetMatchPreFilterInfo();
+    MatchPreFilterInfo *match_pre_filter_info = (*(*active_rule_it)->rule_it_)->GetMatchPreFilterInfo();
     int pat_len;
     int j;//pointer of input data
 
@@ -175,32 +175,32 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
         currentState = 0;
     }else{
         //continue packet for this rule
-        currentState = state->tmpState;
+        currentState = state->tmpState_;
     }
 
     while(j < (int)content_size){
         match_try[mode]++;
-        currentState = g[currentState][(int)p_content[j]];
-        if(out[currentState][0] != 0){
-            for(int index=0; (index<MAXN && out[currentState][index]>0); index++){
-                for(int tekitoh=0; tekitoh<(out[currentState][index]-1); tekitoh++){ //kokoga dasai
-                    if(active_rule_it != state->active_rule_list.end())
+        currentState = g_[currentState][(int)p_content[j]];
+        if(out_[currentState][0] != 0){
+            for(int index=0; (index<MAXN && out_[currentState][index]>0); index++){
+                for(int tekitoh=0; tekitoh<(out_[currentState][index]-1); tekitoh++){ //kokoga dasai
+                    if(active_rule_it != state->active_rule_list_.end())
                     active_rule_it++;
                 }
-                pattern = (*(*active_rule_it)->rule_it)->GetPreFilterPattern();
+                pattern = (*(*active_rule_it)->rule_it_)->GetPreFilterPattern();
                 pat_len = pattern.size();
                 packet->GetStream()->SetSaveFlag();
                 match[mode]++;
                 if(mode == SUND){
-                    sprintf(buffer, "%d", anterior_content_size + j - (pat_len-1));
-                    state->match_pre_filter_log += " [" + pattern + ":" + buffer + "]";
+                    sprintf(buffer_, "%d", anterior_content_size + j - (pat_len-1));
+                    state->match_pre_filter_log_ += " [" + pattern + ":" + buffer_ + "]";
                     PapaResult* temp_result = new PapaResult;
-                    temp_result->SetPRule((*(*active_rule_it)->rule_it));
-                    temp_result->SetRuleId((*(*active_rule_it)->rule_it)->GetId());
+                    temp_result->SetPRule((*(*active_rule_it)->rule_it_));
+                    temp_result->SetRuleId((*(*active_rule_it)->rule_it_)->GetId());
                     temp_result->SetPatLen(pat_len);
                     temp_result->SetPlaceOfPacket(j);//at the end of pattern
                     packet->GetStream()->AddPapaResult(temp_result);
-                    active_rule_it = state->active_rule_list.begin();
+                    active_rule_it = state->active_rule_list_.begin();
                 }
             }
 #ifdef MATCH_ALL
@@ -217,7 +217,7 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 
         j++;
     }
-    state->tmpState = currentState;
+    state->tmpState_ = currentState;
 
     return 0;
 }
@@ -225,7 +225,7 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 
 u_char& MatchPreFilter::GetText(int i, u_char *p_content, MatchPreFilterState *state){
     if(i >= 0){return p_content[i];}
-    else{return state->temp_buf[state->max_prefilter_pattern_size + i];}
+    else{return state->temp_buf_[state->max_prefilter_pattern_size_ + i];}
 }
 
 #ifndef MATCH_ALL
@@ -564,42 +564,42 @@ int MatchPreFilter::Proc(Packet *packet){
 
 
 MatchPreFilterState::MatchPreFilterState(Stream *stream){
-    max_prefilter_pattern_size = 0;
+    max_prefilter_pattern_size_ = 0;
     size_t active_rule_size= 0;
 
     for(list<Rule*>::iterator rule_it = stream->GetRuleFirstIt(); rule_it != stream->GetRuleLastIt(); rule_it++){
         ActiveRule* temp_rule = new ActiveRule;
         active_rule_size += sizeof(*temp_rule);
-        temp_rule->rule_it = rule_it;
+        temp_rule->rule_it_ = rule_it;
 //        temp_rule->rule_id= dd;
-        temp_rule->rule_state_flag = 0;
+        temp_rule->rule_state_flag_ = 0;
         temp_rule->kmp_state = 0;
-        active_rule_list.push_back(temp_rule);
+        active_rule_list_.push_back(temp_rule);
         int pat_len = ((*rule_it)->GetMatchPreFilterInfo())->pat_len;
-        if(max_prefilter_pattern_size < pat_len){
-            max_prefilter_pattern_size = pat_len;
+        if(max_prefilter_pattern_size_ < pat_len){
+            max_prefilter_pattern_size_ = pat_len;
         }
     }
     observer->MPFActiveRuleMallocd(active_rule_size);
     LOG(INFO) << "MPFActivateRuleMalloced";
 
-    after_ip_filter = active_rule_list.size();
-    after_pre_filter = -1;
-    temp_buf = new u_char[max_prefilter_pattern_size + 1];
-    observer->MPFTempBufMallocd(max_prefilter_pattern_size * sizeof(unsigned char));
+    after_ip_filter_ = active_rule_list_.size();
+    after_pre_filter_ = -1;
+    temp_buf_ = new u_char[max_prefilter_pattern_size_ + 1];
+    observer->MPFTempBufMallocd(max_prefilter_pattern_size_ * sizeof(unsigned char));
     OBSERVER_DEBUG(BLUE cout << "MPFTempBufMallocd :" << max_prefilter_pattern_size * sizeof(unsigned char) << endl;RESET);
 
-    tmpState = 0;
+    tmpState_ = 0;
 }
 
 
 MatchPreFilterState::~MatchPreFilterState(){
-    for(list<ActiveRule*>::iterator rule_it = active_rule_list.begin(); rule_it != active_rule_list.end(); rule_it++){
+    for(list<ActiveRule*>::iterator rule_it = active_rule_list_.begin(); rule_it != active_rule_list_.end(); rule_it++){
         observer->MPFActiveRuleDeleted(sizeof(**rule_it));
         LOG(INFO) << "MPFActiveRuleDeleted: " << sizeof(**rule_it);
         delete *rule_it;
     }
-    delete [] temp_buf;
-    observer->MPFTempBufDeleted(max_prefilter_pattern_size * sizeof(unsigned char));
-    LOG(INFO) << "MPFTempBufDeleted: " << max_prefilter_pattern_size * sizeof(unsigned char);
+    delete [] temp_buf_;
+    observer->MPFTempBufDeleted(max_prefilter_pattern_size_ * sizeof(unsigned char));
+    LOG(INFO) << "MPFTempBufDeleted: " << max_prefilter_pattern_size_ * sizeof(unsigned char);
 }

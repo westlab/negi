@@ -32,8 +32,8 @@ class ActiveRule{
     friend class MatchPreFilter;
     private:
 //        Rule *p_rule;
-        list<Rule*>::iterator rule_it;
-        int rule_state_flag;
+        list<Rule*>::iterator rule_it_;
+        int rule_state_flag_;
         //for kmp
         int kmp_state;
 };
@@ -41,29 +41,29 @@ class ActiveRule{
 class MatchPreFilterState{
     friend class MatchPreFilter;
     private:
-        list<ActiveRule*> active_rule_list;
-        int max_prefilter_pattern_size;
-        int after_ip_filter;
-        int after_pre_filter;
-        string match_pre_filter_log;
+        list<ActiveRule*> active_rule_list_;
+        int max_prefilter_pattern_size_;
+        int after_ip_filter_;
+        int after_pre_filter_;
+        string match_pre_filter_log_;
 
         //for BM
-        u_char *temp_buf;
+        u_char *temp_buf_;
         //for Aho
-        int tmpState;
+        int tmpState_;
 
     public:
         MatchPreFilterState(Stream *stream);
         ~MatchPreFilterState();
-        int GetAfterIpFilter(){return after_ip_filter;}
-        int GetAfterPreFilter(){return after_pre_filter;}
-        string GetMatchPreFilterLog(){return match_pre_filter_log;}
+        int GetAfterIpFilter(){return after_ip_filter_;}
+        int GetAfterPreFilter(){return after_pre_filter_;}
+        string GetMatchPreFilterLog(){return match_pre_filter_log_;}
 };
 
 class MatchPreFilter{
     private:
-        int **out;
-        int **g;
+        int **out_;
+        int **g_;
         u_char& GetText(int i, u_char *p_content, MatchPreFilterState *state);
 
 #ifndef MATCH_ALL
@@ -73,7 +73,7 @@ class MatchPreFilter{
 #endif
 
         MatchPreFilterState * MakeMatchPreFilterState(Stream *stream);
-        char buffer[BUFF_SIZE];
+        char buffer_[BUFF_SIZE];
 
         void initAhoMachine();
         void buildAhoMachine();
