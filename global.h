@@ -28,7 +28,7 @@
 #include "extractor.h"
 
 #include "rule_loader_file.h"
-#include "sqlite_dao.h"
+#include "db/sqlite_dao.h"
 #include "sqlite_saver.h"
 #include "gzip.h"
 #include "packet_clean.h"
