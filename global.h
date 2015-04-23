@@ -26,7 +26,6 @@
 #include "master.h"
 #include "match_prefilter.h"
 #include "extractor.h"
-#include "result_saver.h"
 #include "result_pool.h"
 #include "util.h"
 
@@ -83,7 +82,6 @@ extern HttpDecoder *http_decoder;
 extern PacketFileReader *packet_file_reader;
 extern MatchPreFilter *match_pre_filter;
 extern ResultPool *result_pool;
-extern ResultSaver *result_saver;
 extern Extractor *extractor;
 extern RuleLoaderFile *rule_loader_file;
 extern SqliteDao *sqlite_dao;
