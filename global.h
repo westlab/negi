@@ -13,7 +13,6 @@
 #pragma once
 
 #include "include.h"
-#include "packet_pool.h"
 #include "rule_pool.h"
 #include "stream_pool.h"
 #include "stream_rebuild.h"
@@ -63,7 +62,6 @@ extern unsigned long int max_stream_size;
 extern unsigned long int max_sum_stream_size;
 
 extern Config *config;
-extern PacketPool *packet_pool;
 extern StreamPool *stream_pool;
 extern RulePool *rule_pool;
 extern StreamRebuild *stream_rebuild;
