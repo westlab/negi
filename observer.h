@@ -48,7 +48,6 @@ class Observer
 
 
         unsigned long long mpf_mem_inuse;
-///*
         unsigned long long mpf_activerule_mallocd;
         unsigned long long mpf_activerule_freed;
         unsigned long long mpf_activerule_mem_inuse;
@@ -58,7 +57,6 @@ class Observer
         unsigned long long mpf_state_mallocd;
         unsigned long long mpf_state_freed;
         unsigned long long mpf_state_mem_inuse;
-//*/
 
     public:
         Observer();

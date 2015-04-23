@@ -14,10 +14,6 @@
 
 #include "stream.h"
 
-#ifdef USE_POSTGRES
-using namespace pqxx;
-#endif
-
 class RuleLoaderFile
 {
     private:

@@ -143,9 +143,7 @@ void MatchPreFilter::buildAhoMachine(){
             }
         }
     }
-
     delete [] f;
-
 }
 
 int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end){
@@ -221,7 +219,6 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 
     return 0;
 }
-
 
 u_char& MatchPreFilter::GetText(int i, u_char *p_content, MatchPreFilterState *state){
     if(i >= 0){return p_content[i];}
@@ -571,9 +568,8 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
         ActiveRule* temp_rule = new ActiveRule;
         active_rule_size += sizeof(*temp_rule);
         temp_rule->rule_it_ = rule_it;
-//        temp_rule->rule_id= dd;
         temp_rule->rule_state_flag_ = 0;
-        temp_rule->kmp_state = 0;
+        temp_rule->kmp_state_ = 0;
         active_rule_list_.push_back(temp_rule);
         int pat_len = ((*rule_it)->GetMatchPreFilterInfo())->pat_len;
         if(max_prefilter_pattern_size_ < pat_len){

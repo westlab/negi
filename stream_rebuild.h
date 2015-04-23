@@ -32,8 +32,6 @@ class StreamRebuild
             unsigned int dst_port;
         };
 
-
-
     public:
         StreamRebuild();
         void Proc(Packet *pkt);

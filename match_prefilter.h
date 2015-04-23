@@ -31,11 +31,11 @@ class ActiveRule{
     friend class MatchPreFilterState;
     friend class MatchPreFilter;
     private:
-//        Rule *p_rule;
+        // Rule *p_rule;
         list<Rule*>::iterator rule_it_;
         int rule_state_flag_;
         //for kmp
-        int kmp_state;
+        int kmp_state_;
 };
 
 class MatchPreFilterState{

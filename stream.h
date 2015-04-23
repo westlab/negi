@@ -189,11 +189,9 @@ class Stream
 
         void AddPapaResult(PapaResult *pres){papa_result_list_.push_back(pres);};
         list<PapaResult*>::iterator DeletePapaResultIt(list<PapaResult*>::iterator it){delete *it; return papa_result_list_.erase(it);};
-//        void DeletePapaResultIt(list<PapaResult*>::iterator it){papa_result_list.erase(it); delete *it; };
         list<PapaResult*>::iterator GetPapaResultListFirstIt(){return papa_result_list_.begin();};
         list<PapaResult*>::iterator GetPapaResultListLastIt(){return papa_result_list_.end();};
         size_t GetPapaResultListSize(){return papa_result_list_.size();};
-//		void SetPPapaResultList(list<PapaResult*> *p_result_list);
 
         //garbage collector
         struct timeval GetLastUpdatedTime(){ return last_updated_time_;};

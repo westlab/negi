@@ -14,7 +14,6 @@
 #include "glog/logging.h"
 
 Master::Master(){
-
     observer_packet_counter = 0;
     all_packet_counter = 0;
 
@@ -42,7 +41,7 @@ void Master::Proc(Packet *pkt){
         extractor->Proc(pkt);
     }
 
-    OBSERVER_DEBUG(observer->ShowMem(pkt->GetTimestamp()););
+    // OBSERVER_DEBUG(observer->ShowMem(pkt->GetTimestamp()););
 
     static time_t prev_time;
     static time_t now_time;
@@ -58,5 +57,4 @@ void Master::Proc(Packet *pkt){
         }
     }
     packet_clean->Proc(pkt);
-//	MASTER_DEBUG(observer.Show());
 }

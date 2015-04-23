@@ -20,7 +20,6 @@ PacketFileReader::PacketFileReader(){
 }
 
 void PacketFileReader::Init(){
-
     ifstream is;
     is.open(config->get("filename").c_str());
     if(!is){
@@ -34,12 +33,9 @@ void PacketFileReader::Init(){
         if(content_size == "0"){
             observer->Show();
             exit(0);
-
-            }
-
+        }
         Packet *pkt = new Packet( timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content);
         master->Proc(pkt);
     }
-
     exit(0);
 }
