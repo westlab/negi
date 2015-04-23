@@ -16,6 +16,7 @@
 #include "packet.h"
 #include "rule.h"
 #include "global.h"
+#include "glog/logging.h"
 
 //#define MATCH_PRE_FILTER_LOCAL
 #define MATCH_ALL
@@ -95,7 +96,8 @@ void MatchPreFilter::buildAhoMachine(){
     queue<int> q;
     for (int c=0; c<MAXC; ++c) {
         if (g[0][c] != 0) {
-            f[g[0][c]] = 0;//failure transition must go state0 at state of depth1
+            //failure transition must go state0 at state of depth1
+            f[g[0][c]] = 0;
             q.push(g[0][c]);
         }
     }
@@ -166,13 +168,13 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 
     if(start_flag == 1){
         if(start_place < 0){
-            ERROR_DEBUG(cout << "something error on start place :" <<start_place << endl;)
+            LOG(ERROR) << "Error on start palce";
             return 1;
         }
-    //start packet for this rule
+        //start packet for this rule
         currentState = 0;
     }else{
-    //continue packet for this rule
+        //continue packet for this rule
         currentState = state->tmpState;
     }
 
@@ -191,8 +193,6 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
                 match[mode]++;
                 if(mode == SUND){
                     sprintf(buffer, "%d", anterior_content_size + j - (pat_len-1));
-                    //sprintf(buffer, "%d", anterior_content_size + j);
-                    //state->match_pre_filter_log += " [" + pattern + ":" + lexical_cast<string>(anterior_content_size + j) + "]";
                     state->match_pre_filter_log += " [" + pattern + ":" + buffer + "]";
                     PapaResult* temp_result = new PapaResult;
                     temp_result->SetPRule((*(*active_rule_it)->rule_it));
@@ -200,7 +200,6 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
                     temp_result->SetPatLen(pat_len);
                     temp_result->SetPlaceOfPacket(j);//at the end of pattern
                     packet->GetStream()->AddPapaResult(temp_result);
-                    //cout << "harashima MSG " << packet->GetStream() <<", "<< rule <<", "<< rule->GetId() <<", "<< pat_len <<", "<< j << endl;
                     active_rule_it = state->active_rule_list.begin();
                 }
             }
@@ -376,28 +375,29 @@ int MatchPreFilter::BoyerMoore(int mode, int start_flag, MatchPreFilterState *st
 MatchPreFilterState * MatchPreFilter::MakeMatchPreFilterState(Stream *stream){
     MatchPreFilterState *state = new MatchPreFilterState(stream);
     observer->MPFStateMallocd(sizeof(*state));
-    OBSERVER_DEBUG(BLUE cout << "MPFStateMallocd :" << sizeof(*state) << endl;RESET);
+    LOG(INFO) << "MPFStateMallocd :" << sizeof(*state);
     stream->SetMatchPreFilterState(state);
     return state;
 }
 
-int MatchPreFilter::Proc(Packet *packet){ //suppose that don't seatch 2 packet before.
-MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7ContentSize()))
+int MatchPreFilter::Proc(Packet *packet){
+    //suppose that don't seatch 2 packet before.
+    LOG(INFO) << "start: " << packet->GetL7ContentSize();
     if(packet->GetProtocol() != IPPROTO_TCP){
-//        MSG("MPFilter: Protocol is not TCP")
-            return 0;
+        LOG(INFO) << "MPFilter: Protocol is not TCP";
+        return 0;
     }
     if(packet->GetL7ContentSize() == 0){
-//        MSG("MPFilter: ContentSize is 0")
-            return 0;
+        LOG(INFO) << "MPFilter: ContentSize is 0";
+        return 0;
     }
     if(packet->GetStream() == NULL){
-//        MSG("MPFilter: packet->stream is NULL")
-            return 0;
+        LOG(INFO) << "MPFilter: packet->stream is NULL";
+        return 0;
     }
 
     Stream *stream = packet->GetStream();
-//	MSG(packet->GetL7Content());
+    LOG(INFO) << packet->GetL7Content();
     MatchPreFilterState *state;
     if(stream->GetMatchPreFilterState() == 0){
         state = MakeMatchPreFilterState(stream);
@@ -409,14 +409,13 @@ MPF_DEBUG(MSG("MPFilter: ----------process start----------"<<packet->GetL7Conten
     int content_size = packet->GetL7ContentSize();
 
     if(stream->GetPacketNum() == 1 && retrieved_content_size != content_size){
-    cout << "------------------" << endl;
-    cout << "Harashima PacketNum:" <<  stream->GetPacketNum() << " retrieved_content_size: " << retrieved_content_size << " content_size: " << content_size << endl;
+        LOG(INFO) << "Hrashima PacketNum: " << stream->GetPacketNum();
+        LOG(INFO) << "retrieved_content_size: " << retrieved_content_size;
+        LOG(INFO) << "content_size: " << content_size;
     }
 
 #ifdef MATCH_ALL
         int start_flag = 0;
-//unused!!
-//		int end_flag = 0;
         int offset = 0;
         int depth = 0;
         if(depth == 0){
@@ -582,7 +581,7 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
         }
     }
     observer->MPFActiveRuleMallocd(active_rule_size);
-    OBSERVER_DEBUG(BLUE cout << "MPFActiveRuleMallocd :" << active_rule_size << endl;RESET);
+    LOG(INFO) << "MPFActivateRuleMalloced";
 
     after_ip_filter = active_rule_list.size();
     after_pre_filter = -1;
@@ -597,10 +596,10 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
 MatchPreFilterState::~MatchPreFilterState(){
     for(list<ActiveRule*>::iterator rule_it = active_rule_list.begin(); rule_it != active_rule_list.end(); rule_it++){
         observer->MPFActiveRuleDeleted(sizeof(**rule_it));
-        OBSERVER_DEBUG(BLUE cout << "MPFActiveRuleDeleted :" << sizeof(**rule_it) << endl;RESET);
+        LOG(INFO) << "MPFActiveRuleDeleted: " << sizeof(**rule_it);
         delete *rule_it;
     }
     delete [] temp_buf;
     observer->MPFTempBufDeleted(max_prefilter_pattern_size * sizeof(unsigned char));
-    OBSERVER_DEBUG(BLUE cout << "MPFTempBufDeleted :" << max_prefilter_pattern_size * sizeof(unsigned char) << endl;RESET);
+    LOG(INFO) << "MPFTempBufDeleted: " << max_prefilter_pattern_size * sizeof(unsigned char);
 }

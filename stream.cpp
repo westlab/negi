@@ -15,6 +15,7 @@
 #include "packet.h"
 #include "stream.h"
 #include "rule.h"
+#include "glog/logging.h"
 
 PapaResult::PapaResult(){
     result_string[0] = '\0';
@@ -24,6 +25,7 @@ PapaResult::PapaResult(){
 }
 
 Stream::Stream(Packet *pkt){
+    LOG(INFO) << "Stream Created";
     //MSG("Stream Created")
     //Count stream creation
     observer->StreamCreated();

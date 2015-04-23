@@ -14,6 +14,7 @@
 #include "global.h"
 #include "stream.h"
 #include "extractor.h"
+#include "glog/logging.h"
 
 Extractor::Extractor(){
     return;
@@ -54,43 +55,33 @@ void Extractor::Proc(Packet *pkt){
                             (*it)->SetFinished(0);
                         }
                     }
-/*
-                    cout << "this is result!!--------------------" << endl;
-                    pkt->Show();
-                    cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
-                    cout << "Stream p: "<< pkt->GetStream() << endl;
-                    cout << "Rule id: "<< (*it)->GetRuleId() << endl;
-                    cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-                    cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-                    cout << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize() << endl;
-                    cout << "Packet Size: " << pkt->GetL7ContentSize() << endl;
-                    cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-                    cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-                    cout << "ResultStart: " << result_start_num << endl;
-                    cout << "ResultEnd: " << result_end_num << endl;
-                    cout << "Flag: " << (*it)->GetFinished() << endl;
-*/
-                }else if( (*it)->GetPlaceOfPacket() > (int)pkt->GetL7ContentSize() ){
-                    ERROR_DEBUG(cout << "something error on extractor!!" << endl;)
-                    error_flag = 1;
-                    /*
-                    cout << "this is result!!--------------------" << endl;
-                    pkt->Show();
-                    cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
-                    cout << "Stream p: "<< pkt->GetStream() << endl;
-                    cout << "Rule id: "<< (*it)->GetRuleId() << endl;
-                    cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-                    cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-                    cout << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize() << endl;
-                    cout << "Packet Size: " << pkt->GetL7ContentSize() << endl;
-                    cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-                    cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-                    cout << "ResultStart: " << result_start_num << endl;
-                     cout << "ResultEnd: " << result_end_num << endl;
-                    cout << "Flag: " << (*it)->GetFinished() << endl;
-                    cout << "Packet num: " << pkt->GetStream()->GetPacketNum() << endl;
-                    */
 
+                    LOG(INFO) << "Stream p: "<< pkt->GetStream();
+                    LOG(INFO) << "Rule id: "<< (*it)->GetRuleId();
+                    LOG(INFO) << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern();
+                    LOG(INFO) << "Pattern Length: "<< (*it)->GetPatLen();
+                    LOG(INFO) << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize();
+                    LOG(INFO) << "Packet Size: " << pkt->GetL7ContentSize();
+                    LOG(INFO) << "Packet Place: " << (*it)->GetPlaceOfPacket();
+                    LOG(INFO) << "Packet Offset: " << (*it)->GetResultOffset();
+                    LOG(INFO) << "ResultStart: " << result_start_num;
+                    LOG(INFO) << "ResultEnd: " << result_end_num;
+                    LOG(INFO) << "Flag: " << (*it)->GetFinished();
+                }else if( (*it)->GetPlaceOfPacket() > (int)pkt->GetL7ContentSize() ){
+                    error_flag = 1;
+
+                    LOG(ERROR) << "Stream p: "<< pkt->GetStream();
+                    LOG(ERROR) << "Rule id: "<< (*it)->GetRuleId();
+                    LOG(ERROR) << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern();
+                    LOG(ERROR) << "Pattern Length: "<< (*it)->GetPatLen();
+                    LOG(ERROR) << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize();
+                    LOG(ERROR) << "Packet Size: " << pkt->GetL7ContentSize();
+                    LOG(ERROR) << "Packet Place: " << (*it)->GetPlaceOfPacket();
+                    LOG(ERROR) << "Packet Offset: " << (*it)->GetResultOffset();
+                    LOG(ERROR) << "ResultStart: " << result_start_num;
+                    LOG(ERROR) << "ResultEnd: " << result_end_num;
+                    LOG(ERROR) << "Flag: " << (*it)->GetFinished();
+                    LOG(ERROR) << "Packet num: " << pkt->GetStream()->GetPacketNum();
                 }else{
                     if(result_end_num < pkt->GetL7ContentSize()){
                         (*it)->SetResultString(pkt->GetL7Content() + result_start_num, 0, RESULT_SIZE);
@@ -110,43 +101,35 @@ void Extractor::Proc(Packet *pkt){
 
                 if((*it)->GetFinished()){
                     //Lets save it to PGSQL
-                    cout << "this is result!!--------------------" << endl;
-                //	cout << "TimeStamp: "; observer.ShowMem(pkt->GetTimestamp()) ;
-                //	cout << "Stream p: "<< pkt->GetStream() << endl;
-                //	cout << "Rule id: "<< (*it)->GetRuleId() << endl;
-                    cout << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern() << endl;
-                //	cout << "Pattern Length: "<< (*it)->GetPatLen() << endl;
-                //	cout << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize() << endl;
-                //	cout << "Packet Size: " << pkt->GetL7ContentSize() << endl;
-                //	cout << "Packet Place: " << (*it)->GetPlaceOfPacket() << endl;
-                //	cout << "Packet Offset: " << (*it)->GetResultOffset() << endl;
-                //	cout << "ResultStart: " << result_start_num << endl;
-                //	cout << "ResultEnd: " << result_end_num << endl;
-                //	cout << "Flag: " << (*it)->GetFinished() << endl;
+                    LOG(INFO) << "Extreacted result";
+                    LOG(INFO) << "Stream p: "<< pkt->GetStream();
+                    LOG(INFO) << "Rule id: "<< (*it)->GetRuleId();
+                    LOG(INFO) << "Rule : "<< (*it)->GetPRule()->GetPreFilterPattern();
+                    LOG(INFO) << "Pattern Length: "<< (*it)->GetPatLen();
+                    LOG(INFO) << "Stream Size: " << pkt->GetStream()->GetRetrievedContentSize();
+                    LOG(INFO) << "Packet Size: " << pkt->GetL7ContentSize();
+                    LOG(INFO) << "Packet Place: " << (*it)->GetPlaceOfPacket();
+                    LOG(INFO) << "Packet Offset: " << (*it)->GetResultOffset();
+                    LOG(INFO) << "ResultStart: " << result_start_num;
+                    LOG(INFO) << "ResultEnd: " << result_end_num;
+                    LOG(INFO) << "Flag: " << (*it)->GetFinished();
                     if(pkt->GetStream()->GetHttpCompress()==2){
-                    BLUE	cout << "HTTP Encode: " << "GZIP--------------" << endl;RESET
+                        LOG(INFO) << "HTTP Encode: " << "GZIP--------------";
                     }else{
-                        cout << "HTTP Encode: " << "None" << endl;
+                        LOG(INFO) << "HTTP Encode: " << "None";
                     }
 
-
-                    cout << "Source IP,port:      " << pkt->GetSrcIPStr() << ","<< pkt->GetSrcPort()<< endl;
-                    cout << "Destination IP,port: " << pkt->GetDstIPStr() << "," <<pkt->GetDstPort()<< endl;
-                    cout << "ResultString: ";
-                    RED cout <<(*it)->GetPRule()->GetPreFilterPattern();
+                    LOG(INFO) << "Source IP,port:      " << pkt->GetSrcIPStr() << ","<< pkt->GetSrcPort()<< endl;
+                    LOG(INFO) << "Destination IP,port: " << pkt->GetDstIPStr() << "," <<pkt->GetDstPort()<< endl;
+                    LOG(INFO) << "ResultString: " << (*it)->GetPRule()->GetPreFilterPattern();
     #ifdef USE_POSTGRES
-                    YELLOW cout << escape_binary((*it)->GetResultString(), (*it)->GetResultSize()) << endl; RESET
+                    LOG(INFO) << escape_binary((*it)->GetResultString(), (*it)->GetResultSize());
     #else
-                    YELLOW cout << (*it)->GetResultString()  << endl; RESET
+                    LOG(INFO) << (*it)->GetResultString();
     #endif
-                    if(!strcmp((*it)->GetPRule()->GetPreFilterPattern().c_str(),"VIRUS")){
-                        URED cout << "VIRUS DETECTED!! Shut out :"<< pkt->GetSrcIPStr() << endl; RESET
-                        RED; system("./nii-filter -A 11.11.11.1 -I xe-0/0/0");RESET
-                    }
-                    cout << "------------------------------------" << endl;
-//*/
+                    LOG(INFO) << "------------------------------------";
 
-                    GREEN cout << "MAC Addr:" << pkt->GetDstMacAddr() << endl; RESET
+                    LOG(INFO) << "MAC Addr:" << pkt->GetDstMacAddr();
 
                     ostringstream oss;
                     oss.str("");
@@ -173,7 +156,7 @@ void Extractor::Proc(Packet *pkt){
                     query += hit_result;
                     query += "');";
                     free(temp);
-                    cout << query << endl;
+                    LOG(INFO) << query;
                     sqlite_dao->ExecBatchSql(query);
 #endif
 
@@ -193,7 +176,7 @@ void Extractor::Proc(Packet *pkt){
                         T.commit();
                     }
                     catch(const exception &e){
-                        cerr << e.what() << endl;
+                        cerr << e.what();
                     }
                     catch(...){
                         cerr << "unhandled exception" << endl;

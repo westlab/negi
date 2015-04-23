@@ -14,6 +14,7 @@
 #include "global.h"
 #include "match_prefilter.h"
 #include "packet_capture.h"
+#include "glog/logging.h"
 
 unsigned long sim_time;
 
@@ -24,11 +25,11 @@ void pcap_status(int x){
     pcap_stat status;
     pcap_stats(pd, &status);
 
-    cout << "PCAP Library Infomation----" << endl;
-    cout << "Packet Recieved: " << status.ps_recv << endl;
-    cout << "Packet Dropped: " << status.ps_drop << endl;
-    cout << "Packet Dropp Rate: " << (double)status.ps_drop / (double)status.ps_recv * 100.0 << "%" << endl;
-    cout << "Packet IfDropped: " << status.ps_ifdrop << endl;
+    LOG(INFO) << "PCAP Library Infomation----";
+    LOG(INFO) << "Packet Recieved: " << status.ps_recv;
+    LOG(INFO) << "Packet Dropped: " << status.ps_drop;
+    LOG(INFO) << "Packet Dropp Rate: " << (double)status.ps_drop / (double)status.ps_recv * 100.0 << "%";
+    LOG(INFO) << "Packet IfDropped: " << status.ps_ifdrop;
 
 }
 
