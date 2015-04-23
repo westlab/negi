@@ -13,11 +13,11 @@
 #include "global.h"
 
 Result::Result(Stream *pstream,
-               unsigned int fid,
-               unsigned long int sof_size,
-               unsigned int poffset_size,
-               unsigned int pcontent_size,
-               unsigned char * r_string){
+    unsigned int fid,
+    unsigned long int sof_size,
+    unsigned int poffset_size,
+    unsigned int pcontent_size,
+    unsigned char * r_string){
     parent_stream = pstream;
     filter_id = fid;
     stream_offset_size = sof_size;

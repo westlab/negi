@@ -11,11 +11,12 @@
 */
 #include "observer.h"
 #include "global.h"
+#include "glog/logging.h"
 
 Observer::Observer(){
     SetDefault();
     //Print HTTP decoding info
-    cout << "time(real)"<< "	" << "time(packet)" << "	" << "	" << "disorder_count" <<"	" << "stream_created_num" << "	"<< "stream_current_num" << endl;
+    LOG(INFO) << "time(real)"<< "	" << "time(packet)" << "	" << "	" << "disorder_count" <<"	" << "stream_created_num" << "	"<< "stream_current_num";
 }
 
 Observer::~Observer(){
@@ -37,24 +38,24 @@ void Observer::SetDefault(){
 }
 
 void Observer::Show(){
-    cout << "----Observer result------------------" << endl;
-    cout << "Packet created: " << num_packet_created << endl;
-    cout << "Packet deleted: " << num_packet_deleted << endl;
-    cout << "Packet memory mallocd(byte): " << num_packet_mallocd << endl;
-    cout << "Packet memory freed(byte)  : " << num_packet_freed << endl;
-    cout << "Packet memory INUSE  : " << num_packet_mem_inuse << endl;
-    cout <<endl;
-    cout << "Stream created: " << num_stream_created << endl;
-    cout << "Stream deleted: " << num_stream_deleted << endl;
-    cout << "Stream memory mallocd(byte): " << stream_mem_mallocd << endl;
-    cout << "Stream memory freed(byte)  : " << stream_mem_freed << endl;
-    cout << "Stream memory INUSE  : " << stream_mem_inuse << endl;
+    LOG(INFO) << "----Observer result------------------";
+    LOG(INFO) << "Packet created: " << num_packet_created;
+    LOG(INFO) << "Packet deleted: " << num_packet_deleted;
+    LOG(INFO) << "Packet memory mallocd(byte): " << num_packet_mallocd;
+    LOG(INFO) << "Packet memory freed(byte)  : " << num_packet_freed;
+    LOG(INFO) << "Packet memory INUSE  : " << num_packet_mem_inuse;
+    LOG(INFO) <<endl;
+    LOG(INFO) << "Stream created: " << num_stream_created;
+    LOG(INFO) << "Stream deleted: " << num_stream_deleted;
+    LOG(INFO) << "Stream memory mallocd(byte): " << stream_mem_mallocd;
+    LOG(INFO) << "Stream memory freed(byte)  : " << stream_mem_freed;
+    LOG(INFO) << "Stream memory INUSE  : " << stream_mem_inuse;
 
-    cout <<endl;
-    cout << "TcpConn created: " << num_tcpconn_created << endl;
-    cout << "TcpConn deleted: " << num_tcpconn_deleted << endl;
-    cout <<endl;
-    cout << "----Observer END------------------" << endl;
+    LOG(INFO) <<endl;
+    LOG(INFO) << "TcpConn created: " << num_tcpconn_created;
+    LOG(INFO) << "TcpConn deleted: " << num_tcpconn_deleted;
+    LOG(INFO) <<endl;
+    LOG(INFO) << "----Observer END------------------";
 }
 
 void Observer::ShowMem(timeval timestamp){
@@ -76,7 +77,7 @@ void Observer::ShowMem(timeval timestamp){
     }
     if(stream_num * 5 + gzip_stream_num * 64 > max_stream_num) max_stream_num = stream_num*5+gzip_stream_num*64;
     if(sum_stream_size > max_sum_stream_size) max_sum_stream_size = sum_stream_size;
-    cout << timestamp.tv_sec - offset_time.tv_sec << "	" << std::setw(15) << num_stream_disorderd << "	" << std::setw(15) << num_stream_created << "	" << std::setw(15) << num_stream_created - num_stream_deleted  << endl;
+    LOG(INFO) << timestamp.tv_sec - offset_time.tv_sec << "	" << std::setw(15) << num_stream_disorderd << "	" << std::setw(15) << num_stream_created << "	" << std::setw(15) << num_stream_created - num_stream_deleted ;
 
 }
 
