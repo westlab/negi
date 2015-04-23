@@ -1,0 +1,13 @@
+set(SOURCE
+    ${SOURCE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/sqlite_dao.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/util.cpp
+    PARENT_SCOPE
+)
+
+set(HEADERS
+    ${HEADERS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/sqlite_dao.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/util.h
+    PARENT_SCOPE
+)
