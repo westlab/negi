@@ -16,7 +16,8 @@
 Observer::Observer(){
     SetDefault();
     //Print HTTP decoding info
-    LOG(INFO) << "time(real)"<< "	" << "time(packet)" << "	" << "	" << "disorder_count" <<"	" << "stream_created_num" << "	"<< "stream_current_num";
+    LOG(INFO) << "time(real)"<< "	" << "time(packet)" << "	" << "	"
+              << "disorder_count" <<"	" << "stream_created_num" << "	"<< "stream_current_num";
 }
 
 Observer::~Observer(){
@@ -24,7 +25,6 @@ Observer::~Observer(){
 }
 
 void Observer::SetDefault(){
-
         num_packet_created = 0;
         num_packet_deleted = 0;
         num_stream_created = 0;

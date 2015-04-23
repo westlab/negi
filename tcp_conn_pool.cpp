@@ -20,7 +20,6 @@ multimap<u_int, TcpConn*>::iterator TcpConnPool::AddTcpConn(u_int key, TcpConn *
     return tcp_conn_pool_.insert(multimap<u_int, TcpConn*>::value_type(key, tcpconn));
 }
 
-
 void TcpConnPool::RemoveTcpConnIt(multimap<u_int, TcpConn*>::iterator it){
     tcp_conn_pool_.erase(it);
     return ;

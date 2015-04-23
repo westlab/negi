@@ -64,17 +64,17 @@ Stream::Stream(Packet *pkt){
     gzip_z_ = NULL;
     gzip_only_http_header_ = 0;
 
-    //Add stream_pool
+    // Add stream_pool
     stream_pool_it_ = stream_pool->AddStream(this);
 
-    //get hole Rule*
+    // get hole Rule*
     for(list<Rule*>::iterator rule_it = ::rule_pool->GetRuleFirstIt(); rule_it != ::rule_pool->GetRuleLastIt(); rule_it++){
         rule_list_.push_back(*rule_it);
     }
 
-    //engine specific process
+    // engine specific process
     match_prefilter_state_ = 0;
-//	Show();
+    // Show();
 
     return;
 }
@@ -108,9 +108,9 @@ Stream::~Stream(){
     }
 
     if(savemode == PACKET){
-        //packet was already deleted by each packet recieved time.
-        //do nothing.
-        //delete(pkt);
+        // packet was already deleted by each packet recieved time.
+        // do nothing.
+        // delete(pkt);
     }else if(savemode == STREAM){
         list<Packet *>::iterator it= packet_list_.begin();
         while(it != packet_list_.end()){
@@ -119,7 +119,7 @@ Stream::~Stream(){
         }
     }
 
-    //engine specific process
+    // engine specific process
     if(match_prefilter_state_ != 0){
         observer->MPFStateDeleted(sizeof(*match_prefilter_state_));
         OBSERVER_DEBUG(BLUE cout << "MPFStateDeleted :" << sizeof(*match_prefilter_state) << endl;RESET);

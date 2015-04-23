@@ -30,7 +30,6 @@ void pcap_status(int x){
     LOG(INFO) << "Packet Dropped: " << status.ps_drop;
     LOG(INFO) << "Packet Dropp Rate: " << (double)status.ps_drop / (double)status.ps_recv * 100.0 << "%";
     LOG(INFO) << "Packet IfDropped: " << status.ps_ifdrop;
-
 }
 
 void packetcap(){
@@ -46,7 +45,6 @@ void packetcap(){
         char ebuf[PCAP_ERRBUF_SIZE];
         bpf_u_int32 localnet, netmask;
         struct bpf_program fcode;
-
 
     if(config->get("type") != "pcap" && config->get("type") != "ether"){
         exit(1);
@@ -77,7 +75,6 @@ void packetcap(){
         pd = pcap_open_offline(config->get("filename").c_str(), ebuf);
     }
 
-
     /* setting and compiling packet filter */
     if (pcap_compile(pd, &fcode, const_cast<char *>(config->get("pcap_filter").c_str()), 1, netmask) < 0) {
         fprintf(stderr, "can't compile fileter\n");
@@ -92,7 +89,6 @@ void packetcap(){
 
     //set global variables for callback function.
     sim_time = atol(config->get("sim_time").c_str());
-
 
     /* loop packet capture util picking iterate packets up from interface. */
     if (pcap_loop(pd, iterate, pcap_callback, NULL) < 0) {
@@ -121,5 +117,4 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
 
     Packet *pkt = new Packet (pcnt);
     master->Proc(pkt);
-
 }

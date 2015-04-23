@@ -70,7 +70,6 @@ int Rule::GetPreFilterDepth(){
     return depth_;
 }
 
-
 MatchPreFilterInfo* Rule::GetMatchPreFilterInfo(){
     return match_pre_filter_info_;
 }

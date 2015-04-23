@@ -10,6 +10,7 @@
  * $Id: RulePool.C,v 5.2 2011-01-03 10:22:04 sin Exp $
  */
 #include "rule_pool.h"
+#include "glog/logging.h"
 
 RulePool::RulePool(){
     return;
@@ -58,8 +59,7 @@ MPF_DEBUG(rule_p->Show();)
 
 void RulePool::AddRule(int id, string rule){
     Rule* rule_p = new Rule(id, "", "", "", "", 0, "", "", 0, "", rule, 0, 0, 1);
-    cout << "this is addrule" << endl;
-    cout << rule << endl;
+    LOG(INFO) << rule << " is added";
 MPF_DEBUG(rule_p->Show();)
     rule_pool_.push_back(rule_p);
 }

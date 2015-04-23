@@ -28,12 +28,12 @@ class Result
     public:
         Result(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string);
         ~Result();
-        Stream *GetParentStream(){return parent_stream_;};
-        unsigned int GetFilterId(){return filter_id_;};
-        unsigned long int GetStreamOffsetSize(){return stream_offset_size_;};
-        unsigned int GetPacketOffsetSize(){return packet_offset_size_;};
-        unsigned int GetPacketContentSize(){return packet_content_size_;};
-        unsigned char *GetResultString(){return result_string_;};
-        unsigned int GetResultSize(){return result_size_;};
+        Stream *GetParentStream(){return parent_stream_;}
+        unsigned int GetFilterId(){return filter_id_;}
+        unsigned long int GetStreamOffsetSize(){return stream_offset_size_;}
+        unsigned int GetPacketOffsetSize(){return packet_offset_size_;}
+        unsigned int GetPacketContentSize(){return packet_content_size_;}
+        unsigned char *GetResultString(){return result_string_;}
+        unsigned int GetResultSize(){return result_size_;}
         bool GetFinished();
 };

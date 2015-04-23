@@ -82,8 +82,6 @@ void PacketClean::Proc(Packet *pkt){
                 it = it2;
             }
         }
-
         last_gc_time_.tv_sec = packet_timestamp.tv_sec;
     }
-
 }

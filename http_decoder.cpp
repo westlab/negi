@@ -29,7 +29,6 @@ HttpDecoder::~HttpDecoder(){
     return;
 }
 
-
 void HttpDecoder::Proc(Packet *packet){
     if(packet->GetStream() == NULL){ return; }
 
