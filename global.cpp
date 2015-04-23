@@ -57,7 +57,6 @@ PacketClean *packet_clean;
 Observer *observer;
 Gzip *gzip;
 FileWriter *file_writer;
-ResultPool *result_pool;
 
 
 void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6){
