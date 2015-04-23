@@ -13,9 +13,16 @@ endif()
 
 file(GLOB negiSrcs "*.cpp")
 
-
 # add includes for all
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}")
+
+# add db
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/db")
+include_directories(db)
+
+# db
+#set(DB "${CMAKE_CURRENT_SOURCE_DIR}/db/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/db/*.h")
+
 
 # add gflag
 add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/external/gflags")
@@ -32,7 +39,7 @@ include_directories ("${google-glog_SOURCE_DIR}/src")
 set(CMAKE_LIBRARY_PATH "${google-glog_BINARY_DIR}" ${CMAKE_LIBRARY_PATH})
 
 
-add_executable(negi ${negiSrcs})
+add_executable(negi ${negiSrcs} ${SOURCE} ${HEADERS})
 target_link_libraries(negi pcap)
 target_link_libraries(negi z)
 target_link_libraries(negi sqlite3)

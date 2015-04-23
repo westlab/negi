@@ -92,7 +92,6 @@ void SqliteSaver::ProcPacket(Packet * pkt){
     struct timeval tmp_time = pkt->GetTimestamp();
     strftime(ctstamp, 100, "%Y-%m-%d %H:%M:%S", (const struct tm *)localtime(&tmp_time.tv_sec));
     string tstamp = ctstamp;
-//	BLUE cout << timetemp << endl;RESET
     /*
     oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
     string tstamp = oss.str();
