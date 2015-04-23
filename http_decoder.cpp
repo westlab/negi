@@ -16,6 +16,7 @@
 #include "gzip.h"
 #include "http_decoder.h"
 #include "global.h"
+#include "glog/logging.h"
 
 
 HttpDecoder::HttpDecoder(){
@@ -34,11 +35,11 @@ void HttpDecoder::Proc(Packet *packet){
 
     Stream *stream = packet->GetStream();
 
-    HTTP_DEBUG(MSG("Analyze");)
+    LOG(INFO) << "Analyze";
     if(stream->GetState() == BEGIN) AnalyzeHeader(packet);
-    HTTP_DEBUG(MSG("Chunk");)
+    LOG(INFO) << "Chunk";
     if(stream->GetHttpChunked()) DecodeChunk(packet);
-    HTTP_DEBUG(MSG("Gzip"));
+    LOG(INFO) << "Gzip";
     if(!stream->GetL7Error()){
         if(stream->GetHttpCompress()) DecodeGzip(packet);
     }
@@ -99,7 +100,7 @@ void HttpDecoder::AnalyzeHeader(Packet *packet){
 }
 
 void HttpDecoder::DecodeChunk(Packet *packet){
-    HTTP_DEBUG(MSG("Chunk Start"));
+    LOG(INFO) << "Chunk Start";
     Stream *stream = packet->GetStream();
     u_char* content = packet->GetContent();
 
@@ -133,15 +134,13 @@ void HttpDecoder::DecodeChunk(Packet *packet){
     }
     u_int chunk_size = 0;
 
-    //while working pointer - start pointer > packet's http content's size
-    //while(p_content_work - content < packet->GetContentSize() ){
     while(1){
-    HTTP_DEBUG(MSG("Chunk Loop"));
-        //get chunk size.
+        LOG(INFO) << "Chunk loop";
+        // get chunk size.
         u_char * first_nonnum;
 
-
-        chunk_size = strtol((const char *)p_content_work, (char **)&first_nonnum, 16); //10 is  base of hexadecimal(0x) number.
+        // 10 is  base of hexadecimal(0x) number.
+        chunk_size = strtol((const char *)p_content_work, (char **)&first_nonnum, 16);
 
         p_content_work = first_nonnum + sizeof("\r\n")-1;
         if(p_content_work - content  >= packet->GetContentSize()){
@@ -154,34 +153,33 @@ void HttpDecoder::DecodeChunk(Packet *packet){
                 return;
             }
 
-//			MSG("first_nonnum:"<<first_nonnum)
-//			MSG("content:"<<content);
-//			MSG("contentwork:"<<(p_content_work-content));
-//			MSG("contentwork:"<<(p_content_work-first_nonnum));
-//			MSG("contentwork:"<<(int)p_content_work[0]);
-//			MSG("headersize:"<<stream->GetHttpHeaderSize());
+            LOG(INFO) << "first_nonnum:"<< first_nonnum;
+            LOG(INFO) << "content:"<< content;
+            LOG(INFO) << "contentwork:"<< (p_content_work-content);
+            LOG(INFO) << "contentwork:"<< (p_content_work-first_nonnum);
+            LOG(INFO) << "contentwork:"<< (int)p_content_work[0];
+            LOG(INFO) << "headersize:"<< stream->GetHttpHeaderSize();
         }
 
         //debug
         if(chunk_size == LONG_MAX || chunk_size == LONG_MIN){
-                //chunk size error!
-//				cout << "error state: "<< stream->GetState() << endl;
-//				cout << "error offset: "<< stream->GetChunkOffset() << endl;
-                cout << "error chunk size: "<< chunk_size << endl;
-//				cout << "error content size: "<< packet->GetContentSize() << endl;
-//				cout << "error calc size: "<<first_nonnum - content << endl;
-//				cout << "error calc size: "<<p_content_work - content << endl;
-//				MSG(content);
-                MSG(first_nonnum);
-//				MSG(p_content_work);
-                stream->SetL7Error(1);
-                return;
-                exit(1);
+            //chunk size error!
+            LOG(ERROR) << "error state: "<< stream->GetState();
+            LOG(ERROR) << "error offset: "<< stream->GetChunkOffset();
+            LOG(ERROR) << "error chunk size: "<< chunk_size;
+            LOG(ERROR) << "error content size: "<< packet->GetContentSize();
+            LOG(ERROR) << "error calc size: "<< first_nonnum - content;
+            LOG(ERROR) << "error calc size: "<< p_content_work - content;
+            LOG(ERROR) << content;
+            LOG(ERROR) << first_nonnum;
+            LOG(ERROR) << p_content_work;
+            stream->SetL7Error(1);
+            return;
         }
 
         if(chunk_size == 8){
-//				cout << "error content: "<<content << endl;
-//				cout << "error p_content_work: "<<p_content_work << endl;
+            LOG(ERROR) << "error content: "<<content;
+            LOG(ERROR) << "error p_content_work: "<<p_content_work;
         }
 
         if(chunk_size == 0){
@@ -205,15 +203,13 @@ void HttpDecoder::DecodeChunk(Packet *packet){
             p_l7_content_work += chunk_size;
             l7_content_size += chunk_size;
             p_content_work += chunk_size + sizeof("\r\n")-1;
-            //stream->SetChunkOffset(0);
-            //chunk_size = 0;
         }
     }
 }
 
 void HttpDecoder::DecodeGzip(Packet *packet){
     Stream *stream = packet->GetStream();
-//	cout << "Gzip decoding start" << endl;
+    LOG(INFO) << "Gzip decoding start";
 
     u_char* p_dec_start = packet->GetContent();
     z_stream *z = stream->GetGzipZ();
@@ -226,10 +222,9 @@ void HttpDecoder::DecodeGzip(Packet *packet){
         p_dec_start = packet->GetL7Content();
         insize = packet->GetL7ContentSize();
     }else{
-        //cout << "GetL7content and GetContent are same" << endl;
+        LOG(INFO) << "GetL7content and GetContent are same";
     }
-
-//	cout << "GetGzipOnlyHttpHeader" << endl;
+    LOG(INFO) << "GetGzipOnlyHeepHeader";
 
     if(stream->GetGzipOnlyHttpHeader() == 1){
         z = (z_stream*)malloc(sizeof(z_stream));
@@ -237,7 +232,7 @@ void HttpDecoder::DecodeGzip(Packet *packet){
         gzip.dec_init(z);
     }else if(stream->GetGzipOnlyHttpHeader() == 2){
         if( stream->GetHttpCompress() == GZIP){
-            cout << "only http header dec gzip-------------" << endl;
+            LOG(INFO) << "only http header dec gzip-------------";
             offset = gzip.dec_gzip(localbuf, p_dec_start, insize, z);
         }
     }else if(stream->GetState() == BEGIN){
@@ -295,10 +290,8 @@ void HttpDecoder::DecodeGzip(Packet *packet){
             packet->SetL7ContentSize(outsize);
         }
     }
-    //cout << packet->GetL7Content() << endl;
-//	MSG(packet->GetL7Content());
-//	MSG(l7content);
-//	MSG(localbuf);
+
+    LOG(INFO)<< packet->GetL7Content();
     if(old_l7content != NULL){
         free(old_l7content);
     }

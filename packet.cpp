@@ -29,7 +29,6 @@ Packet::Packet(PacketCnt *pcnt){
     l2_header_size = sizeof(struct ether_header);
     eth_header = (struct ether_header *) packet;
 
-///*
     stringstream ss;
     ss.str("");
     ss.clear(stringstream::goodbit);

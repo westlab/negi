@@ -14,9 +14,8 @@
 #include "global.h"
 #include "stream.h"
 
-#ifndef USE_POSTGRES
-
 #include "rule_loader_file.h"
+#include "glog/logging.h"
 
 RuleLoaderFile::RuleLoaderFile(){
     return;
@@ -29,7 +28,7 @@ int RuleLoaderFile::Proc(){
     is.open( config->get("rule_file").c_str());
 
     if(!is){
-        cout << "Config: Can't open " << config->get("rule_file") << "."<< endl;
+        cerr << "Config: Can't open " << config->get("rule_file") << "."<< endl;
         exit(1);
     }
     while(!is.eof()){
@@ -38,7 +37,7 @@ int RuleLoaderFile::Proc(){
 
         is >> id >> rule;
         cout << rule << endl;
-        cout << "Start add rule loop" << endl;
+        LOG(INFO) << "Start add rule loop";
         rule_pool->AddRule(id, rule);
 
     }
@@ -49,5 +48,3 @@ int RuleLoaderFile::Proc(){
 
     return 0;
 }
-
-#endif //USE_POSTGRES

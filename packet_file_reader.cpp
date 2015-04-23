@@ -42,5 +42,4 @@ void PacketFileReader::Init(){
     }
 
     exit(0);
-
 }

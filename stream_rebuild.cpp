@@ -13,6 +13,7 @@
 #include "include.h"
 #include "global.h"
 #include "stream_rebuild.h"
+#include "glog/logging.h"
 
 StreamRebuild::StreamRebuild(){
     return;
@@ -29,7 +30,7 @@ void StreamRebuild::Init(Packet *pkt){
 
 void StreamRebuild::SearchStream(Packet * pkt){
 
-    ST_REBUILD_DEBUG(BLUE cout << "[Packet]------------------" << endl; RESET);
+    LOG(INFO) << "[Packet]------------------" ;
     //find map using src or dst port
 
     unsigned int port_map_key;
@@ -41,28 +42,28 @@ void StreamRebuild::SearchStream(Packet * pkt){
         port_map_key = pkt->GetDstPort();
     }
 
-    ST_REBUILD_DEBUG(BLUE cout << "Key value is: "<< port_map_key << endl; RESET);
+    LOG(INFO) << "Key value is: "<< port_map_key ;
 
     TcpConn *tcp_conn;
     Stream *stream;
 
     if(pkt->GetSyn() && !pkt->GetAck()){
-        ST_REBUILD_DEBUG( BLUE cout << "SYN detected. New tcp connection entry created." << endl; RESET);
+        LOG(INFO) << "SYN detected. New tcp connection entry created." ;
         //If packet containes SYN, create new stream entry.
         tcp_conn = new TcpConn(port_map_key, pkt);
         return;
 
     }else{
         if(!pkt->GetFin() && !pkt->GetContentSize()){
-            ST_REBUILD_DEBUG( BLUE cout << "No Container. Discard." << endl; RESET);
+            LOG(INFO) << "No Container. Discard." ;
             return;
         }
         unsigned int tcp_conn_num = tcp_conn_pool->GetTcpConnCount(port_map_key);
-        ST_REBUILD_DEBUG( BLUE cout << "Map found : "<<tcp_conn_num <<" entries." << endl; RESET);
+        LOG(INFO) << "Map found : "<<tcp_conn_num <<" entries." ;
 
         if(tcp_conn_num == 0){
             //Something err.
-            ST_REBUILD_DEBUG( RED cout <<"ERROR! No match tcp connection found!!" << endl; RESET);
+            LOG(INFO) <<"ERROR! No match tcp connection found!!" ;
             return;
         }else {
             multimap<unsigned int, TcpConn *>::iterator tcp_conn_map_it = tcp_conn_pool->FindTcpConn(port_map_key);
@@ -80,12 +81,12 @@ void StreamRebuild::SearchStream(Packet * pkt){
                 if(pkt->GetSrcPort() == tcp_conn->GetSrcPort() && pkt->GetDstPort() == tcp_conn->GetDstPort()){
                     if(!memcmp(&packet_src_ip, &tcpconn_src_ip, sizeof(struct in6_addr)) &&	\
                         !memcmp(&packet_dst_ip, &tcpconn_dst_ip, sizeof(struct in6_addr))){
-                        ST_REBUILD_DEBUG( BLUE cout << "Entry matched! Client -> Server" << endl; RESET);
+                        LOG(INFO) << "Entry matched! Client -> Server" ;
 
 
                         switch(tcp_conn->GetPrevDirection()){
                             case NEW:
-                                ST_REBUILD_DEBUG( BLUE cout << "New connection data arrived. create stream, Set prev_direction to C2S." << endl; RESET);
+                                LOG(INFO) << "New connection data arrived. create stream, Set prev_direction to C2S." ;
                                 stream = new Stream(pkt);
                                 stream->AddPacket(pkt);
                                 stream->SetDirection(C2S);
@@ -94,13 +95,13 @@ void StreamRebuild::SearchStream(Packet * pkt){
                                 break;
 
                             case C2S:
-                                ST_REBUILD_DEBUG( BLUE cout << "Stream continueing. add data to stream." << endl; RESET);
+                                LOG(INFO) << "Stream continueing. add data to stream." ;
                                 //if direction is same as previous packet, add packet to stream.
                                 (*--(tcp_conn->GetStreamLastIt()))->AddPacket(pkt);
                                 (*--(tcp_conn->GetStreamLastIt()))->SetState(CONTINUE);
                                 break;
                             case S2C:
-                                ST_REBUILD_DEBUG( BLUE cout << "Direction changed. Create new stream." << endl; RESET);
+                                LOG(INFO) << "Direction changed. Create new stream." ;
                                 Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                                 last_stream->SetState(END);
                                 end_stream_list.push_back(last_stream);
@@ -114,7 +115,7 @@ void StreamRebuild::SearchStream(Packet * pkt){
                                 return;
                         }
                         if(pkt->GetFin()){
-                            ST_REBUILD_DEBUG( BLUE cout << "FIN flag detected. connection state to FINISHED. tcp connection entry." << endl; RESET);
+                            LOG(INFO) << "FIN flag detected. connection state to FINISHED. tcp connection entry." ;
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if(last_stream == NULL){return;}
                             if(tcp_conn->GetStreamLastIt() == tcp_conn->GetStreamFirstIt()){return;}
@@ -125,7 +126,7 @@ void StreamRebuild::SearchStream(Packet * pkt){
                             return;
                         }
                         if(pkt->GetRst()){
-                            ST_REBUILD_DEBUG( BLUE cout << "RST flag detected. connection state to FINISHED. tcp connection entry." << endl; RESET);
+                            LOG(INFO) << "RST flag detected. connection state to FINISHED. tcp connection entry." ;
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if(last_stream == NULL){return;}
                             if(tcp_conn->GetStreamLastIt() == tcp_conn->GetStreamFirstIt()){return;}
@@ -140,12 +141,12 @@ void StreamRebuild::SearchStream(Packet * pkt){
                 }else if(pkt->GetSrcPort() == tcp_conn->GetDstPort() && pkt->GetDstPort() == tcp_conn->GetSrcPort()){
                     if(!memcmp(&packet_src_ip, &tcpconn_dst_ip, sizeof(struct in6_addr)) &&	\
                         !memcmp(&packet_dst_ip, &tcpconn_src_ip, sizeof(struct in6_addr))){
-                        ST_REBUILD_DEBUG( BLUE cout << "Entry matched! Server -> Client" << endl; RESET);
+                        LOG(INFO) << "Entry matched! Server -> Client" ;
 
 
                         switch(tcp_conn->GetPrevDirection()){
                             case NEW:
-                                ST_REBUILD_DEBUG( BLUE cout << "New connection data arrived. create stream, Set prev_direction to S2C." << endl; RESET);
+                                LOG(INFO) << "New connection data arrived. create stream, Set prev_direction to S2C." ;
 
                                 stream = new Stream(pkt);
                                 stream->AddPacket(pkt);
@@ -155,16 +156,15 @@ void StreamRebuild::SearchStream(Packet * pkt){
                                 break;
 
                             case S2C:
-                                ST_REBUILD_DEBUG( BLUE cout << "Stream continueing. add data to stream." << endl; RESET);
+                                LOG(INFO) << "Stream continueing. add data to stream." ;
                                 //if direction is same as previous packet, add packet to stream.
                                 (*--(tcp_conn->GetStreamLastIt()))->AddPacket(pkt);
                                 (*--(tcp_conn->GetStreamLastIt()))->SetState(CONTINUE);
                                 break;
 
                             case C2S:
-                                ST_REBUILD_DEBUG( BLUE cout << "Direction changed. Create new stream." << endl; RESET);
+                                LOG(INFO) << "Direction changed. Create new stream." ;
                                 Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
-                                //if(last_stream->GetState() == END){break;}
                                 last_stream->SetState(END);
                                 end_stream_list.push_back(last_stream);
 
@@ -176,7 +176,7 @@ void StreamRebuild::SearchStream(Packet * pkt){
                                 break;
                         }
                         if(pkt->GetFin()){
-                            ST_REBUILD_DEBUG( BLUE cout << "FIN flag detected. delete tcp connection entry." << endl; RESET);
+                            LOG(INFO) << "FIN flag detected. delete tcp connection entry." ;
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if(last_stream == NULL){return;}
                             if(tcp_conn->GetStreamLastIt() == tcp_conn->GetStreamFirstIt()){return;}
@@ -187,7 +187,7 @@ void StreamRebuild::SearchStream(Packet * pkt){
                             return;
                         }
                         if(pkt->GetRst()){
-                            ST_REBUILD_DEBUG( BLUE cout << "RST flag detected. delete tcp connection entry." << endl; RESET);
+                            LOG(INFO) << "RST flag detected. delete tcp connection entry." ;
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if(last_stream == NULL){return;}
                             if(tcp_conn->GetStreamLastIt() == tcp_conn->GetStreamFirstIt()){return;}
@@ -201,8 +201,6 @@ void StreamRebuild::SearchStream(Packet * pkt){
                 }
             }
         }
-    return;
-
-
+        return;
     }
 }

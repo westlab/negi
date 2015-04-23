@@ -10,10 +10,6 @@ SqliteSaver::SqliteSaver(){
 
 
 void SqliteSaver::Proc(Stream * stream){
-//	string src_ip_str, dst_ip_str;
-//	src_ip_str = inet_ntoa(stream->GetSrcIP());
-//	dst_ip_str = inet_ntoa(stream->GetDstIP());
-
     //add
     struct timeval tmp_time = stream->GetTimestamp();
     struct tm *tmp = localtime(&tmp_time.tv_sec);
@@ -21,7 +17,6 @@ void SqliteSaver::Proc(Stream * stream){
     oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
     string tstamp = oss.str();
 
-//	cout << str_src_addr <<":"<<str_dst_addr << endl;
 
     oss.str("");
     oss << "insert into save_stream ("
@@ -48,16 +43,10 @@ void SqliteSaver::Proc(Stream * stream){
 
 
     //match_str
-    //query += "',E'"+T.esc_raw(stream->GetMatchString())+"'";
-    //query += "',E'"+escape_binary(stream->GetMatchString())+"'";
-    //string match_string((char*) stream->GetMatchString());
     query += "','"+stream->GetMatchString()+"'";
     //stream
     if(!no_stream_save){
         query += ",'";
-//		for(list<Packet*>::iterator it = stream->GetPacketFirstIt(); it != stream->GetPacketLastIt(); it++){
-//			query += T.esc_raw((*it)->GetContent(), (*it)->GetContentSize());
-//		}
         query += "'";
     }else{
         query += ",''";
@@ -103,7 +92,6 @@ void SqliteSaver::ProcPacket(Packet * pkt){
     struct timeval tmp_time = pkt->GetTimestamp();
     strftime(ctstamp, 100, "%Y-%m-%d %H:%M:%S", (const struct tm *)localtime(&tmp_time.tv_sec));
     string tstamp = ctstamp;
-//	BLUE cout << timetemp << endl;RESET
     /*
     oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
     string tstamp = oss.str();

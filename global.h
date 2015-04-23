@@ -85,13 +85,7 @@ extern MatchPreFilter *match_pre_filter;
 extern ResultPool *result_pool;
 extern ResultSaver *result_saver;
 extern Extractor *extractor;
-#ifdef USE_POSTGRES
-extern PgsqlSaver *pgsql_saver;
-extern RuleLoaderPgsql *rule_loader_pgsql;
-extern Pgsql *pgsql;
-#else
 extern RuleLoaderFile *rule_loader_file;
-#endif
 extern SqliteDao *sqlite_dao;
 extern SqliteSaver *sqlite_saver;
 extern TcpConnPool *tcp_conn_pool;

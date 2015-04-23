@@ -38,7 +38,6 @@ using namespace std;
 #include <ctime>
 #include <queue>
 #include <fstream>
-//#include <boost/regex.hpp>
 #include <vector>
 #include <zlib.h>
 #include <syslog.h>
@@ -52,10 +51,6 @@ using namespace std;
 #include <pthread.h>
 #include <sstream>
 #include "vlan_hdr.h"
-
-#ifdef USE_POSTGRES
-#include <pqxx/pqxx>
-#endif
 
 #include "color.h"
 #include "debug.h"

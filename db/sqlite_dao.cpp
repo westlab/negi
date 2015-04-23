@@ -1,5 +1,4 @@
 #include "include.h"
-#include "global.h"
 #include "util.h"
 
 #include "sqlite_dao.h"

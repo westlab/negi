@@ -48,13 +48,7 @@ HttpDecoder *http_decoder;
 MatchPreFilter *match_pre_filter;
 Extractor *extractor;
 StreamPool *stream_pool;
-#ifdef USE_POSTGRES
-Pgsql *pgsql;
-PgsqlSaver *pgsql_saver;
-RuleLoaderPgsql *rule_loader_pgsql;
-#else
 RuleLoaderFile *rule_loader_file;
-#endif
 SqliteDao *sqlite_dao;
 SqliteSaver *sqlite_saver;
 Master *master;
