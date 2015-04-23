@@ -26,16 +26,8 @@
 #include "master.h"
 #include "match_prefilter.h"
 #include "extractor.h"
-#include "result_pool.h"
-#include "util.h"
 
-#ifdef USE_POSTGRES
-#include "PgsqlSaver.h"
-#include "Pgsql.h"
-#include "RuleLoaderPgsql.h"
-#else
 #include "rule_loader_file.h"
-#endif
 #include "sqlite_dao.h"
 #include "sqlite_saver.h"
 #include "gzip.h"
@@ -43,7 +35,6 @@
 #include "observer.h"
 #include "global.h"
 #include "file_writer.h"
-//#include "RiverGate.h"
 
 
 extern unsigned int stream_buf_size;
@@ -81,7 +72,6 @@ extern IpFilter *ip_filter;
 extern HttpDecoder *http_decoder;
 extern PacketFileReader *packet_file_reader;
 extern MatchPreFilter *match_pre_filter;
-extern ResultPool *result_pool;
 extern Extractor *extractor;
 extern RuleLoaderFile *rule_loader_file;
 extern SqliteDao *sqlite_dao;
