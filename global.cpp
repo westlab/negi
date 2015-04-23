@@ -40,7 +40,6 @@ SaveMode savemode;
 MallocMode mallocmode;
 
 Config *config;
-PacketPool *packet_pool;
 RulePool *rule_pool;
 StreamRebuild *stream_rebuild;
 HttpDecoder *http_decoder;

@@ -153,11 +153,8 @@ Packet::Packet(PacketCnt *pcnt){
     l7_content_ = content_;
     l7_content_size_ = content_size_;
 
-    //Add to packet_pool
-//	packet_pool.AddPacket(this);
-
     if(packet_size_cap_ < packet_size_){
-//		Show();
+        //Show();
     }
 
     return;
@@ -208,9 +205,6 @@ Packet::Packet(string timestamp_str, string content_size_str, string srcip_str, 
     content_size = mem_size;
     content = packet;
 
-    //Add to packet_pool
-    packet_pool->AddPacket(this);
-
     return;
 }
 */
@@ -219,16 +213,11 @@ Packet::~Packet(){
     //Count packet deletion
     observer->PacketDeleted();
 
-//	if(l7_content != content) free(l7_content);
-
-//	packet_pool.RemovePacketIt(packet_pool_it);
-//#ifndef STREAM_CLEAN_MODE
     if(savemode == PACKET){
         if(stream_ != NULL){
             stream_->RemovePacketIt(stream_packet_list_it_);
         }
     }
-//#endif
 
     if(packet_ != NULL){
     free(packet_);
