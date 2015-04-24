@@ -1,4 +1,4 @@
-CREATE TABLE "save_stream" (
+CREATE TABLE IF NOT EXISTS "save_stream" (
 "id" INTEGER PRIMARY KEY AUTOINCREMENT,
 "timestamp" TEXT,
 "src_ip" TEXT,
@@ -29,7 +29,7 @@ CREATE TABLE "save_stream" (
 "prefilter_log" TEXT
 );
 
-CREATE TABLE "save_result" (
+CREATE TABLE IF NOT EXISTS "save_result" (
 "id" INTEGER PRIMARY KEY AUTOINCREMENT,
 "src_ip" TEXT,
 "src_port" INTEGER,
