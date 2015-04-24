@@ -11,13 +11,14 @@ if (HAS_CPP11)
 endif()
 
 
-file(GLOB negiSrcs "*.cpp")
+file(GLOB negiSrcs "./src/*.cpp")
 
 # add includes for all
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # add db
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/db")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/db")
 # include_directories(db)
 
 # db
