@@ -38,6 +38,13 @@ include_directories ("${google-glog_SOURCE_DIR}/src")
 # add library path for google-glog
 set(CMAKE_LIBRARY_PATH "${google-glog_BINARY_DIR}" ${CMAKE_LIBRARY_PATH})
 
+# add gtest
+add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/external/gtest")
+# add includes for gtests
+include_directories ("${gtest_SOURCE_DIR}/src")
+# add library path for gtest
+set(CMAKE_LIBRARY_PATH "${gtest_BINARY_DIR}" ${CMAKE_LIBRARY_PATH})
+
 
 add_executable(negi ${negiSrcs} ${SOURCE} ${HEADERS})
 target_link_libraries(negi pcap)
