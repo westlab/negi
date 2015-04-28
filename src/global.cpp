@@ -10,7 +10,8 @@
  * $Id: Global.C,v 5.15 2012-05-19 15:01:30 sin Exp $
 */
 
-#include "global.h"
+#include "src/global.h"
+#include <list>
 
 unsigned int stream_buf_size;
 unsigned int emergency_save_all;
@@ -27,9 +28,9 @@ unsigned int sim_rule_num;
 unsigned int sim_rule_size;
 unsigned int stream_id_prev;
 
-unsigned long int max_stream_num;
-unsigned long int max_stream_size;
-unsigned long int max_sum_stream_size;
+unsigned __int64 max_stream_num;
+unsigned __int64 max_stream_size;
+unsigned __int64 max_sum_stream_size;
 
 
 list<Stream *> end_stream_list;
@@ -57,12 +58,13 @@ Gzip *gzip;
 FileWriter *file_writer;
 
 
-void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6){
-    unsigned char v6char[] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0,0,0,0};
+void inet_v4tov6(struct in_addr *v4 , struct in6_addr *v6) {
+    unsigned char v6char[] =
+                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0, 0, 0, 0};
     memcpy(v6char+12, (unsigned char *)v4, 4);
     memcpy(v6, v6char, 16);
 }
 
-void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4){
-    memcpy(v4, (unsigned char*)v6+12,4);
+void inet_v6tov4(struct in6_addr *v6 , struct in_addr *v4) {
+    memcpy(v4, (unsigned char*)v6+12, 4);
 }
