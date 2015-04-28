@@ -11,6 +11,7 @@
 */
 
 #include "global.h"
+#include <list>
 
 unsigned int stream_buf_size;
 unsigned int emergency_save_all;
@@ -57,12 +58,13 @@ Gzip *gzip;
 FileWriter *file_writer;
 
 
-void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6){
-    unsigned char v6char[] =  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0,0,0,0};
+void inet_v4tov6(struct in_addr *v4 , struct in6_addr *v6) {
+    unsigned char v6char[] =
+                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0xff, 0xff, 0, 0, 0, 0};
     memcpy(v6char+12, (unsigned char *)v4, 4);
     memcpy(v6, v6char, 16);
 }
 
-void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4){
-    memcpy(v4, (unsigned char*)v6+12,4);
+void inet_v6tov4(struct in6_addr *v6 , struct in_addr *v4) {
+    memcpy(v4, (unsigned char*)v6+12, 4);
 }
