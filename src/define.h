@@ -11,8 +11,8 @@
 */
 
 
-#ifndef SRC_DEFINE_H_
-#define SRC_DEFINE_H_
+#ifndef DEFINE_H_
+#define DEFINE_H_
 #pragma once
 
 #define SAVE_MAX_SIZE 102400  // 100KB
@@ -66,4 +66,4 @@ enum ProcList{
     MANAGER, MASTER, CAPTURE
 };
 
-#endif  // SRC_DEFINE_H_
+#endif  // DEFINE_H_
