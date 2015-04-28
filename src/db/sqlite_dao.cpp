@@ -1,5 +1,7 @@
 #include "sqlite_dao.h"
 #include <unistd.h>
+#include <iostream>
+#include <cstdlib>
 #include <fstream>
 #include "util.h"
 
