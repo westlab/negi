@@ -10,7 +10,7 @@
  * $Id: Global.C,v 5.15 2012-05-19 15:01:30 sin Exp $
 */
 
-#include "src/global.h"
+#include "global.h"
 #include <list>
 
 unsigned int stream_buf_size;
@@ -28,9 +28,9 @@ unsigned int sim_rule_num;
 unsigned int sim_rule_size;
 unsigned int stream_id_prev;
 
-unsigned __int64 max_stream_num;
-unsigned __int64 max_stream_size;
-unsigned __int64 max_sum_stream_size;
+unsigned long int max_stream_num;
+unsigned long int max_stream_size;
+unsigned long int max_sum_stream_size;
 
 
 list<Stream *> end_stream_list;
