@@ -35,35 +35,35 @@
 // #define DEBUG
 
 enum Trunc{
-  FULL, TRUNCATED
+    FULL, TRUNCATED
 };
 
 enum L7Protocol{
-  OTHER = 0, HTTP = 80,
+    OTHER = 0, HTTP = 80,
 };
 enum HttpCompress{
-  NONE, DEFLATE, GZIP
+    NONE, DEFLATE, GZIP
 };
 
 enum State{
-  BEGIN, CONTINUE, END, DISCARD, REMOVE
+    BEGIN, CONTINUE, END, DISCARD, REMOVE
 };
 
 enum SaveMode{
-  PACKET, STREAM
+    PACKET, STREAM
 };
 
 enum MallocMode{
-  MALLOC, SIMULATE
+    MALLOC, SIMULATE
 };
 
 enum StringMatch{
 //    KMP, BM1, BM2, BM3, HORS, SUND, PAPA1, PAPA2
-  BM2, HORS, SUND
+    BM2, HORS, SUND
 };
 
 enum ProcList{
-  MANAGER, MASTER, CAPTURE
+    MANAGER, MASTER, CAPTURE
 };
 
 #endif  // SRC_DEFINE_H_
