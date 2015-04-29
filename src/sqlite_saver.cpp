@@ -100,8 +100,8 @@ void SqliteSaver::ProcPacket(Packet * pkt) {
     string tstamp = ctstamp;
 
     oss.str("");
-    oss << "insert into save_packet(src_ip, dst_ip, src_port, dst_port, timestamp, " +
-    "protocol, packet_size, packet_size_org, content_size, flag, content) values('"
+    oss << "insert into save_packet(src_ip, dst_ip, src_port, dst_port, timestamp, "
+    << "protocol, packet_size, packet_size_org, content_size, flag, content) values('"
     << pkt->GetSrcIPStr() <<"','"<< pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"
     <<pkt->GetDstPort() <<"','"<< tstamp <<"','"<< pkt->GetProtocol() <<"','"<< pkt->GetPacketSize()
     <<"','"<< pkt->GetPacketSizeOrg() <<"','"<< pkt->GetContentSize();
