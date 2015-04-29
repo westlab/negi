@@ -13,8 +13,8 @@
  * Note: configulation class. read swsim.conf.
 */
 
-#ifndef SRC_CONFIG_H_
-#define SRC_CONFIG_H_
+#ifndef CONFIG_H_
+#define CONFIG_H_
 
 #include "include.h"
 
@@ -33,4 +33,4 @@ class Config{
   string operator[](const char *);
   void show();
 };
-#endif  // SRC_CONFIG_H_
+#endif  // CONFIG_H_
