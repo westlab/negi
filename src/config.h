@@ -13,25 +13,24 @@
  * Note: configulation class. read swsim.conf.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef SRC_CONFIG_H_
+#define SRC_CONFIG_H_
 
 #include "include.h"
 
-class Config
-{
-    private:
-        map<string, string> config_map_;
-        void setDefault();
+class Config{
+ private:
+  map<string, string> config_map_;
+  void setDefault();
 
-    public:
-        Config(const string filename);
-        Config();
-        int init(const string filename);
-        string get(const string index);
-        void set(const string index, const string value);
-        string operator[](const string index);
-        string operator[](const char *);
-        void show();
+ public:
+  explicit Config(const string filename);
+  Config();
+  int init(const string filename);
+  string get(const string index);
+  void set(const string index, const string value);
+  string operator[](const string index);
+  string operator[](const char *);
+  void show();
 };
-#endif
+#endif  // SRC_CONFIG_H_
