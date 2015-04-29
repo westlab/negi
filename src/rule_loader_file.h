@@ -10,14 +10,16 @@
  * $Id: RuleLoaderFile.H,v 5.1 2012-08-22 08:13:16 sin Exp $
 */
 
+#ifndef RULE_LOADER_FILE_H_
+#define RULE_LOADER_FILE_H_
 #pragma once
 
 #include "stream.h"
 
-class RuleLoaderFile
-{
-    private:
-    public:
+class RuleLoaderFile {
+ private:
+ public:
         RuleLoaderFile();
         int Proc();
 };
+#endif  // RULE_LOADER_FILE_H_
