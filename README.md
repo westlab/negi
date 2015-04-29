@@ -8,7 +8,7 @@ Author: Shinichi Ishida
 * NEGI can read a pcap file.
 
 ### Dependencies:
-* libpcap, zlib, sqlite3, gtest, glog, glags
+* libpcap, zlib, sqlite3, gtest, glog, gflags
 
 ### REMARKS:
 * NEGI can eat over 2TB pcap files with about 6GB memory usage.
