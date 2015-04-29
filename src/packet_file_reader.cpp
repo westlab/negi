@@ -15,26 +15,28 @@
 #include "match_prefilter.h"
 #include "packet_file_reader.h"
 
-PacketFileReader::PacketFileReader(){
+PacketFileReader::PacketFileReader() {
     return;
 }
 
-void PacketFileReader::Init(){
+void PacketFileReader::Init() {
     ifstream is;
     is.open(config->get("filename").c_str());
-    if(!is){
+    if (!is) {
         cout << "PacketFileReader: Can't open " << config->get("filename") << "."<< endl;
         exit(1);
     }
-    while(!is.eof()){
+    while (!is.eof()) {
         string timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content;
 
-        is >> timestamp >> content_size >> src_ip >> src_port >> dst_ip >> dst_port >> flag >> content;
-        if(content_size == "0"){
+        is >> timestamp >> content_size >> src_ip >> src_port >>
+        dst_ip >> dst_port >> flag >> content;
+        if (content_size == "0") {
             observer->Show();
             exit(0);
         }
-        Packet *pkt = new Packet( timestamp, content_size, src_ip, src_port, dst_ip, dst_port, flag, content);
+        Packet *pkt = new Packet( timestamp, content_size, src_ip,
+                                  src_port, dst_ip, dst_port, flag, content);
         master->Proc(pkt);
     }
     exit(0);
