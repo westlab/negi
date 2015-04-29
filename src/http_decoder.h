@@ -10,6 +10,8 @@
  * $Id: HttpDecoder.H,v 5.5 2012-05-09 17:24:13 sin Exp $
 */
 
+#ifndef HTTP_DECODER_H_
+#define HTTP_DECODER_H_
 #pragma once
 #include "packet.h"
 #include "gzip.h"
@@ -17,15 +19,14 @@
 #define CHUNK_BUF_SIZE 2000
 
 #ifdef HTTP_DEBUG_EN
-#define HTTP_DEBUG(x)  x ;
+#define HTTP_DEBUG(x)  x;
 #else
-#define HTTP_DEBUG(x)   ;
+#define HTTP_DEBUG(x);
 #endif
 
 
-class HttpDecoder{
-    public:
-
+class  HttpDecoder {
+ public:
         HttpDecoder();
         ~HttpDecoder();
         void Proc(Packet *packet);
@@ -33,13 +34,13 @@ class HttpDecoder{
         void DecodeChunk(Packet *packet);
         void DecodeGzip(Packet *packet);
 
-    private:
+ private:
         int decode();
-        char* chunk_buf_;		//temporary buffer for data process
-        char* st_work_;		//private copied original token data
-        char* p_st_work_;	//current pos. of st_work
-        char* p_st_bin_;		//current pos. of token's "cooked" buffer
-        unsigned int st_work_size_;	//current size of yet not decoded data
+        char* chunk_buf_;       // temporary buffer for data process
+        char* st_work_;         // private copied original token data
+        char* p_st_work_;       // current pos. of st_work
+        char* p_st_bin_;        // current pos. of token's "cooked" buffer
+        unsigned int st_work_size_;   // current size of yet not decoded data
         char* msg_buf_;
         Gzip gzip_;
         u_char *localbuf_;
@@ -50,5 +51,5 @@ class HttpDecoder{
         int offset_;
 
         void HeaderCheck();
-
 };
+#endif  // HTTP_DECODER_H_
