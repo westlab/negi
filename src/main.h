@@ -10,8 +10,13 @@
  *$Id: srim.H,v 5.0 2010-10-13 08:47:17 sin Exp $
  */
 
+#ifndef MAIN_H_
+#define MAIN_H_
+
 #pragma once
 
 #include "include.h"
 #include "global.h"
 #include "main.h"
+
+#endif  // MAIN_H_

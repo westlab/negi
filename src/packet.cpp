@@ -59,7 +59,6 @@ Packet::Packet(PacketCnt *pcnt){
 
     switch (ether_proto_){
         case ETH_P_IP:
-            PACKET_DEBUG(RED cout << "IPv4!" << endl ;RESET);
             version_ = 4;
             ip_header_ = (struct iphdr *)l3_header_;
             inet_v4tov6((struct in_addr *)(&(ip_header_->saddr)), &src_ip_);
@@ -83,7 +82,6 @@ Packet::Packet(PacketCnt *pcnt){
             break;
 
         case ETH_P_IPV6:
-            PACKET_DEBUG(RED cout << "IPv6!" << endl ;RESET);
             version_ = 6;
             ip6_header_ = (struct ip6_hdr *)l3_header_;
             src_ip_ = ip6_header_->ip6_src;
@@ -105,7 +103,6 @@ Packet::Packet(PacketCnt *pcnt){
 
         default:
             LOG(ERROR) << "This is not IPv4 not IPv6";
-            PACKET_DEBUG(RED    cout << "This is not IPv4 or IPv6 packet!!" <<endl; RESET);
             version_ = 0;
             src_port_ = 0;
             dst_port_ = 0;
@@ -130,7 +127,6 @@ Packet::Packet(PacketCnt *pcnt){
         l4_header_size_ = tcp_header_->doff*4;
         content_size_ = packet_size_ - l2_header_size_ - l3_header_size_ - l4_header_size_;
 
-        PACKET_DEBUG(Show());
 
     } else if(protocol_ == IPPROTO_UDP){
         LOG(INFO) << "UCP Packet";
@@ -140,7 +136,6 @@ Packet::Packet(PacketCnt *pcnt){
         l4_header_size_ = ntohs(udp_header->len);
         content_size_ = packet_size_ - l3_header_size_ - sizeof(struct udphdr);
     } else{
-    PACKET_DEBUG(RED	cout << "This is not TCP/UDP packet!!" <<endl; RESET);
         src_port_ = 0;
         dst_port_ = 0;
         content_size_ = 0;
