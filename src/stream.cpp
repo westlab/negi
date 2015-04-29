@@ -247,7 +247,7 @@ string Stream::GetRuleIds() {
     string res;
     for (list<Rule*>::iterator it=rule_list_.begin(); it != rule_list_.end(); it++) {
         // res += "["+ lexical_cast<string>((*it)->GetId()) +"]";
-        snprintf(buffer_, "[%d]", (*it)->GetId());
+        sprintf(buffer_, "[%d]", (*it)->GetId());
         res += buffer_;
     }
     return res;
