@@ -9,6 +9,8 @@
 /*
  * $Id: Master.H,v 5.6 2012-03-25 13:21:19 sin Exp $
 */
+#ifndef MASTER_H_
+#define MASTER_H_
 #pragma once
 #include "include.h"
 #include "master.h"
@@ -16,22 +18,22 @@
 #include <ext/stdio_filebuf.h>
 
 #ifdef MASTER_DEBUG_EN
-#define MASTER_DEBUG(x)  x ;
+#define MASTER_DEBUG(x)  x;
 #else
-#define MASTER_DEBUG(x)   ;
+#define MASTER_DEBUG(x);
 #endif
 
 
-class Master
-{
-    private:
+class Master {
+ private:
         int observer_packet_counter;
         long long all_packet_counter;
         time_t start_time;
 
-    public:
+ public:
         Master();
         ~Master();
         void Loop();
         void Proc(Packet *pkt);
 };
+#endif  // MASTER_H_
