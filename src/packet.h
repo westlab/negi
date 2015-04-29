@@ -22,7 +22,6 @@ typedef struct PacketCnt_t {
 }PacketCnt;
 
 
-
 class Packet{
  private:
   PacketCnt *packet_cnt_;                // pointer to libpcap packet structure(w/ header)

@@ -1,9 +1,10 @@
 #include "util.h"
 
-
-void find_and_replace(string& source, string const& find, string const& replace)
+void find_and_replace(std::string& source,
+                      std::string const& find,
+                      std::string const& replace)
 {
-    for(string::size_type i = 0; (i = source.find(find, i)) != string::npos;)
+    for(std::string::size_type i = 0; (i = source.find(find, i)) != std::string::npos;)
     {
             source.replace(i, find.length(), replace);
             i += replace.length() - find.length() + 1;
