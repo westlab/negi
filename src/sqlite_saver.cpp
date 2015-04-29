@@ -1,20 +1,25 @@
+/*
+ * * ** Copyright (C) 2015 Westlab, All Rights Reserved.
+ * */
+
 #include "include.h"
 #include "global.h"
 #include "stream.h"
 
 #ifdef USE_SQLITE
 
-SqliteSaver::SqliteSaver(){
+SqliteSaver::SqliteSaver() {
     return;
 }
 
 
-void SqliteSaver::Proc(Stream * stream){
-    //add
+void SqliteSaver::Proc(Stream * stream) {
+    // add
     struct timeval tmp_time = stream->GetTimestamp();
-    struct tm *tmp = localtime(&tmp_time.tv_sec);
+    struct tm *tmp = localtime_r(&tmp_time.tv_sec);
     ostringstream oss;
-    oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<<tmp->tm_mday <<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec;
+    oss << tmp->tm_year+1900 << "-" << tmp->tm_mon+1 << "-" << tmp->tm_mday
+    << " " << tmp->tm_hour << ":" << tmp->tm_min << ":" << tmp->tm_sec;
     string tstamp = oss.str();
 
 
@@ -31,39 +36,41 @@ void SqliteSaver::Proc(Stream * stream){
     <<"match_str, stream, stream_org, "
     <<"after_ipfilter, after_prefilter, prefilter_log"
     <<") values ('"
-    << stream->GetStreamId() << "','2.2','"<<stream->GetSrcIPStr()<<"','"<<stream->GetDstIPStr()<<"','"<<stream->GetSrcPort()<<"','"<<stream->GetDstPort()<<"','"<<tstamp<<"','"
-    << stream->GetDirection() <<"','"<< stream->GetTruncated() <<"','"<< stream->GetRuleIds() <<"','"
-    << stream->GetStreamSize() <<"','"<<  stream->GetOrgStreamSize() <<"','"
-    << stream->GetError() <<"','"
-    << stream->GetL7Error() <<"','"
-    << stream->GetL7Protocol() <<"','"<<  stream->GetHttpContentSize() <<"','"<<  stream->GetHttpCompress() <<"','" \
-    << stream->GetHttpHeaderSize() <<"','"<<  stream->GetHttpChunked() <<"','"<<  stream->GetHitCount();
+    << stream->GetStreamId() << "','2.2','" << stream->GetSrcIPStr() << "','"
+    << stream->GetDstIPStr() << "','" << stream->GetSrcPort() << "','" << stream->GetDstPort()
+    << "','" << tstamp << "','"<< stream->GetDirection() <<"','" << stream->GetTruncated()
+    <<"','"<< stream->GetRuleIds() <<"','" << stream->GetStreamSize() <<"','"
+    << stream->GetOrgStreamSize() <<"','" << stream->GetError() <<"','" << stream->GetL7Error()
+    <<"','"<< stream->GetL7Protocol() <<"','"<<  stream->GetHttpContentSize() <<"','"
+    << stream->GetHttpCompress() <<"','" << stream->GetHttpHeaderSize() <<"','"
+    << stream->GetHttpChunked() <<"','"<<  stream->GetHitCount();
     string query = oss.str();
 
 
-    //match_str
+    // match_str
     query += "','"+stream->GetMatchString()+"'";
-    //stream
-    if(!no_stream_save){
+    // stream
+    if (!no_stream_save) {
         query += ",'";
         query += "'";
-    }else{
+    } else {
         query += ",''";
     }
-    //stream_org
-    if(!no_stream_org_save){
+    // stream_org
+    if (!no_stream_org_save) {
         query += ",''";
-    }else{
+    } else {
         query += ",''";
     }
 
-    //MatchPreFilter
-    //after_ipfilter, after_prefilter, prefilter_log
-    if(stream->GetMatchPreFilterState() != 0){
+    // MatchPreFilter
+    // after_ipfilter, after_prefilter, prefilter_log
+    if (stream->GetMatchPreFilterState() != 0) {
         oss.str("");
-        oss << ", " << stream->GetMatchPreFilterState()->GetAfterIpFilter() << ", " << stream->GetMatchPreFilterState()->GetAfterPreFilter();
+        oss << ", " << stream->GetMatchPreFilterState()->GetAfterIpFilter() << ", "
+        << stream->GetMatchPreFilterState()->GetAfterPreFilter();
         query += oss.str() + ", '" + stream->GetMatchPreFilterState()->GetMatchPreFilterLog() + "'";
-    }else{
+    } else {
         query += ", -1, -1, ''";
     }
 
@@ -83,33 +90,33 @@ void SqliteSaver::Proc(Stream * stream){
 }
 
 
-void SqliteSaver::ProcPacket(Packet * pkt){
+void SqliteSaver::ProcPacket(Packet * pkt) {
     ostringstream oss;
 
-    if(pkt->GetProtocol() != IPPROTO_TCP){return;}
+    if (pkt->GetProtocol() != IPPROTO_TCP) {return;}
     char ctstamp[100];
     struct timeval tmp_time = pkt->GetTimestamp();
     strftime(ctstamp, 100, "%Y-%m-%d %H:%M:%S", (const struct tm *)localtime(&tmp_time.tv_sec));
     string tstamp = ctstamp;
 
     oss.str("");
-    oss << "insert into save_packet (src_ip ,dst_ip ,src_port ,dst_port ,timestamp , \
-    protocol, packet_size, packet_size_org, content_size, flag, content) values (\
-    ,'"<< pkt->GetSrcIPStr() <<"','"<< pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"\
-    <<pkt->GetDstPort() <<"','"<< tstamp <<"','"<<pkt->GetProtocol()<<"','"<< pkt->GetPacketSize() <<"','"<< pkt->GetPacketSizeOrg() <<"','"\
-    << pkt->GetContentSize();
+    oss << "insert into save_packet(src_ip, dst_ip, src_port, dst_port, timestamp, " +
+    "protocol, packet_size, packet_size_org, content_size, flag, content) values('"
+    << pkt->GetSrcIPStr() <<"','"<< pkt->GetDstIPStr() <<"','"<< pkt->GetSrcPort() <<"','"
+    <<pkt->GetDstPort() <<"','"<< tstamp <<"','"<< pkt->GetProtocol() <<"','"<< pkt->GetPacketSize()
+    <<"','"<< pkt->GetPacketSizeOrg() <<"','"<< pkt->GetContentSize();
     string query = oss.str();
 
-    //flag row
+    // flag row
     query += "','";
-    if(pkt->GetProtocol() == IPPROTO_TCP){
-        if(pkt->GetAck()){ query += "[ACK]"; }
-        if(pkt->GetFin()){ query += "[FIN]"; }
-        if(pkt->GetSyn()){ query += "[SYN]"; }
-        if(pkt->GetRst()){ query += "[RST]"; }
+    if (pkt->GetProtocol() == IPPROTO_TCP) {
+        if (pkt->GetAck()) { query += "[ACK]"; }
+        if (pkt->GetFin()) { query += "[FIN]"; }
+        if (pkt->GetSyn()) { query += "[SYN]"; }
+        if (pkt->GetRst()) { query += "[RST]"; }
     }
 
-    string content((char*) pkt->GetContent());
+    string content(reinterpret_cast<char*>(pkt->GetContent()));
     query += "','"+content+"');";
     cout << "save packet" << endl;
     cout << query << endl;
@@ -120,4 +127,4 @@ void SqliteSaver::ProcPacket(Packet * pkt){
     return;
 }
 
-#endif //USE_SQLITE
+#endif  // USE_SQLITE
