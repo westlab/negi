@@ -17,20 +17,20 @@
 #include "rule.h"
 #include "glog/logging.h"
 
-PapaResult::PapaResult(){
+PapaResult::PapaResult() {
     result_string_[0] = '\0';
     result_size_ = 0;
     result_offset_ = 0;
     finished_ = 0;
 }
 
-Stream::Stream(Packet *pkt){
+Stream::Stream(Packet *pkt) {
     LOG(INFO) << "Stream Created";
-    //MSG("Stream Created")
-    //Count stream creation
+    // MSG("Stream Created")
+    // Count stream creation
     observer->StreamCreated();
     observer->StreamMallocd(sizeof(*this));
-    OBSERVER_DEBUG(BLUE cout << "StreamMallocd :" << sizeof(*this) << endl;RESET);
+    OBSERVER_DEBUG(BLUE cout << "StreamMallocd :" << sizeof(*this) << endl; RESET);
 
     stream_id_ = stream_id_prev+1;
     stream_id_prev++;
@@ -68,7 +68,8 @@ Stream::Stream(Packet *pkt){
     stream_pool_it_ = stream_pool->AddStream(this);
 
     // get hole Rule*
-    for(list<Rule*>::iterator rule_it = ::rule_pool->GetRuleFirstIt(); rule_it != ::rule_pool->GetRuleLastIt(); rule_it++){
+    for (list<Rule*>::iterator rule_it = ::rule_pool->GetRuleFirstIt();
+        rule_it != ::rule_pool->GetRuleLastIt(); rule_it++) {
         rule_list_.push_back(*rule_it);
     }
 
@@ -79,126 +80,130 @@ Stream::Stream(Packet *pkt){
     return;
 }
 
-Stream::~Stream(){
-    //Count stream deletion
-//	MSG("Stream Deleted")
+Stream::~Stream() {
+    // Count stream deletion
+    // MSG("Stream Deleted")
     observer->StreamDeleted();
     observer->StreamFreed(sizeof(*this), stream_packet_size_);
 
-    if(GetL7Protocol() == HTTP){
+    if (GetL7Protocol() == HTTP) {
         observer->http_stream_num++;
         observer->http_stream_byte_sum += GetRetrievedContentSize();
         observer->http_stream_packet_sum += GetPacketNum();
     }
 
-    if(GetHttpCompress()){
+    if (GetHttpCompress()) {
         observer->http_gzip_stream_num++;
         observer->http_gzip_stream_byte_sum += GetL7RetrievedContentSize();
         observer->http_gzip_stream_packet_sum += GetPacketNum();
     }
 
-    OBSERVER_DEBUG(BLUE cout << "StreamFreed :" << sizeof(*this) << endl;RESET);
+    OBSERVER_DEBUG(BLUE cout << "StreamFreed :" << sizeof(*this) << endl; RESET);
 
-    if(retrieved_content_size_ > max_stream_size)  max_stream_size = retrieved_content_size_;
-    //observer->ShowMem(timestamp);
+    if (retrieved_content_size_ > max_stream_size)  max_stream_size = retrieved_content_size_;
+    // observer->ShowMem(timestamp);
 
-    if(gzip_z_ != NULL){
+    if (gzip_z_ != NULL) {
         inflateEnd(gzip_z_);
         free(gzip_z_);
     }
 
-    if(savemode == PACKET){
+    if (savemode == PACKET) {
         // packet was already deleted by each packet recieved time.
         // do nothing.
         // delete(pkt);
-    }else if(savemode == STREAM){
-        list<Packet *>::iterator it= packet_list_.begin();
-        while(it != packet_list_.end()){
+    } else if (savemode == STREAM) {
+        list<Packet *>::iterator it = packet_list_.begin();
+        while (it != packet_list_.end()) {
             delete *it;
             it = packet_list_.erase((*it)->GetStreamIt());
         }
     }
 
     // engine specific process
-    if(match_prefilter_state_ != 0){
+    if (match_prefilter_state_ != 0) {
         observer->MPFStateDeleted(sizeof(*match_prefilter_state_));
-        OBSERVER_DEBUG(BLUE cout << "MPFStateDeleted :" << sizeof(*match_prefilter_state) << endl;RESET);
+        OBSERVER_DEBUG(BLUE cout << "MPFStateDeleted :"
+        << sizeof(*match_prefilter_state) << endl; RESET);
         delete match_prefilter_state_;
     }
-    for(list<PapaResult*>::iterator it = papa_result_list_.begin(); it != papa_result_list_.end(); it++){
+    for (list<PapaResult*>::iterator it = papa_result_list_.begin();
+         it != papa_result_list_.end(); it++) {
         delete *it;
     }
 
     stream_pool->RemoveStreamIt(stream_pool_it_);
     tcp_conn_->RemoveStreamIt(tcp_conn_it_);
-
 }
 
-list<Rule*>::iterator Stream::GetRuleFirstIt(){
+list<Rule*>::iterator Stream::GetRuleFirstIt() {
     return rule_list_.begin();
 }
 
-list<Rule*>::iterator Stream::GetRuleLastIt(){
+list<Rule*>::iterator Stream::GetRuleLastIt() {
     return rule_list_.end();
 }
 
-list<Rule*>::iterator Stream::RemoveRuleIt(list<Rule*>::iterator it){
+list<Rule*>::iterator Stream::RemoveRuleIt(list<Rule*>::iterator it) {
     list<Rule*>::iterator it2 = it;
     it2--;
     rule_list_.erase(it);
     return it2;
 }
 
-Rule* Stream::GetRule(list<Rule*>::iterator it){
+Rule* Stream::GetRule(list<Rule*>::iterator it) {
     return *it;
 }
 
-unsigned int Stream::GetPacketNum(){
+unsigned int Stream::GetPacketNum() {
     return packet_num_;
 }
 
-void Stream::Show(){
-    YELLOW cout << "STREAM------------------------------------" << endl;RESET
+void Stream::Show() {
+    YELLOW cout << "STREAM------------------------------------" << endl; RESET
     ShowStreamInfo();
     ShowContents();
 }
 
-void Stream::ShowStreamInfo(){
-    struct tm * tmp = localtime(&(timestamp_.tv_sec));
-    YELLOW cout << "Date:"<<tmp->tm_year+1900<<"/"<< tmp->tm_mon+1<<"/"<<tmp->tm_mday<<" "<<tmp->tm_hour<<":"<<tmp->tm_min<<":"<<tmp->tm_sec<<" "<<timestamp_.tv_usec <<endl;
-    cout << "IP: " << src_ip_str_ << ":" << src_port_ << " -> " << dst_ip_str_ << ":" << dst_port_ <<endl;
+void Stream::ShowStreamInfo() {
+    struct tm * tmp = localtime_r(&(timestamp_.tv_sec));
+    YELLOW cout << "Date:" << tmp->tm_year+1900 << "/"
+    << tmp->tm_mon+1 << "/" << tmp->tm_mday << " " << tmp->tm_hour << ":"
+    << tmp->tm_min << ":" << tmp->tm_sec << " " << timestamp_.tv_usec << endl;
+    cout << "IP: " << src_ip_str_ << ":" << src_port_ << " -> "
+    << dst_ip_str_ << ":" << dst_port_ <<endl;
     RESET
 }
 
-void Stream::ShowContents(){
+void Stream::ShowContents() {
     YELLOW cout << "Contents: ["; RESET
-    for(list<Packet*>::iterator it=++packet_list_.begin(); it!=packet_list_.end(); it++){
+    for (list<Packet*>::iterator it=++packet_list_.begin(); it != packet_list_.end(); it++) {
         (*it)->ShowContent();
     }
-    YELLOW cout << "]"<<endl; RESET
+    YELLOW cout << "]" << endl; RESET
 }
 
-void Stream::ShowPackets(){
-    for(list<Packet*>::iterator it=++packet_list_.begin(); it!=packet_list_.end(); it++){
+void Stream::ShowPackets() {
+    for (list<Packet*>::iterator it=++packet_list_.begin(); it != packet_list_.end(); it++) {
         (*it)->Show();
     }
 }
 
-void Stream::AddRule(Rule *rule){
+void Stream::AddRule(Rule *rule) {
     rule_list_.push_back(rule);
     return;
 }
 
-void Stream::AddPacket(Packet *pkt){
-    if(pkt->GetSeqNo() != last_seq_no_ + GetLastPacketContentSize() && GetState() == CONTINUE){
-        if(pkt->GetSeqNo() <= last_seq_no_){
-            //duplicate! do nothing
+void Stream::AddPacket(Packet *pkt) {
+    if (pkt->GetSeqNo() != last_seq_no_ + GetLastPacketContentSize() && GetState() == CONTINUE) {
+        if (pkt->GetSeqNo() <= last_seq_no_) {
+            // duplicate! do nothing
             pkt->SetError();
             return;
-        }else{
-            //out of order
+        } else {
+            // out of order
             pkt->SetError();
-            if(disorder_flag_ != 1){
+            if (disorder_flag_ != 1) {
                 disorder_flag_ = 1;
                 observer->StreamDisorderd();
             }
@@ -206,13 +211,13 @@ void Stream::AddPacket(Packet *pkt){
         }
     }
 
-    if(disorder_flag_ == 1){
+    if (disorder_flag_ == 1) {
         observer->StreamDisorderRecoverd();
         disorder_flag_ = 0;
     }
 
     last_seq_no_ = pkt->GetSeqNo();
-    pkt->SetStreamIt(packet_list_.insert(packet_list_.end(),pkt));
+    pkt->SetStreamIt(packet_list_.insert(packet_list_.end(), pkt));
     pkt->SetStream(this);
     packet_num_++;
     retrieved_content_size_ += pkt->GetContentSize();
@@ -225,24 +230,24 @@ void Stream::AddPacket(Packet *pkt){
     return;
 }
 
-void Stream::RemovePacketIt(list<Packet *>::iterator it){
+void Stream::RemovePacketIt(list<Packet *>::iterator it) {
     packet_list_.erase(it);
 }
 
-MatchPreFilterState* Stream::GetMatchPreFilterState(){
+MatchPreFilterState* Stream::GetMatchPreFilterState() {
     return match_prefilter_state_;
 }
 
-void Stream::SetMatchPreFilterState(MatchPreFilterState *state){
+void Stream::SetMatchPreFilterState(MatchPreFilterState *state) {
     match_prefilter_state_ = state;
     return;
 }
 
-string Stream::GetRuleIds(){
+string Stream::GetRuleIds() {
     string res;
-    for(list<Rule*>::iterator it=rule_list_.begin(); it != rule_list_.end(); it++){
-        //res += "["+ lexical_cast<string>((*it)->GetId()) +"]";
-        sprintf(buffer_, "[%d]", (*it)->GetId());
+    for (list<Rule*>::iterator it=rule_list_.begin(); it != rule_list_.end(); it++) {
+        // res += "["+ lexical_cast<string>((*it)->GetId()) +"]";
+        snprintf(buffer_, "[%d]", (*it)->GetId());
         res += buffer_;
     }
     return res;
