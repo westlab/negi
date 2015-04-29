@@ -16,7 +16,7 @@ SqliteSaver::SqliteSaver() {
 void SqliteSaver::Proc(Stream * stream) {
     // add
     struct timeval tmp_time = stream->GetTimestamp();
-    struct tm *tmp = localtime_r(&tmp_time.tv_sec);
+    struct tm *tmp = localtime(&tmp_time.tv_sec);
     ostringstream oss;
     oss << tmp->tm_year+1900 << "-" << tmp->tm_mon+1 << "-" << tmp->tm_mday
     << " " << tmp->tm_hour << ":" << tmp->tm_min << ":" << tmp->tm_sec;
