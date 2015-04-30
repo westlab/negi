@@ -30,6 +30,7 @@ using namespace std;
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <cstdlib>
 #include <limits.h>
 #include <pcap.h>
 #include <string>
