@@ -10,6 +10,9 @@
  * $Id: Global.h,v 5.15 2012-05-19 15:01:30 sin Exp $
 */
 
+#ifndef GLOBAL_H_
+#define GLOBAL_H_
+
 #pragma once
 
 #include "include.h"
@@ -40,7 +43,7 @@ extern unsigned int emergency_save_all;
 extern unsigned int no_stream_save;
 extern unsigned int no_stream_org_save;
 extern unsigned int no_regexp_hit_save;
-extern map<string,string> sql_config;
+extern map<string, string> sql_config;
 
 extern pid_t pid[P_MAX];
 
@@ -82,5 +85,7 @@ extern FileWriter *file_writer;
 extern void packetcap();
 extern void pcap_signal();
 
-extern void inet_v4tov6(struct in_addr *v4 ,struct in6_addr *v6);
-extern void inet_v6tov4(struct in6_addr *v6 ,struct in_addr *v4);
+extern void inet_v4tov6(struct in_addr *v4, struct in6_addr *v6);
+extern void inet_v6tov4(struct in6_addr *v6, struct in_addr *v4);
+
+#endif  // GLOBAL_H_
