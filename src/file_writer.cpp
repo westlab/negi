@@ -14,12 +14,12 @@
 #include "global.h"
 #include "file_writer.h"
 
-FileWriter::FileWriter(){
+FileWriter::FileWriter() {
     ofs_.open("./output.txt", ios::trunc | ios::binary);
     return;
 }
 
 
-void FileWriter::Write(const string& str){
+void FileWriter::Write(const string& str) {
     ofs_ << str << endl;
 }

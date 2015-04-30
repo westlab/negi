@@ -17,7 +17,7 @@ Result::Result(Stream *pstream,
                unsigned long int sof_size,
                unsigned int poffset_size,
                unsigned int pcontent_size,
-               unsigned char * r_string){
+               unsigned char * r_string) {
     parent_stream_ = pstream;
     filter_id_ = fid;
     stream_offset_size_ = sof_size;
@@ -28,6 +28,6 @@ Result::Result(Stream *pstream,
     return;
 }
 
-Result::~Result(){
+Result::~Result() {
     return;
 }

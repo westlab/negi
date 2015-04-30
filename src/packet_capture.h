@@ -10,8 +10,8 @@
  * $Id: PacketCapture.H,v 5.9 2011-11-08 10:20:38 sin Exp $
 */
 
-#ifndef PacketCapture_H
-#define PacketCapture_H
+#ifndef PACKET_CAPTURE_H_
+#define PACKET_CAPTURE_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,4 +26,4 @@
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 void packetcap();
 
-#endif
+#endif  // PACKET_CAPTURE_H_
