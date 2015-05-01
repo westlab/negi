@@ -9,27 +9,29 @@
 /*
  * $Id: MatchPreFilterInfo.H,v 5.1 2010-10-15 11:09:53 harashima Exp $
 */
+#ifndef MATCH_PREFILTER_INFO_H_
+#define MATCH_PREFILTER_INFO_H_
 #pragma once
 #include "include.h"
 #define BM_BC_SIZE 256
-//#define BM_BC_SIZE 128
-class MatchPreFilterInfo{
-    private:
-    public:
+// #define BM_BC_SIZE 128
+class MatchPreFilterInfo {
+ private:
+ public:
         string pattern;
         int pat_len;
-        int bm_bc[BM_BC_SIZE]; //bad character rule
-        int bm_bc_plus[BM_BC_SIZE]; //for Sunday
+        int bm_bc[BM_BC_SIZE];  // bad character rule
+        int bm_bc_plus[BM_BC_SIZE];  // for Sunday
 
-        //for algorithm test
+        // for algorithm test
         int match_try[STRING_MATCH_NUM];
         int read_table[STRING_MATCH_NUM];
         int sum_slide[STRING_MATCH_NUM];
         int match[STRING_MATCH_NUM];
 
-        MatchPreFilterInfo(string pattern);
+        explicit MatchPreFilterInfo(string pattern);
         ~MatchPreFilterInfo();
         void MakeBmBc();
         void ShowResult();
-
 };
+#endif  // MATCH_PREFILTER_INFO_H_

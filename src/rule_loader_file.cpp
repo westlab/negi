@@ -17,21 +17,21 @@
 #include "rule_loader_file.h"
 #include "glog/logging.h"
 
-RuleLoaderFile::RuleLoaderFile(){
+RuleLoaderFile::RuleLoaderFile() {
     return;
 }
 
-int RuleLoaderFile::Proc(){
+int RuleLoaderFile::Proc() {
     rule_pool->Clear();
 
     ifstream is;
-    is.open( config->get("rule_file").c_str());
+    is.open(config->get("rule_file").c_str());
 
-    if(!is){
+    if (!is) {
         cerr << "Config: Can't open " << config->get("rule_file") << "."<< endl;
         exit(1);
     }
-    while(!is.eof()){
+    while (!is.eof()) {
         int id;
         string rule;
 
@@ -39,7 +39,6 @@ int RuleLoaderFile::Proc(){
         cout << rule << endl;
         LOG(INFO) << "Start add rule loop";
         rule_pool->AddRule(id, rule);
-
     }
     rule_pool->DeleteLastRule();
     stream_id_prev = 0;

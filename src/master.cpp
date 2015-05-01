@@ -13,7 +13,7 @@
 #include "global.h"
 #include "glog/logging.h"
 
-Master::Master(){
+Master::Master() {
     observer_packet_counter = 0;
     all_packet_counter = 0;
 
@@ -23,14 +23,14 @@ Master::Master(){
     return;
 }
 
-Master::~Master(){
+Master::~Master() {
     return;
 }
-void Master::Proc(Packet *pkt){
+void Master::Proc(Packet *pkt) {
     LOG(INFO) << "Master Proc";
     stream_rebuild->Proc(pkt);
 
-    if(pkt->GetError() == 0){
+    if (pkt->GetError() == 0) {
         LOG(INFO) << "Http Decode";
         http_decoder->Proc(pkt);
 
@@ -47,11 +47,12 @@ void Master::Proc(Packet *pkt){
     static time_t now_time;
     static unsigned int time_counter;
 
-    if(!end_stream_list.empty()){
-        for(list<Stream *>::iterator it=end_stream_list.begin(); it != end_stream_list.end(); it++){
-            if((*it)->GetSaveFlag()){
+    if (!end_stream_list.empty()) {
+        for (list<Stream *>::iterator it=end_stream_list.begin();
+             it != end_stream_list.end(); it++) {
+            if ((*it)->GetSaveFlag()) {
                 sqlite_saver->Proc(*it);
-            }else if(atoi(config->get("save_all").c_str())){
+            } else if (atoi(config->get("save_all").c_str())) {
                 sqlite_saver->Proc(*it);
             }
         }
