@@ -21,7 +21,7 @@ class Packet;
 
 class TcpConn{
  private:
-      struct in6_addr src_ip_, dst_ip_;  // Source/Destination IP address
+        struct in6_addr src_ip_, dst_ip_;  // Source/Destination IP address
         u_int src_port_, dst_port_;  // Source/Destination Port
         struct timeval timestamp_;  // first packet reach time
         struct timeval last_updated_time_;  // last packet reach time(used for gabage collection)
