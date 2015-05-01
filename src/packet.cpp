@@ -34,18 +34,18 @@ Packet::Packet(PacketCnt *pcnt) {
     ss.clear(stringstream::goodbit);
     for (int i = 0; i < 5; i++) {
         ss << hex << setw(2) << setfill('0')
-           << static_cast<int>(eth_header_)->ether_shost[i] << ":";
+           << static_cast<int>(eth_header_->ether_shost[i]) << ":";
     }
-    ss << hex << setw(2) << setfill('0') << static_cast<int>(eth_header_)->ether_shost[5];
+    ss << hex << setw(2) << setfill('0') << static_cast<int>(eth_header_->ether_shost[5]);
     src_mac_addr_ = ss.str();
 
     ss.str("");
     ss.clear(stringstream::goodbit);
     for (int i = 0; i < 5; i++) {
         ss << hex << setw(2) << setfill('0')
-           << static_cast<int>(eth_header_)->ether_dhost[i] << ":";
+           << static_cast<int>(eth_header_->ether_dhost[i]) << ":";
     }
-    ss << hex << setw(2) << setfill('0') << static_cast<int>(eth_header_)->ether_dhost[5];
+    ss << hex << setw(2) << setfill('0') << static_cast<int>(eth_header_->ether_dhost[5]);
     dst_mac_addr_ = ss.str();
 
 
@@ -158,7 +158,7 @@ Packet::Packet(PacketCnt *pcnt) {
 }
 
 Packet::Packet(string timestamp_str, string content_size_str, string srcip_str,
-char src_port_str, string dstip_str, string dst_port_str, string flag_str, string content_str) {
+string src_port_str, string dstip_str, string dst_port_str, string flag_str, string content_str) {
 }
 /*
     //Count packet creation
