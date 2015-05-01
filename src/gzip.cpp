@@ -77,8 +77,8 @@ int Gzip::dec_zlib(u_char* outbuf, u_char* inbuf, int len, z_stream *z) {
 
 int Gzip::dec_deflate(u_char* outbuf, u_char* inbuf, int size, z_stream *z) {
     // Setting Input buf data
-    z->next_in = <Bytef*> inbuf;
-    z->next_out = <Bytef*> outbuffer;
+    z->next_in = reinterpret_cast<Bytef*>(inbuf);
+    z->next_out =reinterpret_cast <Bytef*>(outbuffer);
     z->avail_in = size;
     z->avail_out = SAVE_MAX_SIZE;
 
