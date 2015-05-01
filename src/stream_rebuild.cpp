@@ -116,11 +116,11 @@ void StreamRebuild::SearchStream(Packet * pkt) {
                         }
                         if (pkt->GetFin()) {
                             LOG(INFO) << "FIN flag detected. connection state to FINISHED."
-                                         "tcp connection entry.";
+                                         " tcp connection entry.";
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if (last_stream == NULL) {return;}
-                            if (tcp_conn->GetStreamLastIt() ==
-                                tcp_conn->GetStreamFirstIt()) {return;}
+                            if (tcp_conn->GetStreamLastIt()
+                            == tcp_conn->GetStreamFirstIt()) {return;}
                             if (last_stream->GetState() == END) {return;}
                             last_stream->SetState(END);
                             end_stream_list.push_back(last_stream);
@@ -129,11 +129,11 @@ void StreamRebuild::SearchStream(Packet * pkt) {
                         }
                         if (pkt->GetRst()) {
                             LOG(INFO) << "RST flag detected. connection state to FINISHED."
-                                         "tcp connection entry.";
+                                         " tcp connection entry.";
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if (last_stream == NULL) {return;}
-                            if (tcp_conn->GetStreamLastIt() ==
-                                tcp_conn->GetStreamFirstIt()) {return;}
+                            if (tcp_conn->GetStreamLastIt()
+                            == tcp_conn->GetStreamFirstIt()) {return;}
                             if (last_stream->GetState() == END) {return;}
                             last_stream->SetState(END);
                             end_stream_list.push_back(last_stream);
@@ -142,8 +142,8 @@ void StreamRebuild::SearchStream(Packet * pkt) {
                         }
                     }
 
-                } else if (pkt->GetSrcPort() == tcp_conn->GetDstPort() &&
-                           pkt->GetDstPort() == tcp_conn->GetSrcPort()) {
+                } else if (pkt->GetSrcPort() == tcp_conn->GetDstPort()
+                       && pkt->GetDstPort() == tcp_conn->GetSrcPort()) {
                     if (!memcmp(&packet_src_ip, &tcpconn_dst_ip, sizeof(struct in6_addr)) &&  \
                         !memcmp(&packet_dst_ip, &tcpconn_src_ip, sizeof(struct in6_addr))) {
                         LOG(INFO) << "Entry matched! Server -> Client";
@@ -151,8 +151,7 @@ void StreamRebuild::SearchStream(Packet * pkt) {
 
                         switch (tcp_conn->GetPrevDirection()) {
                             case NEW:
-                                LOG(INFO) << "New connection data arrived. create stream,"
-                                             "Set prev_direction to S2C.";
+                                LOG(INFO) << "Set prev_direction to S2C.";
 
                                 stream = new Stream(pkt);
                                 stream->AddPacket(pkt);
@@ -185,8 +184,8 @@ void StreamRebuild::SearchStream(Packet * pkt) {
                             LOG(INFO) << "FIN flag detected. delete tcp connection entry.";
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if (last_stream == NULL) {return;}
-                            if (tcp_conn->GetStreamLastIt() ==
-                                tcp_conn->GetStreamFirstIt()) {return;}
+                            if (tcp_conn->GetStreamLastIt()
+                            == tcp_conn->GetStreamFirstIt()) {return;}
                             if (last_stream->GetState() == END) {return;}
                             last_stream->SetState(END);
                             end_stream_list.push_back(last_stream);
@@ -197,8 +196,8 @@ void StreamRebuild::SearchStream(Packet * pkt) {
                             LOG(INFO) << "RST flag detected. delete tcp connection entry.";
                             Stream * last_stream = *--(tcp_conn->GetStreamLastIt());
                             if (last_stream == NULL) {return;}
-                            if (tcp_conn->GetStreamLastIt() ==
-                                tcp_conn->GetStreamFirstIt()) {return;}
+                            if (tcp_conn->GetStreamLastIt()
+                            == tcp_conn->GetStreamFirstIt()) {return;}
                             if (last_stream->GetState() == END) {return;}
                             last_stream->SetState(END);
                             end_stream_list.push_back(last_stream);

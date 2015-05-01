@@ -151,8 +151,8 @@ void HttpDecoder::DecodeChunk(Packet *packet) {
             stream->SetChunkOffset(chunk_size);
             return;
         }
-        if (strstr(reinterpret_cast<char *>(first_nonnum), "\r\n") !=
-                   reinterpret_cast<char*>(first_nonnum)) {
+        if (strstr(reinterpret_cast<char *>(first_nonnum), "\r\n")
+        != reinterpret_cast<char*>(first_nonnum)) {
             p_content_work = reinterpret_cast<u_char*>(strstr(reinterpret_cast<char *>
                              (first_nonnum), "\r\n" + sizeof("\r\n")-1));
             if (p_content_work - first_nonnum > 10 || p_content_work - first_nonnum < 0) {
