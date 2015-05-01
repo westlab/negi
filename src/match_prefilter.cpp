@@ -66,7 +66,8 @@ void MatchPreFilter::buildAhoMachine(){
     int index = 0;
     int currentState;
 
-    for(list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt(); rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
+    for(list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt();
+        rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
         string keyword = (*rule_it)->GetPreFilterPattern();
         currentState = 0;
         for (unsigned int j = 0; j < keyword.size(); j++) {
@@ -142,7 +143,12 @@ void MatchPreFilter::buildAhoMachine(){
     delete [] f;
 }
 
-int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end){
+int MatchPreFilter::AhoSearch(int mode,
+                              int start_flag,
+                              MatchPreFilterState *state, Packet *packet,
+                              int start_place,
+                              u_char *p_content,
+                              u_char *p_content_end){
     list<ActiveRule*>::iterator active_rule_it = state->active_rule_list_.begin();
     int content_size = (int)packet->GetL7ContentSize();
     string pattern;
@@ -163,6 +169,7 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
     if(start_flag == 1){
         if(start_place < 0){
             LOG(ERROR) << "Error on start palce";
+            LOG(ERROR) << "start palce: " << start_place;
             return 1;
         }
         //start packet for this rule
@@ -178,8 +185,9 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
         if(out_[currentState][0] != 0){
             for(int index=0; (index<MAXN && out_[currentState][index]>0); index++){
                 for(int k=0; k<(out_[currentState][index]-1); k++){
-                    if(active_rule_it != state->active_rule_list_.end())
+                    if(active_rule_it != state->active_rule_list_.end()){
                         active_rule_it++;
+                    }
                 }
                 pattern = (*(*active_rule_it)->rule_it_)->GetPreFilterPattern();
                 pat_len = pattern.size();
@@ -227,7 +235,7 @@ MatchPreFilterState * MatchPreFilter::MakeMatchPreFilterState(Stream *stream){
 }
 
 int MatchPreFilter::Proc(Packet *packet){
-    //suppose that don't seatch 2 packet before.
+    //suppose that don't search 2 packet before.
     LOG(INFO) << "start: " << packet->GetL7ContentSize();
     if(packet->GetProtocol() != IPPROTO_TCP){
         LOG(INFO) << "MPFilter: Protocol is not TCP";
@@ -263,9 +271,7 @@ int MatchPreFilter::Proc(Packet *packet){
     int start_flag = 0;
     int offset = 0;
     int depth = 0;
-    if(depth == 0){
-        depth = INT_MAX;
-    }
+    depth = INT_MAX;
     int start = offset;
     int end = start + depth - 1;
     u_char *p_content = NULL, *p_content_end = NULL;
@@ -275,6 +281,12 @@ int MatchPreFilter::Proc(Packet *packet){
             start_flag = 1;
             start_place = start - (retrieved_content_size - content_size);
             p_content = packet->GetL7Content() + start_place;
+            if (start_place < 0) {
+                LOG(ERROR) << "Calicurate start place";
+                LOG(ERROR) << "start place: " << start_place;
+                LOG(ERROR) << "retrieved content size: " << retrieved_content_size;
+                LOG(ERROR) << "content size: " << content_size;
+            }
     }
 
     if(start_flag == 0){
@@ -284,9 +296,15 @@ int MatchPreFilter::Proc(Packet *packet){
 
     if(end <= retrieved_content_size - 1){ //end packet
         p_content_end = packet->GetL7Content() + end - (retrieved_content_size - content_size);
+        if (start_place < 0) {
+            LOG(ERROR) << "start place before aho search is called: " << start_place;
+        }
         AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
     }else{
         p_content_end = packet->GetL7Content() + content_size - 1;
+        if (start_place < 0) {
+            LOG(ERROR) << "start place before aho search is called: " << start_place;
+        }
         AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
     }
 
@@ -298,7 +316,9 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
     max_prefilter_pattern_size_ = 0;
     size_t active_rule_size= 0;
 
-    for(list<Rule*>::iterator rule_it = stream->GetRuleFirstIt(); rule_it != stream->GetRuleLastIt(); rule_it++){
+    for(list<Rule*>::iterator rule_it = stream->GetRuleFirstIt();
+        rule_it != stream->GetRuleLastIt(); rule_it++){
+
         ActiveRule* temp_rule = new ActiveRule;
         active_rule_size += sizeof(*temp_rule);
         temp_rule->rule_it_ = rule_it;
@@ -317,14 +337,15 @@ MatchPreFilterState::MatchPreFilterState(Stream *stream){
     after_pre_filter_ = -1;
     temp_buf_ = new u_char[max_prefilter_pattern_size_ + 1];
     observer->MPFTempBufMallocd(max_prefilter_pattern_size_ * sizeof(unsigned char));
-    OBSERVER_DEBUG(BLUE cout << "MPFTempBufMallocd :" << max_prefilter_pattern_size * sizeof(unsigned char) << endl;RESET);
 
     tmpState_ = 0;
 }
 
 
 MatchPreFilterState::~MatchPreFilterState(){
-    for(list<ActiveRule*>::iterator rule_it = active_rule_list_.begin(); rule_it != active_rule_list_.end(); rule_it++){
+    for(list<ActiveRule*>::iterator rule_it = active_rule_list_.begin();
+        rule_it != active_rule_list_.end(); rule_it++){
+
         observer->MPFActiveRuleDeleted(sizeof(**rule_it));
         LOG(INFO) << "MPFActiveRuleDeleted: " << sizeof(**rule_it);
         delete *rule_it;
