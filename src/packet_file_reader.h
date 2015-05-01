@@ -10,8 +10,9 @@
  * $Id: PacketFileReader.H,v 5.1 2010-10-16 11:01:20 harashima Exp $
 */
 
-#ifndef PacketFileReader_H
-#define PacketFileReader_H
+#ifndef PACKET_FILE_READER_H_
+#define PACKET_FILE_READER_H_
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,9 +26,8 @@
 class PacketFileReader {
     friend void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
-    private:
-
-    public:
+ private:
+ public:
         PacketFileReader();
         void Init();
         void StartLoop();
@@ -35,4 +35,4 @@ class PacketFileReader {
 };
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 
-#endif
+#endif  // PACKET_FILE_READER_H_

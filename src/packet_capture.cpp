@@ -18,7 +18,7 @@
 
 unsigned long sim_time;
 
-void pcap_status(int x){
+void pcap_status(int x) {
     pcap_t *pd;
     pd = pcap_descriptor;
 
@@ -28,17 +28,19 @@ void pcap_status(int x){
     LOG(INFO) << "PCAP Library Infomation----";
     LOG(INFO) << "Packet Recieved: " << status.ps_recv;
     LOG(INFO) << "Packet Dropped: " << status.ps_drop;
-    LOG(INFO) << "Packet Dropp Rate: " << (double)status.ps_drop / (double)status.ps_recv * 100.0 << "%";
+    LOG(INFO) << "Packet Dropp Rate: " << static_cast<double>(status.ps_drop)
+                 / static_cast<double>(status.ps_recv * 100.0) << "%";
     LOG(INFO) << "Packet IfDropped: " << status.ps_ifdrop;
 }
 
-void packetcap(){
+void packetcap() {
         signal(SIGUSR1, pcap_status);
 
-        //settings for libpcap
+        // settings for libpcap
         pcap_t *pd = NULL;
 
-        static const int snaplen = 15000;	//default packet snap length:15000bytes(enough for full capture)
+        static const int snaplen = 15000;
+        // default packet snap length:15000bytes(enough for full capture)
         static const int pflag = 0;
         static const int timeout = 1000;
         static const int iterate = -1;
@@ -46,11 +48,11 @@ void packetcap(){
         bpf_u_int32 localnet, netmask;
         struct bpf_program fcode;
 
-    if(config->get("type") != "pcap" && config->get("type") != "ether"){
+    if (config->get("type") != "pcap" && config->get("type") != "ether") {
         exit(1);
     }
 
-    if(config->get("type") == "ether"){
+    if (config->get("type") == "ether") {
         cerr << "Entering Ether mode." << endl;
 
         if (config->get("device").size() == 0) {
@@ -60,7 +62,8 @@ void packetcap(){
         }
 
         /* open network interface with on-line mode */
-        if ((pd = pcap_open_live(config->get("device").c_str(), snaplen, !pflag, timeout, ebuf)) == NULL) {
+        if ((pd = pcap_open_live(config->get("device").c_str(),
+        snaplen, !pflag, timeout, ebuf)) == NULL) {
             fprintf(stderr, "Can't open pcap deivce\n");
             exit(1);
         }
@@ -71,12 +74,13 @@ void packetcap(){
             fprintf(stderr, "Can't get interface informartions\n");
             exit(1);
         }
-    }else if(config->get("type") == "pcap"){
+    } else if (config->get("type") == "pcap") {
         pd = pcap_open_offline(config->get("filename").c_str(), ebuf);
     }
 
     /* setting and compiling packet filter */
-    if (pcap_compile(pd, &fcode, const_cast<char *>(config->get("pcap_filter").c_str()), 1, netmask) < 0) {
+    if (pcap_compile(pd, &fcode, const_cast<char *>(config->get("pcap_filter").c_str()),
+    1, netmask) < 0) {
         fprintf(stderr, "can't compile fileter\n");
         exit(1);
     }
@@ -85,9 +89,9 @@ void packetcap(){
         exit(1);
     }
 
-    //Setting Other settings
+    // Setting Other settings
 
-    //set global variables for callback function.
+    // set global variables for callback function.
     sim_time = atol(config->get("sim_time").c_str());
 
     /* loop packet capture util picking iterate packets up from interface. */
@@ -101,17 +105,16 @@ void packetcap(){
 
     // close message queue
     kill(getppid(), SIGTERM);
-
 }
 
 void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *p) {
     static struct timeval start_time;
 
-    //Calc. ongoing time from Start time.
-    if(start_time.tv_sec == 0 && start_time.tv_usec == 0) start_time = h->ts;
+    // Calc. ongoing time from Start time.
+    if (start_time.tv_sec == 0 && start_time.tv_usec == 0) start_time = h->ts;
     PacketCnt *pcnt;
 
-    pcnt = (PacketCnt *)malloc(sizeof(PacketCnt) + h->caplen);
+    pcnt = reinterpret_cast<PacketCnt *>(malloc(sizeof(PacketCnt) + h->caplen));
     memcpy(&(pcnt->pcap_hdr), h, sizeof(struct pcap_pkthdr));
     memcpy(pcnt->pcap_pkt, p, h->caplen);
 
