@@ -54,14 +54,16 @@ class PapaResult{
         void SetPlaceOfPacket(int place) {place_of_packet_ = place;}
         int GetPlaceOfPacket() {return place_of_packet_;}
 
-        void SetResultString(unsigned char* src, u_int offset, u_int size) {memcpy(result_string_ + offset, src, size);};
-        unsigned char *GetResultString() {return result_string_;};
-        void SetResultSize(u_int size) {result_size_ = size;};
-        unsigned int GetResultSize() {return result_size_;};
-        void SetResultOffset(u_int offset) {result_offset_ = offset;};
-        unsigned int GetResultOffset() {return result_offset_;};
-        void SetFinished(bool flag) {finished_ = flag;};
-        bool GetFinished() {return finished_;};
+        void SetResultString(unsigned char* src, u_int offset, u_int size) {
+            memcpy(result_string_ + offset, src, size);
+        }
+        unsigned char *GetResultString() {return result_string_;}
+        void SetResultSize(u_int size) {result_size_ = size;}
+        unsigned int GetResultSize() {return result_size_;}
+        void SetResultOffset(u_int offset) {result_offset_ = offset;}
+        unsigned int GetResultOffset() {return result_offset_;}
+        void SetFinished(bool flag) {finished_ = flag;}
+        bool GetFinished() {return finished_;}
 };
 // == class for string match for harashima end ==
 
@@ -72,8 +74,10 @@ class Stream {
         struct timeval timestamp_;        // first stream packet reach time.
         struct in6_addr src_ip_, dst_ip_;      // Source IP, Destination IP
         u_int src_port_, dst_port_;        // Source Port, Destination Port
-        Direction direction_;          // transport direction(S2C: server->client, C2S: client-> server)
-        unsigned int last_seq_no_;        // last reached packet's sequence number(for packet drop detection)
+        // transport direction(S2C: server->client, C2S: client-> server)
+        Direction direction_;
+        // last reached packet's sequence number(for packet drop detection)
+        unsigned int last_seq_no_;
 
         bool disorder_flag_;            // packet disorder flag(internally used only)
         bool truncated_;              // not used.
@@ -105,21 +109,23 @@ class Stream {
         list<Stream*>::iterator stream_pool_it_;  // used for gabage collect
         list<Stream*>::iterator tcp_conn_it_;  // used for gabage collect
 
-        //engine specific values
+        // engine specific values
         MatchPreFilterState *match_prefilter_state_;
         list<PapaResult*> papa_result_list_;
 
-        //Observer
+        // Observer
         size_t stream_packet_size_;
 
-        //Gabage Collector
+        // Gabage Collector
         bool gc_deleted_;
         struct timeval last_updated_time_;
 
-        int gzip_only_http_header_;  //Flag this stream is gzipped but first packet contains only httpdeader
+        // Flag this stream is gzipped but first packet contains only httpdeader
+        int gzip_only_http_header_;
         char buffer_[BUFF_SIZE];
+
  public:
-        Stream(Packet *pkt);
+        explicit Stream(Packet *pkt);
         ~Stream();
         void AddRule(Rule *rule);
         void AddPacket(Packet *pkt);
@@ -189,23 +195,27 @@ class Stream {
         MatchPreFilterState *GetMatchPreFilterState();
         void SetMatchPreFilterState(MatchPreFilterState *state);
 
-        void AddPapaResult(PapaResult *pres) {papa_result_list_.push_back(pres);};
-        list<PapaResult*>::iterator DeletePapaResultIt(list<PapaResult*>::iterator it) {delete *it; return papa_result_list_.erase(it);};
-        list<PapaResult*>::iterator GetPapaResultListFirstIt() {return papa_result_list_.begin();};
-        list<PapaResult*>::iterator GetPapaResultListLastIt() {return papa_result_list_.end();};
-        size_t GetPapaResultListSize() {return papa_result_list_.size();};
+        void AddPapaResult(PapaResult *pres) {papa_result_list_.push_back(pres);}
+        list<PapaResult*>::iterator DeletePapaResultIt(list<PapaResult*>::iterator it) {
+            delete *it; return papa_result_list_.erase(it);
+        }
+        list<PapaResult*>::iterator GetPapaResultListFirstIt() {return papa_result_list_.begin();}
+        list<PapaResult*>::iterator GetPapaResultListLastIt() {return papa_result_list_.end();}
+        size_t GetPapaResultListSize() {return papa_result_list_.size();}
 
-        //garbage collector
-        struct timeval GetLastUpdatedTime() { return last_updated_time_;};
+        // garbage collector
+        struct timeval GetLastUpdatedTime() { return last_updated_time_;}
         void GabageDelete();
-        bool GetGabageState() {return gc_deleted_;};
-        void SetSaveFlag() {save_flag_ = 1;};
-        bool GetSaveFlag() {return save_flag_;};
+        bool GetGabageState() {return gc_deleted_;}
+        void SetSaveFlag() {save_flag_ = 1;}
+        bool GetSaveFlag() {return save_flag_;}
 
-        void SetGzipZ(z_stream *z) {gzip_z_ = z ;};
-        z_stream* GetGzipZ() {return gzip_z_ ;};
+        void SetGzipZ(z_stream *z) {gzip_z_ = z ;}
+        z_stream* GetGzipZ() {return gzip_z_ ;}
 
-        void SetGzipOnlyHttpHeader(int _gzip_only_http_header) { gzip_only_http_header_ = _gzip_only_http_header;}
+        void SetGzipOnlyHttpHeader(int _gzip_only_http_header) {
+            gzip_only_http_header_ = _gzip_only_http_header;
+        }
         int GetGzipOnlyHttpHeader() {return gzip_only_http_header_;}
         void IncGzipOnlyHttpHeader() { gzip_only_http_header_++;}
 };

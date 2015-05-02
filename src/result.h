@@ -29,7 +29,8 @@ class Result {
         bool finished;
 
  public:
-        Result(Stream *pstream, unsigned int fid, unsigned long int sof_size, unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string);
+        Result(Stream *pstream, unsigned int fid, unsigned long int sof_size,
+               unsigned int poffset_size, unsigned int pcontent_size, unsigned char* r_string);
         ~Result();
         Stream *GetParentStream() {return parent_stream_; }
         unsigned int GetFilterId() {return filter_id_; }

@@ -41,7 +41,8 @@ void PacketClean::Proc(Packet *pkt) {
     if (!end_stream_list.empty()) {
         LOG(INFO) << "Stream End-----------------------";
         LOG(INFO) << "end_stream_list size is :" << end_stream_list.size();
-        for (list<Stream *>::iterator it=end_stream_list.begin(); it != end_stream_list.end(); it++) {
+        for (list<Stream *>::iterator it=end_stream_list.begin();
+             it != end_stream_list.end(); it++) {
             delete(*it);
         }
         end_stream_list.clear();
@@ -50,14 +51,16 @@ void PacketClean::Proc(Packet *pkt) {
     // Gabage collect is enough 1 sec. each.
     if (packet_timestamp.tv_sec - last_gc_time_.tv_sec >= 1) {
     // Check all stream for timeout.
-    for (list<Stream *>::iterator it=stream_pool->GetStreamFirstIt(); it != stream_pool->GetStreamLastIt(); it++) {
+    for (list<Stream *>::iterator it=stream_pool->GetStreamFirstIt();
+         it != stream_pool->GetStreamLastIt(); it++) {
         LOG(INFO) << "Stream timeout-----------------------";
         LOG(INFO) << "packet timestamp sec: " << packet_timestamp.tv_sec;
         LOG(INFO) << "GetLastUpdatedTime: " << (*it)->GetLastUpdatedTime().tv_sec;
         LOG(INFO) << "Division: " << packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec;
         LOG(INFO) << "gc_removetime: " << gc_remove_time;
         LOG(INFO) << atoi(config->get("gc_remove_time").c_str());
-        if ( packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec >= atoi(config->get("gc_remove_time").c_str()) ) {
+        if (packet_timestamp.tv_sec - (*it)->GetLastUpdatedTime().tv_sec
+            >= atoi(config->get("gc_remove_time").c_str())) {
             list<Stream *>::iterator it2;
             it2 = --it;
             ++it;
@@ -69,9 +72,11 @@ void PacketClean::Proc(Packet *pkt) {
         }
 
         // Check all tcpconn for timeout.
-        for (multimap<u_int, TcpConn*>::iterator it=tcp_conn_pool->GetTcpConnFirstIt(); it != tcp_conn_pool->GetTcpConnLastIt(); ++it) {
+        for (multimap<u_int, TcpConn*>::iterator it=tcp_conn_pool->GetTcpConnFirstIt();
+             it != tcp_conn_pool->GetTcpConnLastIt(); ++it) {
             LOG(INFO) << "TCP connection timeout-----------------------";
-            if ( packet_timestamp.tv_sec - (it->second)->GetLastUpdatedTime().tv_sec >=  atoi(config->get("gc_remove_time").c_str()) ) {
+            if (packet_timestamp.tv_sec - (it->second)->GetLastUpdatedTime().tv_sec
+                >=  atoi(config->get("gc_remove_time").c_str())) {
                 multimap<u_int, TcpConn*>::iterator it2;
                     it2 = --it;
                     ++it;

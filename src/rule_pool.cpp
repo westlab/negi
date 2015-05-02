@@ -47,11 +47,16 @@ void RulePool::DeleteLastRule() {
 }
 
 
-void RulePool::AddRule(int _id, string _owner, string _timestamp, string _src_ip, string _src_netmask,
-                       int _src_port, string _dst_ip, string _dst_netmask, int _dst_port, string _regexp,
-                       string _prefilter_pattern, int _prefilter_offset, int _prefilter_depth, int _save_flag) {
-    Rule* rule_p = new Rule(_id, _owner, _timestamp, _src_ip, _src_netmask, _src_port, _dst_ip, _dst_netmask,
-                            _dst_port, _regexp, _prefilter_pattern, _prefilter_offset, _prefilter_depth, _save_flag);
+void RulePool::AddRule(int _id, string _owner, string _timestamp,
+                       string _src_ip, string _src_netmask, int _src_port,
+                       string _dst_ip, string _dst_netmask, int _dst_port,
+                       string _regexp, string _prefilter_pattern, int _prefilter_offset,
+                       int _prefilter_depth, int _save_flag) {
+    Rule* rule_p = new Rule(_id, _owner, _timestamp,
+                            _src_ip, _src_netmask, _src_port,
+                            _dst_ip, _dst_netmask, _dst_port,
+                            _regexp, _prefilter_pattern, _prefilter_offset,
+                            _prefilter_depth, _save_flag);
 MPF_DEBUG(rule_p->Show();)
     rule_pool_.push_back(rule_p);
 }
