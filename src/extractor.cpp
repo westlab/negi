@@ -26,7 +26,8 @@ void Extractor::Proc(Packet *pkt) {
         if (pkt->ExFlag()) {
             end_flag = 1;
         }
-        for (list<PapaResult*>::iterator it = pkt->GetStream()->GetPapaResultListFirstIt(); it != pkt->GetStream()->GetPapaResultListLastIt();) {
+        for (list<PapaResult*>::iterator it = pkt->GetStream()->GetPapaResultListFirstIt();
+             it != pkt->GetStream()->GetPapaResultListLastIt();) {
             int error_flag = 0;
             if ((*it)->GetPRule()->GetSaveFlag()) {
                 u_int result_start_num = (*it)->GetPlaceOfPacket() + 1;  // for Aho Corasick
@@ -35,18 +36,28 @@ void Extractor::Proc(Packet *pkt) {
                 struct timeval tmp_time = pkt->GetStream()->GetTimestamp();
                 struct tm *tmp = localtime(&tmp_time.tv_sec);
                 ostringstream oss;
-                oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1 <<"-"<< tmp->tm_mday <<" "<< tmp->tm_hour <<":"<< tmp->tm_min <<":"<< tmp->tm_sec;
+                oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1
+                    <<"-"<< tmp->tm_mday
+                    <<" "<< tmp->tm_hour
+                    <<":"<< tmp->tm_min
+                    <<":"<< tmp->tm_sec;
                 string tstamp = oss.str();
 
                 if ((*it)->GetResultOffset() > 0) {
                     // this means results crosses packets.
                     if ((*it)->GetResultOffset() <= pkt->GetL7ContentSize()) {
-                        (*it)->SetResultString(pkt->GetL7Content() , RESULT_SIZE - (*it)->GetResultOffset(), (*it)->GetResultOffset());
+                        (*it)->SetResultString(pkt->GetL7Content(),
+                                               RESULT_SIZE - (*it)->GetResultOffset(),
+                                               (*it)->GetResultOffset());
                         (*it)->SetResultSize(RESULT_SIZE);
                         (*it)->SetFinished(1);
                     } else {
-                        (*it)->SetResultString(pkt->GetL7Content() , RESULT_SIZE - (*it)->GetResultOffset(), pkt->GetL7ContentSize());
-                        (*it)->SetResultSize(RESULT_SIZE - (*it)->GetResultOffset() + pkt->GetL7ContentSize());
+                        (*it)->SetResultString(pkt->GetL7Content(),
+                                               RESULT_SIZE - (*it)->GetResultOffset(),
+                                               pkt->GetL7ContentSize());
+                        (*it)->SetResultSize(RESULT_SIZE
+                         - (*it)->GetResultOffset()
+                         + pkt->GetL7ContentSize());
                         (*it)->SetResultOffset((*it)->GetResultOffset() - pkt->GetL7ContentSize());
                         if (end_flag) {
                             (*it)->SetFinished(1);
@@ -66,7 +77,8 @@ void Extractor::Proc(Packet *pkt) {
                     LOG(INFO) << "ResultStart: " << result_start_num;
                     LOG(INFO) << "ResultEnd: " << result_end_num;
                     LOG(INFO) << "Flag: " << (*it)->GetFinished();
-                } else if ( (*it)->GetPlaceOfPacket() > (int)pkt->GetL7ContentSize() ) {
+                } else if ( (*it)->GetPlaceOfPacket()
+                            > static_cast<int>(pkt->GetL7ContentSize()) ) {
                     error_flag = 1;
 
                     LOG(ERROR) << "Stream p: "<< pkt->GetStream();
@@ -83,12 +95,17 @@ void Extractor::Proc(Packet *pkt) {
                     LOG(ERROR) << "Packet num: " << pkt->GetStream()->GetPacketNum();
                 } else {
                     if (result_end_num < pkt->GetL7ContentSize()) {
-                        (*it)->SetResultString(pkt->GetL7Content() + result_start_num, 0, RESULT_SIZE);
+                        (*it)->SetResultString(pkt->GetL7Content() + result_start_num,
+                                               0,
+                                               RESULT_SIZE);
                         (*it)->SetResultSize(RESULT_SIZE);
                         (*it)->SetFinished(1);
                     } else {
-                        (*it)->SetResultString(pkt->GetL7Content() + result_start_num, 0, pkt->GetL7ContentSize() - result_start_num);
-                        (*it)->SetResultSize(RESULT_SIZE - (result_end_num - pkt->GetL7ContentSize()));
+                        (*it)->SetResultString(pkt->GetL7Content() + result_start_num,
+                                               0,
+                                               pkt->GetL7ContentSize() - result_start_num);
+                        (*it)->SetResultSize(RESULT_SIZE
+                                             - (result_end_num - pkt->GetL7ContentSize()));
                         (*it)->SetResultOffset(result_end_num - pkt->GetL7ContentSize());
                         if (end_flag) {
                             (*it)->SetFinished(1);
@@ -118,28 +135,40 @@ void Extractor::Proc(Packet *pkt) {
                         LOG(INFO) << "HTTP Encode: " << "None";
                     }
 
-                    LOG(INFO) << "Source IP,port:      " << pkt->GetSrcIPStr() << ","<< pkt->GetSrcPort()<< endl;
-                    LOG(INFO) << "Destination IP,port: " << pkt->GetDstIPStr() << "," <<pkt->GetDstPort()<< endl;
-                    LOG(INFO) << "ResultString: " << (*it)->GetPRule()->GetPreFilterPattern();
+                    LOG(INFO) << "Source IP,port:      " << pkt->GetSrcIPStr()
+                              << ","<< pkt->GetSrcPort() << endl;
+                    LOG(INFO) << "Destination IP,port: " << pkt->GetDstIPStr()
+                              << ","                     << pkt->GetDstPort()
+                              << endl;
+                    LOG(INFO) << "ResultString: "
+                              << (*it)->GetPRule()->GetPreFilterPattern();
                     LOG(INFO) << (*it)->GetResultString();
                     LOG(INFO) << "------------------------------------";
 
-                    LOG(INFO) << "MAC Addr:" << pkt->GetDstMacAddr();
+                    LOG(INFO) << "MAC Addr:"             << pkt->GetDstMacAddr();
 
                     ostringstream oss;
                     oss.str("");
 
 
-                    oss << "insert into save_result(stream_id, rule_id, pattern, pattern_len, place,timestamp, src_ip, dst_ip, src_port, dst_port, src_mac_addr, dst_mac_addr, result) values "\
-                    << "('" << pkt->GetStream()->GetStreamId() << "','" << (*it)->GetRuleId() << "','" \
-                    << (*it)->GetPRule()->GetPreFilterPattern() << "','" << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
-                    << tstamp << "','" <<  pkt->GetSrcIPStr() << "','" <<  pkt->GetDstIPStr() << "','" \
-                    << pkt->GetSrcPort() << "','" << pkt->GetDstPort() << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
+                    oss << "insert into save_result"
+                        << "(stream_id, rule_id, pattern, pattern_len,"
+                        << " place,timestamp, src_ip, dst_ip, src_port,"
+                        << " dst_port, src_mac_addr, dst_mac_addr, result) values "\
+                        << "('" << pkt->GetStream()->GetStreamId()
+                        << "','" << (*it)->GetRuleId() << "','" \
+                        << (*it)->GetPRule()->GetPreFilterPattern() << "','"
+                        << (*it)->GetPatLen() << "','" << (*it)->GetPlaceOfPacket() << "','" \
+                        << tstamp << "','" <<  pkt->GetSrcIPStr()
+                        << "','" <<  pkt->GetDstIPStr() << "','" \
+                        << pkt->GetSrcPort() << "','" << pkt->GetDstPort()
+                        << "','" << pkt->GetSrcMacAddr() << "','" << pkt->GetDstMacAddr();
 
                     string query = oss.str();
 
-                    char * temp = (char *)malloc(sizeof(char)* RESULT_SIZE);
-                    memcpy(temp, (char *)((*it)->GetResultString()), RESULT_SIZE - 1);
+                    char * temp = reinterpret_cast<char *>(malloc(sizeof(char)* RESULT_SIZE));
+                    memcpy(temp,
+                           reinterpret_cast<char *>(((*it)->GetResultString()), RESULT_SIZE - 1));
                     temp[RESULT_SIZE - 1] = '\0';
                     query += "','";
                     string hit_result(temp);

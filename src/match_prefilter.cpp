@@ -70,7 +70,8 @@ void MatchPreFilter::buildAhoMachine() {
     int index = 0;
     int currentState;
 
-    for (list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt(); rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
+    for (list<Rule*>::iterator rule_it = rule_pool->GetRuleFirstIt();
+         rule_it != rule_pool->GetRuleLastIt(); rule_it++) {
         string keyword = (*rule_it)->GetPreFilterPattern();
         currentState = 0;
         for (unsigned int j = 0; j < keyword.size(); j++) {
@@ -146,11 +147,14 @@ void MatchPreFilter::buildAhoMachine() {
     delete [] f;
 }
 
-int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *state, Packet *packet, int start_place, u_char *p_content, u_char *p_content_end) {
+int MatchPreFilter::AhoSearch(int mode, int start_flag,
+                              MatchPreFilterState *state, Packet *packet,
+                              int start_place, u_char *p_content, u_char *p_content_end) {
     list<ActiveRule*>::iterator active_rule_it = state->active_rule_list_.begin();
-    int content_size = (int)packet->GetL7ContentSize();
+    int content_size = static_cast<int>(packet->GetL7ContentSize());
     string pattern;
-    MatchPreFilterInfo *match_pre_filter_info = (*(*active_rule_it)->rule_it_)->GetMatchPreFilterInfo();
+    MatchPreFilterInfo *match_pre_filter_info
+     = (*(*active_rule_it)->rule_it_)->GetMatchPreFilterInfo();
     int pat_len;
     int j;  // pointer of input data
 
@@ -159,7 +163,8 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
     int* read_table = match_pre_filter_info->read_table;
     int* match = match_pre_filter_info->match;
 
-    int anterior_content_size = packet->GetStream()->GetL7RetrievedContentSize() - packet->GetL7ContentSize();
+    int anterior_content_size
+     = packet->GetStream()->GetL7RetrievedContentSize() - packet->GetL7ContentSize();
 
     int currentState;  // for Aho Corasick
     j = start_place;
@@ -176,12 +181,13 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
         currentState = state->tmpState_;
     }
 
-    while (j < (int)content_size) {
+    while (j < static_cast<int>(content_size)) {
         match_try[mode]++;
-        currentState = g_[currentState][(int)p_content[j]];
+        currentState = g_[currentState][static_cast<int>(p_content[j])];
         if (out_[currentState][0] != 0) {
             for (int index=0; (index<MAXN && out_[currentState][index]>0); index++) {
-                for (int tekitoh=0; tekitoh < (out_[currentState][index]-1); tekitoh++) {  // kokoga dasai
+                for (int tekitoh=0; tekitoh < (out_[currentState][index]-1);
+                     tekitoh++) {  // kokoga dasai
                     if (active_rule_it != state->active_rule_list_.end())
                     active_rule_it++;
                 }
@@ -204,13 +210,15 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 #ifdef MATCH_ALL
             // j += AfterMatch(mode, j, match_pre_filter_info, p_content);
             // j++;
-            // MSG(mode<<": j="<< j <<", AfterMatch"<<AfterMatch(mode, j, match_pre_filter_info, p_content))
+            // MSG(mode<<": j="<< j <<",
+            //     AfterMatch"<<AfterMatch(mode, j, match_pre_filter_info, p_content))
 #else
             return 1;
 #endif
         } else {  // found miss
             read_table[mode]++;
-            // MSG(mode<<": j="<< j <<", Slide"<<Slide(mode, j, i, match_pre_filter_info, p_content))
+            // MSG(mode<<": j="<< j <<",
+            //     Slide"<<Slide(mode, j, i, match_pre_filter_info, p_content))
         }
 
         j++;
@@ -221,17 +229,22 @@ int MatchPreFilter::AhoSearch(int mode, int start_flag, MatchPreFilterState *sta
 }
 
 u_char& MatchPreFilter::GetText(int i, u_char *p_content, MatchPreFilterState *state) {
-    if (i >= 0) {return p_content[i];}
-    else {return state->temp_buf_[state->max_prefilter_pattern_size_ + i];}
+    if (i >= 0) {return p_content[i];
+    } else {return state->temp_buf_[state->max_prefilter_pattern_size_ + i];}
 }
 
 #ifndef MATCH_ALL
-int MatchPreFilter::AfterMatch(int mode, int j, MatchPreFilterInfo *match_pre_filter_info, u_char *p_content) {
+int MatchPreFilter::AfterMatch(int mode, int j,
+                               MatchPreFilterInfo *match_pre_filter_info, u_char *p_content) {
     int result;
     if (mode == HORS) {
-        result = (int)match_pre_filter_info->bm_bc[(int)p_content[j + (int)match_pre_filter_info->pat_len - 1]];
+        result = static_cast<int>(match_pre_filter_info->bm_bc[
+                  static_cast<int>(p_content[
+                   j + static_cast<int>(match_pre_filter_info->pat_len - 1)])]);
     } else if (mode == SUND) {
-        result = (int)match_pre_filter_info->bm_bc[(int)p_content[j + (int)match_pre_filter_info->pat_len]] + 1;
+        result = static_cast<int>(match_pre_filter_info->bm_bc[
+                  static_cast<int>(p_content[
+                   j + static_cast<int>(match_pre_filter_info->pat_len)])]) + 1;
     } else {
         result = 0;
 MSG("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa error desu by MatchPreFilter.C")
