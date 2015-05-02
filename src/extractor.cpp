@@ -34,7 +34,8 @@ void Extractor::Proc(Packet *pkt) {
                 u_int result_end_num = result_start_num + RESULT_SIZE;
 
                 struct timeval tmp_time = pkt->GetStream()->GetTimestamp();
-                struct tm *tmp = localtime(&tmp_time.tv_sec);
+                struct tm local_tm;
+                struct tm *tmp = localtime_r(&tmp_time.tv_sec, &local_tm);
                 ostringstream oss;
                 oss << tmp->tm_year+1900 <<"-"<< tmp->tm_mon+1
                     <<"-"<< tmp->tm_mday
