@@ -10,16 +10,15 @@
  * $Id: FileWriter.H,v 1.1 2011-11-18 04:36:54 sin Exp $
 */
 
-#ifndef FileWriter_H
-#define FileWriter_H
+#ifndef FILE_WRITER_H_
+#define FILE_WRITER_H_
 
-class FileWriter
-{
-    private:
+class FileWriter {
+ private:
         ofstream ofs_;
-    public:
+ public:
         FileWriter();
         void Write(const string& str);
 };
 
-#endif
+#endif  // FILE_WRITER_H_

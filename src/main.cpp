@@ -19,18 +19,18 @@
 #include "glog/logging.h"
 
 
-int main(int argc, char *argv[]){
-//	signal(SIGINT, signal_handler);
+int main(int argc, char *argv[]) {
+// signal(SIGINT, signal_handler);
     google::InitGoogleLogging("negi");
     LOG(INFO) << "start negi";
-    if(argc != 2){
+    if (argc != 2) {
         cerr << "Usage: " << argv[0] << " config_file" << endl;
         return 1;
     }
-    //Read arguments
+    // Read arguments
     string config_file = argv[1];
 
-    //Create instances
+    // Create instances
     config = new Config;
     config->init(config_file);
 

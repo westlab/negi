@@ -12,21 +12,21 @@
 
 #include "stream_pool.h"
 
-StreamPool::StreamPool(){
+StreamPool::StreamPool() {
     return;
 }
 
-list<Stream*>::iterator StreamPool::AddStream(Stream *stream){
+list<Stream*>::iterator StreamPool::AddStream(Stream *stream) {
     return stream_pool_.insert(stream_pool_.end(), stream);
 }
 
-list<Stream*>::iterator StreamPool::RemoveStreamIt(list<Stream*>::iterator it){
-    if(it == stream_pool_.end() ){return stream_pool_.end();}
+list<Stream*>::iterator StreamPool::RemoveStreamIt(list<Stream*>::iterator it) {
+    if (it == stream_pool_.end() ) {return stream_pool_.end();}
     return stream_pool_.erase(it);
 }
 
-void StreamPool::ShowStreams(){
-    for(list<Stream*>::iterator it = stream_pool_.begin(); it!=stream_pool_.end(); it++){
+void StreamPool::ShowStreams() {
+    for (list<Stream*>::iterator it = stream_pool_.begin(); it !=stream_pool_.end(); it++) {
         (*it)->Show();
     }
 }
