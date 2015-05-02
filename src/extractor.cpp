@@ -168,7 +168,7 @@ void Extractor::Proc(Packet *pkt) {
 
                     char * temp = reinterpret_cast<char *>(malloc(sizeof(char)* RESULT_SIZE));
                     memcpy(temp,
-                           reinterpret_cast<char *>(((*it)->GetResultString()), RESULT_SIZE - 1));
+                           reinterpret_cast<char *>(((*it)->GetResultString())), RESULT_SIZE - 1);
                     temp[RESULT_SIZE - 1] = '\0';
                     query += "','";
                     string hit_result(temp);
