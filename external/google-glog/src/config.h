@@ -28,7 +28,7 @@
 #define HAVE_PTHREAD 1
 
 /* Define to 1 if you have the <libunwind.h> header file. */
-/* #undef HAVE_LIBUNWIND_H */
+#define HAVE_LIBUNWIND_H 1
 
 /* define if you have google gflags library */
 #define HAVE_LIB_GFLAGS 1
@@ -40,7 +40,7 @@
 #undef HAVE_LIB_GTEST
 
 /* define if you have libunwind */
-/* #undef HAVE_LIB_UNWIND */
+#define HAVE_LIB_UNWIND 1
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
@@ -55,7 +55,7 @@
 #define HAVE_PWD_H 1
 
 /* define if the compiler implements pthread_rwlock_* */
-/* #undef HAVE_RWLOCK */
+#define HAVE_RWLOCK 1
 
 /* Define if you have the `sigaltstack' function */
 #define HAVE_SIGALTSTACK 1
@@ -73,7 +73,7 @@
 /* #undef HAVE_STRING_H */
 
 /* Define to 1 if you have the <syscall.h> header file. */
-#define HAVE_SYSCALL_H 1
+/* #undef HAVE_SYSCALL_H */
 
 /* Define to 1 if you have the <syslog.h> header file. */
 #define HAVE_SYSLOG_H 1
@@ -97,7 +97,7 @@
 #define HAVE_SYS_UTSNAME_H 1
 
 /* Define to 1 if you have the <ucontext.h> header file. */
-#define HAVE_UCONTEXT_H 1
+/* #undef HAVE_UCONTEXT_H */
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H

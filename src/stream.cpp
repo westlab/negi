@@ -166,7 +166,8 @@ void Stream::Show() {
 }
 
 void Stream::ShowStreamInfo() {
-    struct tm * tmp = localtime(&(timestamp_.tv_sec));
+    struct tm local_tm;
+    struct tm * tmp = localtime_r(&(timestamp_.tv_sec), &local_tm);
     YELLOW cout << "Date:" << tmp->tm_year+1900 << "/"
     << tmp->tm_mon+1 << "/" << tmp->tm_mday << " " << tmp->tm_hour << ":"
     << tmp->tm_min << ":" << tmp->tm_sec << " " << timestamp_.tv_usec << endl;
