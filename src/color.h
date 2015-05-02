@@ -10,6 +10,10 @@
  * $Id: Color.H,v 5.0 2010-10-13 08:47:15 sin Exp $
  * Note: ?ǥХå????Ϥο??դ??ե?????
 */
+
+#ifndef COLOR_H_
+#define COLOR_H_
+
 #define BLACK cout << "[30m";
 #define RED cout << "[31m";
 #define GREEN cout << "[32m";
@@ -29,3 +33,5 @@
 #define UWHITE cout << "[47m";
 
 #define RESET cout << "[0m";
+
+#endif  // COLOR_H_

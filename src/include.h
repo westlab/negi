@@ -9,6 +9,9 @@
 /*
  *$Id: Include.H,v 5.9 2012-05-09 17:24:13 sin Exp $
  */
+#ifndef INCLUDE_H_
+#define INCLUDE_H_
+
 #pragma once
 
 #include "define.h"
@@ -55,3 +58,5 @@ using namespace std;
 
 #include "color.h"
 #include "debug.h"
+
+#endif  // INCLUDE_H_
