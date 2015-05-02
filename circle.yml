@@ -5,6 +5,7 @@ machine:
 
 dependencies:
   pre:
+   - ./dev/lint/lint.sh
    - sudo apt-get update
    - sudo apt-get install libpcap-dev
    - sudo apt-get install libsqlite3-dev
