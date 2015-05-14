@@ -74,7 +74,7 @@ Stream::Stream(Packet *pkt) {
     }
 
     // engine specific process
-    match_prefilter_state_ = 0;
+    match_prefilter_state_ = NULL;
     // Show();
 
     return;
