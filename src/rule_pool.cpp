@@ -57,13 +57,11 @@ void RulePool::AddRule(int _id, string _owner, string _timestamp,
                             _dst_ip, _dst_netmask, _dst_port,
                             _regexp, _prefilter_pattern, _prefilter_offset,
                             _prefilter_depth, _save_flag);
-MPF_DEBUG(rule_p->Show();)
     rule_pool_.push_back(rule_p);
 }
 
 void RulePool::AddRule(int id, string rule) {
     Rule* rule_p = new Rule(id, "", "", "", "", 0, "", "", 0, "", rule, 0, 0, 1);
     LOG(INFO) << rule << " is added";
-MPF_DEBUG(rule_p->Show();)
     rule_pool_.push_back(rule_p);
 }

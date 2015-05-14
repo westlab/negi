@@ -149,6 +149,13 @@ int MatchPreFilter::AhoSearch(int mode,
                               int start_place,
                               u_char *p_content,
                               u_char *p_content_end) {
+    // start_place validation
+    if (start_place < 0) {
+        LOG(ERROR) << "start_place must be greater than 0";
+        LOG(ERROR) << "start_place: " << start_place;
+        return 1;
+    }
+
     list<ActiveRule*>::iterator active_rule_it = state->active_rule_list_.begin();
     int content_size = static_cast<int>(packet->GetL7ContentSize());
     string pattern;
@@ -169,11 +176,6 @@ int MatchPreFilter::AhoSearch(int mode,
     j = start_place;
 
     if (start_flag == 1) {
-        if (start_place < 0) {
-            LOG(ERROR) << "Error on start palce";
-            LOG(ERROR) << "start palce: " << start_place;
-            return 1;
-        }
         // start packet for this rule
         currentState = 0;
     } else {
@@ -207,14 +209,8 @@ int MatchPreFilter::AhoSearch(int mode,
                     active_rule_it = state->active_rule_list_.begin();
                 }
             }
-            // j += AfterMatch(mode, j, match_pre_filter_info, p_content);
-            // j++;
-            // MSG(mode<<": j="<< j <<", AfterMatch"
-            // <<AfterMatch(mode, j, match_pre_filter_info, p_content))
         } else {  // found miss
             read_table[mode]++;
-            // MSG(mode<<": j="<< j <<", Slide"
-            // <<Slide(mode, j, i, match_pre_filter_info, p_content))
         }
 
         j++;
@@ -240,7 +236,7 @@ MatchPreFilterState * MatchPreFilter::MakeMatchPreFilterState(Stream *stream) {
 
 int MatchPreFilter::Proc(Packet *packet) {
     // suppose that don't search 2 packet before.
-    LOG(INFO) << "start: " << packet->GetL7ContentSize();
+    LOG(INFO) << "incoming packet L7 content size: " << packet->GetL7ContentSize();
     if (packet->GetProtocol() != IPPROTO_TCP) {
         LOG(INFO) << "MPFilter: Protocol is not TCP";
         return 0;
@@ -256,61 +252,26 @@ int MatchPreFilter::Proc(Packet *packet) {
 
     Stream *stream = packet->GetStream();
     LOG(INFO) << packet->GetL7Content();
+
+    // retrieve state if there is one
     MatchPreFilterState *state;
-    if (stream->GetMatchPreFilterState() == 0) {
+    if (stream->GetMatchPreFilterState() == NULL) {
         state = MakeMatchPreFilterState(stream);
     } else {
         state = stream->GetMatchPreFilterState();
     }
-    int after_pre_filter = 0;
-    int retrieved_content_size = stream->GetL7RetrievedContentSize();
+
     int content_size = packet->GetL7ContentSize();
 
-    if (stream->GetPacketNum() == 1 && retrieved_content_size != content_size) {
-        LOG(INFO) << "Hrashima PacketNum: " << stream->GetPacketNum();
-        LOG(INFO) << "retrieved_content_size: " << retrieved_content_size;
-        LOG(INFO) << "content_size: " << content_size;
-    }
-
     int start_flag = 0;
-    int offset = 0;
-    int depth = 0;
-    depth = INT_MAX;
-    int start = offset;
-    int end = start + depth - 1;
-    u_char *p_content = NULL, *p_content_end = NULL;
     int start_place = 0;
+    int start = 0;
+    u_char *p_content = NULL, *p_content_end = NULL;
 
-    if (start <= retrieved_content_size - 1) {  // start packet
-            start_flag = 1;
-            start_place = start - (retrieved_content_size - content_size);
-            p_content = packet->GetL7Content() + start_place;
-            if (start_place < 0) {
-                LOG(ERROR) << "Calicurate start place";
-                LOG(ERROR) << "start place: " << start_place;
-                LOG(ERROR) << "retrieved content size: " << retrieved_content_size;
-                LOG(ERROR) << "content size: " << content_size;
-            }
-    }
+    p_content = packet->GetL7Content();
+    p_content_end = packet->GetL7Content() + content_size - 1;
 
-    if (start_flag == 0) {
-            start_place = 0;
-            p_content = packet->GetL7Content();
-    }
-
-    if (end <= retrieved_content_size - 1) {  // end packet
-        p_content_end = packet->GetL7Content() + end - (retrieved_content_size - content_size);
-        if (start_place < 0) {
-            LOG(ERROR) << "start place before aho search is called: " << start_place;
-        }
-        AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
-    } else {
-        p_content_end = packet->GetL7Content() + content_size - 1;
-        if (start_place < 0) {
-            LOG(ERROR) << "start place before aho search is called: " << start_place;
-        }
-        AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
-    }
+    AhoSearch(SUND, start_flag, state, packet, start_place, p_content, p_content_end);
 
     return 0;
 }

@@ -20,11 +20,6 @@ class Stream;
 class Packet;
 class Rule;
 
-#ifdef MPF_DEBUG_EN
-#define MPF_DEBUG(x)  x;
-#else
-#define MPF_DEBUG(x);
-#endif
 const int MAXN = 10;  // max number of patterns at one state
 const int MAXS = 200000;  // max number of states < the number of characters of patterns
 const int MAXC = 256;  // ascii code
