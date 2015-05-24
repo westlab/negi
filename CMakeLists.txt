@@ -11,14 +11,15 @@ if (HAS_CPP11)
 endif()
 
 
-file(GLOB negiSrcs "*.cpp")
+file(GLOB negiSrcs "./src/*.cpp")
 
 # add includes for all
 include_directories ("${CMAKE_CURRENT_SOURCE_DIR}")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # add db
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/db")
-include_directories(db)
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/db")
+# include_directories(db)
 
 # db
 #set(DB "${CMAKE_CURRENT_SOURCE_DIR}/db/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/db/*.h")
@@ -38,9 +39,26 @@ include_directories ("${google-glog_SOURCE_DIR}/src")
 # add library path for google-glog
 set(CMAKE_LIBRARY_PATH "${google-glog_BINARY_DIR}" ${CMAKE_LIBRARY_PATH})
 
+# add gtest
+add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/external/gtest")
+# add includes for gtests
+include_directories ("${gtest_SOURCE_DIR}/src")
+# add library path for gtest
+set(CMAKE_LIBRARY_PATH "${gtest_BINARY_DIR}" ${CMAKE_LIBRARY_PATH})
+
 
 add_executable(negi ${negiSrcs} ${SOURCE} ${HEADERS})
 target_link_libraries(negi pcap)
 target_link_libraries(negi z)
 target_link_libraries(negi sqlite3)
 target_link_libraries(negi glog)
+
+if (test)
+    add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/test")
+    enable_testing()
+    file(GLOB TEST_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp)
+    add_executable(runUnitTests ${TEST_SRC_FILES} ${negiSrcs} ${SOURCE} ${HEADERS})
+    target_link_libraries(runUnitTests pthlead)
+    target_link_libraries(runUnitTests gtest)
+    add_test(NAME that-test-I-made COMMAND runUnitTests)
+endif()
