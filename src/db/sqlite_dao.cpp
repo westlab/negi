@@ -18,8 +18,10 @@ int SqliteDao::Connect(const string& dbname){
    }
     // set WAL mode
     string sql = "PRAGMA journal_mode=WAL;";
-    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &res_, NULL);
-    sqlite3_step(res_);
+    sqlite3_stmt *statement;
+    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
+    sqlite3_step(statement);
+    sqlite3_finalize(statement);
    return 1;
 }
 
@@ -35,9 +37,11 @@ int SqliteDao::Connect(const string& dbname){
 // sqlite3_finalize(statement);
 sqlite3_stmt* SqliteDao::ExecSql(const string &sql){
     // Compile SQL
-    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &res_, NULL);
+    sqlite3_stmt *statement;
+    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     // Excute all SQL
     sqlite3_step(res_);
+    sqlite3_finalize(statement);
     return res_;
 }
 
