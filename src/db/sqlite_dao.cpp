@@ -16,6 +16,10 @@ int SqliteDao::Connect(const string& dbname){
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(conn_));
       exit(0);
    }
+    // set WAL mode
+    string sql = "PRAGMA journal_mode=WAL;";
+    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &res_, NULL);
+    sqlite3_step(res_);
    return 1;
 }
 
