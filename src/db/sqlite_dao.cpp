@@ -1,8 +1,7 @@
 #include "sqlite_dao.h"
 #include <unistd.h>
-#include <iostream>
-#include <cstdlib>
 #include <fstream>
+#include "glog/logging.h"
 #include "util.h"
 
 SqliteDao::SqliteDao(){
@@ -12,8 +11,9 @@ SqliteDao::SqliteDao(){
 // Connect to a Sqlite DB
 int SqliteDao::Connect(const string& dbname){
    rc_ = sqlite3_open(dbname.c_str(), &conn_);
+    dbname_ = dbname;
    if(rc_){
-      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(conn_));
+      LOG(ERROR) << "Can't open database: " << sqlite3_errmsg(conn_);
       exit(0);
    }
     // set WAL mode
@@ -22,6 +22,7 @@ int SqliteDao::Connect(const string& dbname){
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     sqlite3_step(statement);
     sqlite3_finalize(statement);
+    sqlite3_close(conn_);
    return 1;
 }
 
@@ -40,46 +41,56 @@ sqlite3_stmt* SqliteDao::ExecSql(const string &sql){
     sqlite3_stmt *statement;
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     // Excute all SQL
-    sqlite3_step(res_);
+    sqlite3_step(statement);
     sqlite3_finalize(statement);
-    return res_;
+    return statement;
 }
 
 // Execute write only sql
 void SqliteDao::ExecBatchSql(const string &sql, int limit){
+    // Open and close db every time is not good solution in terms of
+    // overhaed of open and close operation.
+    // It seems that lock is not released when db is open in runtime.
+    sqlite3 *conn;
+    rc_ = sqlite3_open(dbname_.c_str(), &conn);
+    string wal = "PRAGMA journal_mode=WAL;";
     sqlite3_stmt *statement;
+    sqlite3_prepare_v2(conn, wal.c_str(), -1, &statement, NULL);
+    sqlite3_finalize(statement);
+
     int status=0;
     // Compile SQL
-    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
+    sqlite3_prepare_v2(conn, sql.c_str(), -1, &statement, NULL);
     // Excute all SQL
     int loop=0;
     while (1){
         status = sqlite3_step(statement);
         if(status == SQLITE_ERROR){
-            fprintf(stderr, "SQL gets an error.: %s\n", sqlite3_errmsg(conn_));
+            LOG(ERROR) << "SQL gets an error.: " <<  sqlite3_errmsg(conn);
             break;
         }else if(status == SQLITE_DONE){
             //SQL are executed without errors
             break;
         }else if(status == SQLITE_BUSY){
-            cout << "sqlite is busy" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            LOG(INFO) << "sqlite is busy";
+            LOG(INFO) << sqlite3_errmsg(conn);
         }else if(status == SQLITE_ROW){
-            cout << "sql returns row. this Operator is supposed to be used for read only operation" << endl;
+            LOG(INFO) << "sql returns row. this Operator is supposed to be used for read only operation";
         }else if(status == SQLITE_MISUSE){
-            cout << "sql is used in wrong way" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            LOG(INFO) << "sql is used in wrong way";
+            LOG(INFO) << sqlite3_errmsg(conn);
             sleep(2);
         }else{
-            cout << "sql returns unkown error" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            LOG(INFO) << "sql returns unkown error";
+            LOG(INFO) << sqlite3_errmsg(conn);
         }
         if (loop++>limit){
-            cout << "sqlite execution loop reached max." << endl;
+            LOG(INFO) << "sqlite execution loop reached max.";
             break;
         }
     }
     sqlite3_finalize(statement);
+    sqlite3_close(conn);
 }
 
 // Get SQL from a file and create table.
@@ -88,7 +99,7 @@ void SqliteDao::CreateTableFromFile(const string &file_path){
     is.open(file_path.c_str());
 
     if(!is){
-        cout << "Config: Can't open " << file_path << "."<< endl;
+        LOG(ERROR) << "Config: Can't open " << file_path;
         exit(1);
     }
 
