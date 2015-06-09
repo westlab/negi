@@ -12,6 +12,7 @@ SqliteDao::SqliteDao(){
 // Connect to a Sqlite DB
 int SqliteDao::Connect(const string& dbname){
    rc_ = sqlite3_open(dbname.c_str(), &conn_);
+    dbname_ = dbname;
    if(rc_){
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(conn_));
       exit(0);
@@ -22,6 +23,7 @@ int SqliteDao::Connect(const string& dbname){
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     sqlite3_step(statement);
     sqlite3_finalize(statement);
+    sqlite3_close_v2(conn_);
    return 1;
 }
 
@@ -47,32 +49,39 @@ sqlite3_stmt* SqliteDao::ExecSql(const string &sql){
 
 // Execute write only sql
 void SqliteDao::ExecBatchSql(const string &sql, int limit){
+    sqlite3 *conn;
+    rc_ = sqlite3_open(dbname_.c_str(), &conn);
+    string wal = "PRAGMA journal_mode=WAL;";
     sqlite3_stmt *statement;
+    sqlite3_prepare_v2(conn, wal.c_str(), -1, &statement, NULL);
+    sqlite3_finalize(statement);
+    sqlite3_reset(statement);
+
     int status=0;
     // Compile SQL
-    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
+    sqlite3_prepare_v2(conn, sql.c_str(), -1, &statement, NULL);
     // Excute all SQL
     int loop=0;
     while (1){
         status = sqlite3_step(statement);
         if(status == SQLITE_ERROR){
-            fprintf(stderr, "SQL gets an error.: %s\n", sqlite3_errmsg(conn_));
+            fprintf(stderr, "SQL gets an error.: %s\n", sqlite3_errmsg(conn));
             break;
         }else if(status == SQLITE_DONE){
             //SQL are executed without errors
             break;
         }else if(status == SQLITE_BUSY){
             cout << "sqlite is busy" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            cout << sqlite3_errmsg(conn) << endl;
         }else if(status == SQLITE_ROW){
             cout << "sql returns row. this Operator is supposed to be used for read only operation" << endl;
         }else if(status == SQLITE_MISUSE){
             cout << "sql is used in wrong way" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            cout << sqlite3_errmsg(conn) << endl;
             sleep(2);
         }else{
             cout << "sql returns unkown error" << endl;
-            cout << sqlite3_errmsg(conn_) << endl;
+            cout << sqlite3_errmsg(conn) << endl;
         }
         if (loop++>limit){
             cout << "sqlite execution loop reached max." << endl;
@@ -80,6 +89,7 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
         }
     }
     sqlite3_finalize(statement);
+    sqlite3_close_v2(conn);
 }
 
 // Get SQL from a file and create table.

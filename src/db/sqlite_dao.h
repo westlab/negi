@@ -17,6 +17,7 @@ class SqliteDao{
   sqlite3 *conn_;
   sqlite3_stmt *res_;
   int  rc_;
+  string dbname_;
 
  public:
   SqliteDao();
