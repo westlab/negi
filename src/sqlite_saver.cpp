@@ -76,8 +76,6 @@ void SqliteSaver::Proc(Stream * stream) {
     }
 
     query += ");";
-    cout << "save stream" << endl;
-    cout << query << endl;
 
 #ifdef FILEWRITE_MODE
         file_writer->Write(query);

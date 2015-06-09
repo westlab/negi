@@ -11,7 +11,9 @@ SqliteDao::SqliteDao(){
 
 // Connect to a Sqlite DB
 int SqliteDao::Connect(const string& dbname){
-   rc_ = sqlite3_open(dbname.c_str(), &conn_);
+    dbname_ = dbname;
+   //rc_ = sqlite3_open(dbname.c_str(), &conn_);
+    rc_ = 1;
    if(rc_){
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(conn_));
       exit(0);
@@ -40,6 +42,8 @@ sqlite3_stmt* SqliteDao::ExecSql(const string &sql){
 // Execute write only sql
 void SqliteDao::ExecBatchSql(const string &sql, int limit){
     sqlite3_stmt *statement;
+    sqlite3 *conn_;
+    sqlite3_open(dbname_.c_str(), &conn_);
     int status=0;
     // Compile SQL
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
@@ -72,6 +76,7 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
         }
     }
     sqlite3_finalize(statement);
+    sqlite3_close(conn_);
 }
 
 // Get SQL from a file and create table.

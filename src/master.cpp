@@ -51,9 +51,9 @@ void Master::Proc(Packet *pkt) {
         for (list<Stream *>::iterator it=end_stream_list.begin();
              it != end_stream_list.end(); it++) {
             if ((*it)->GetSaveFlag()) {
-                sqlite_saver->Proc(*it);
+                // sqlite_saver->Proc(*it);
             } else if (atoi(config->get("save_all").c_str())) {
-                sqlite_saver->Proc(*it);
+                // sqlite_saver->Proc(*it);
             }
         }
     }

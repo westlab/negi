@@ -14,6 +14,7 @@ using namespace std;
 
 class SqliteDao{
  private:
+  string dbname_;
   sqlite3 *conn_;
   sqlite3_stmt *res_;
   int  rc_;
