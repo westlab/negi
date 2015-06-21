@@ -1,6 +1,6 @@
 ## Software: NEGI (Negi Enables Global Intelligence)
 Publication Date: 2012/9/4  
-Author: Shinichi Ishida  
+Author: Shinichi Ishida, Ken Takagiwa
 
 ### Description:
 * NEGI is a Layer7 information extractor software at Linux gateways.
