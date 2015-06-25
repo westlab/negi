@@ -22,7 +22,7 @@ int SqliteDao::Connect(const string& dbname){
     sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     sqlite3_step(statement);
     sqlite3_finalize(statement);
-    sqlite3_close(conn_);
+    // sqlite3_close(conn_);
    return 1;
 }
 
@@ -51,38 +51,38 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
     // Open and close db every time is not good solution in terms of
     // overhaed of open and close operation.
     // It seems that lock is not released when db is open in runtime.
-    sqlite3 *conn;
-    rc_ = sqlite3_open(dbname_.c_str(), &conn);
+    // sqlite3 *conn;
+    rc_ = sqlite3_open(dbname_.c_str(), &conn_);
     string wal = "PRAGMA journal_mode=WAL;";
     sqlite3_stmt *statement;
-    sqlite3_prepare_v2(conn, wal.c_str(), -1, &statement, NULL);
+    sqlite3_prepare_v2(conn_, wal.c_str(), -1, &statement, NULL);
     sqlite3_finalize(statement);
 
     int status=0;
     // Compile SQL
-    sqlite3_prepare_v2(conn, sql.c_str(), -1, &statement, NULL);
+    sqlite3_prepare_v2(conn_, sql.c_str(), -1, &statement, NULL);
     // Excute all SQL
     int loop=0;
     while (1){
         status = sqlite3_step(statement);
         if(status == SQLITE_ERROR){
-            LOG(ERROR) << "SQL gets an error.: " <<  sqlite3_errmsg(conn);
+            LOG(ERROR) << "SQL gets an error.: " <<  sqlite3_errmsg(conn_);
             break;
         }else if(status == SQLITE_DONE){
             //SQL are executed without errors
             break;
         }else if(status == SQLITE_BUSY){
             LOG(INFO) << "sqlite is busy";
-            LOG(INFO) << sqlite3_errmsg(conn);
+            LOG(INFO) << sqlite3_errmsg(conn_);
         }else if(status == SQLITE_ROW){
             LOG(INFO) << "sql returns row. this Operator is supposed to be used for read only operation";
         }else if(status == SQLITE_MISUSE){
             LOG(INFO) << "sql is used in wrong way";
-            LOG(INFO) << sqlite3_errmsg(conn);
+            LOG(INFO) << sqlite3_errmsg(conn_);
             sleep(2);
         }else{
             LOG(INFO) << "sql returns unkown error";
-            LOG(INFO) << sqlite3_errmsg(conn);
+            LOG(INFO) << sqlite3_errmsg(conn_);
         }
         if (loop++>limit){
             LOG(INFO) << "sqlite execution loop reached max.";
@@ -90,7 +90,7 @@ void SqliteDao::ExecBatchSql(const string &sql, int limit){
         }
     }
     sqlite3_finalize(statement);
-    sqlite3_close(conn);
+    // sqlite3_close(conn_);
 }
 
 // Get SQL from a file and create table.
