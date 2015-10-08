@@ -17,3 +17,5 @@ cmake_install.cmake
 install_manifest.txt
 CMakeFiles/
 .idea/
+*.cmake
+Testing
