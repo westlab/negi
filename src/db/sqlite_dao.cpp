@@ -1,6 +1,7 @@
 #include "sqlite_dao.h"
 #include <unistd.h>
 #include <fstream>
+#include <cstdlib>
 #include "glog/logging.h"
 #include "util.h"
 
