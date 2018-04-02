@@ -12,11 +12,14 @@
 #include <sys/mman.h>
 #include <arpa/inet.h>
 #include <pthread.h> 
+#include <time.h>
 
 #include "circular_buffer.h"
 #include "shared_memory_support.h"
 
 #define MAX_THREADS 10
+
+#define MEASURE_TIME 0 
 
 extern char *thread_mmap_buf;
 extern circular_buffer **cb_threads;

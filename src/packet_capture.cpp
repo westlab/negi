@@ -112,6 +112,17 @@ void packetcap() {
 void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *p) {
     static struct timeval start_time;
 
+    static double avg_time = 0;
+    static double avg_alloc_time = 0;
+    clock_t pcap_call_end_time;
+    clock_t pcap_call_begin_time;
+    clock_t pcap_call_hash_end_time;
+    static int loop_count = 0;
+    if(MEASURE_TIME) loop_count++;
+    if(MEASURE_TIME) pcap_call_begin_time = clock();
+
+
+    
     // Calc. ongoing time from Start time.
     if (start_time.tv_sec == 0 && start_time.tv_usec == 0) start_time = h->ts;
     PacketCnt *pcnt;
@@ -228,7 +239,7 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
         dst_port_ = 0;
     }
 
-
+    if(MEASURE_TIME) pcap_call_hash_end_time = clock();
     if(sizeof(PacketCnt) < 10000){
         int thread_ID = 0;
         thread_ID = (src_port_ | dst_port_)%MAX_THREADS;
@@ -248,5 +259,8 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
         master->Proc(pkt);
         */
     }
-    
+    if(MEASURE_TIME) pcap_call_end_time = clock();
+    if(MEASURE_TIME) avg_time = (double)(avg_time*(loop_count-1) + ((double)(pcap_call_end_time - pcap_call_begin_time)/ CLOCKS_PER_SEC))/(double)loop_count;
+    if(MEASURE_TIME) avg_alloc_time = (double)(avg_alloc_time*(loop_count-1) + ((double)(pcap_call_hash_end_time - pcap_call_begin_time)/ CLOCKS_PER_SEC))/(double)loop_count;
+    if(MEASURE_TIME && (loop_count%10000 == 0)) printf("avg thread_exec time : %f ",avg_time);
 }

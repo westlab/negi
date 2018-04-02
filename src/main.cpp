@@ -21,6 +21,8 @@
 
 
 
+
+
 char *thread_mmap_buf;
 circular_buffer **cb_threads;
 
@@ -28,8 +30,14 @@ circular_buffer **cb_threads;
 void *packet_handler_thread(void *pcap_cap_thread_control){ 
     int* thread_ID = (int* )pcap_cap_thread_control;
     printf("thread %d started\n", (*thread_ID));
+    clock_t thread_begin_time;
+    clock_t thread_end_time;
+    double avg_time = 0;
+    int loop_count = 0;
     while (1){
         int buf_empty;
+        if(MEASURE_TIME) loop_count++; 
+        if(MEASURE_TIME) thread_begin_time = clock();        
         cb_buffer_struct pull_data;
         pull_data = CB_pop(cb_threads[(*thread_ID)], &buf_empty);
         if(!buf_empty){
@@ -41,6 +49,9 @@ void *packet_handler_thread(void *pcap_cap_thread_control){
         else{
             //printf(".");
         }
+        if(MEASURE_TIME) thread_end_time = clock();
+        if(MEASURE_TIME) avg_time = (double)(avg_time*(loop_count-1) + ((double)(thread_end_time - thread_begin_time)/ CLOCKS_PER_SEC))/(double)loop_count;
+        if(MEASURE_TIME && (loop_count%10000 == 0)) printf("avg thread_exec time : %f ",avg_time);
     }
 }
 
