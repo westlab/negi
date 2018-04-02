@@ -55,7 +55,7 @@
 #define HAVE_PWD_H 1
 
 /* define if the compiler implements pthread_rwlock_* */
-#define HAVE_RWLOCK 1
+/* #undef HAVE_RWLOCK */
 
 /* Define if you have the `sigaltstack' function */
 #define HAVE_SIGALTSTACK 1
@@ -73,7 +73,7 @@
 /* #undef HAVE_STRING_H */
 
 /* Define to 1 if you have the <syscall.h> header file. */
-/* #undef HAVE_SYSCALL_H */
+#define HAVE_SYSCALL_H 1
 
 /* Define to 1 if you have the <syslog.h> header file. */
 #define HAVE_SYSLOG_H 1
@@ -97,7 +97,7 @@
 #define HAVE_SYS_UTSNAME_H 1
 
 /* Define to 1 if you have the <ucontext.h> header file. */
-/* #undef HAVE_UCONTEXT_H */
+#define HAVE_UCONTEXT_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H

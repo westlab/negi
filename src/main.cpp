@@ -17,9 +17,52 @@
 #include <functional>
 #include <utility>
 #include "glog/logging.h"
+#include "thread_header.h"
 
+
+
+char *thread_mmap_buf;
+circular_buffer **cb_threads;
+
+
+void *packet_handler_thread(void *pcap_cap_thread_control){ 
+    int* thread_ID = (int* )pcap_cap_thread_control;
+    printf("thread %d started\n", (*thread_ID));
+    while (1){
+        int buf_empty;
+        cb_buffer_struct pull_data;
+        pull_data = CB_pop(cb_threads[(*thread_ID)], &buf_empty);
+        if(!buf_empty){
+            //printf("packet pulled from thread %d\n",thread_ID);
+            //Packet *pkt = new Packet (pcnt);
+            Packet *pkt = new Packet ((PacketCnt *)pull_data.buffer);
+            master->Proc(pkt);
+        }
+        else{
+            //printf(".");
+        }
+    }
+}
 
 int main(int argc, char *argv[]) {
+
+    const char *thread_buf_mmap_file_name = "/home/shanaka/repos/worker_buf";
+    
+    int file_size;  
+    int options = PROT_READ | PROT_WRITE;
+    int mode = MAP_SHARED;
+    
+    file_size = (MAX_THREADS +1)* sizeof(circular_buffer);
+    
+    thread_mmap_buf = (char *)set_up_mmap(thread_buf_mmap_file_name, file_size, options, mode);
+    //[no_of_buffers];
+    cb_threads = (circular_buffer **)malloc(MAX_THREADS*sizeof(long));
+    int i = 0;
+    for (i = 0; i<MAX_THREADS; i++){
+        cb_threads[i] = (circular_buffer *)(thread_mmap_buf + i*sizeof(circular_buffer));
+        CB_init(cb_threads[i]);
+    }
+
 // signal(SIGINT, signal_handler);
     google::InitGoogleLogging("negi");
     LOG(INFO) << "start negi";
@@ -54,6 +97,15 @@ int main(int argc, char *argv[]) {
 
     match_pre_filter = new MatchPreFilter;
     rule_pool->ShowRules();
+    int thread_ID = 0;
+    int pcap_cap_thread_control = 0;
+    pthread_t pcap_cap_thread[MAX_THREADS];
+    for ( thread_ID = 0; thread_ID < MAX_THREADS; thread_ID++){
+        int pcap_cap_thread_control = thread_ID;
+        printf("thread %d will start\n", thread_ID);
+        pthread_create( &pcap_cap_thread[thread_ID],NULL,packet_handler_thread, &pcap_cap_thread_control );
+    }
+    
 
     packetcap();
 

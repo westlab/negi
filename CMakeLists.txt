@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(negi)
-
+find_package (Threads)
 
 # try enable c++11
 # g++ and clang++ need flags to enable c++11
@@ -52,7 +52,7 @@ target_link_libraries(negi pcap)
 target_link_libraries(negi z)
 target_link_libraries(negi sqlite3)
 target_link_libraries(negi glog)
-
+target_link_libraries(negi ${CMAKE_THREAD_LIBS_INIT})
 if (test)
     add_subdirectory ("${CMAKE_CURRENT_SOURCE_DIR}/test")
     enable_testing()

@@ -16,6 +16,8 @@
 #include "packet_capture.h"
 #include "glog/logging.h"
 
+
+
 unsigned long sim_time;
 
 void pcap_status(int x) {
@@ -118,6 +120,133 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
     memcpy(&(pcnt->pcap_hdr), h, sizeof(struct pcap_pkthdr));
     memcpy(pcnt->pcap_pkt, p, h->caplen);
 
-    Packet *pkt = new Packet (pcnt);
-    master->Proc(pkt);
+
+
+
+    struct ether_header* eth_header_;      // pointer to Ether header structure
+    struct vlan_ethhdr* vlan_eth_header_;  // pointer to VLAN tagged Ether header structure
+    struct iphdr* ip_header_;              // pointer to IP header structure
+    struct ip6_hdr* ip6_header_;           // pointer to IP header structure
+    struct tcphdr* tcp_header_;            // pointer to TCP header structure
+    unsigned int l2_header_size_;          // L2(MAC) header size
+    unsigned int ether_proto_;
+    bool vlan_tag_flag_;                  // TRUE if vlan tagged
+
+    unsigned int l3_header_size_;         // L3(IP) header size
+    unsigned int l4_header_size_;         // L4(TCP/UDP) header size
+    unsigned int version_;                // Packet IP Version(4 or 6)
+
+    unsigned char* l3_header_;            // pointer to L3(MAC) header
+    unsigned char* l4_header_;            // pointer to L4(TCP/UDP) header
+
+    unsigned int protocol_;               // Transport Protocol(ex: TCP:6) (in IPv6: Next Header)
+
+    struct in6_addr src_ip_;              // Source IP(IPv4 included v6 with ::ffff:x.x.x.x)
+    struct in6_addr dst_ip_;              // Destination IP
+
+    char src_ip_str_[INET6_ADDRSTRLEN];
+    char dst_ip_str_[INET6_ADDRSTRLEN];
+
+    unsigned int src_port_;               // Source Port
+    unsigned int dst_port_;               // Destination Port
+
+
+
+    eth_header_ = (struct ether_header *) p;
+    //memcpy(packet_, packet_cnt_->pcap_pkt, h->caplen);
+
+    l2_header_size_ = sizeof(struct ether_header);
+    eth_header_ = (struct ether_header *) p;
+
+    if (ntohs(eth_header_->ether_type) == ETH_P_8021Q) {
+        l3_header_ = (unsigned char*)(p) + sizeof(struct vlan_ethhdr);
+        vlan_eth_header_ = (struct vlan_ethhdr *) p;
+        ether_proto_ = ntohs(vlan_eth_header_->ether_type);
+    } else {
+        l3_header_ = (unsigned char *)(p) + sizeof(struct ether_header);  // IP header
+        ether_proto_ = ntohs(eth_header_->ether_type);
+    }
+
+    switch (ether_proto_) {
+        case ETH_P_IP:
+            //LOG(ERROR) << "This is IPv4"; //shanaka
+            version_ = 4;
+            ip_header_ = (struct iphdr *)l3_header_;
+            inet_v4tov6((struct in_addr *)(&(ip_header_->saddr)), &src_ip_);
+            inet_v4tov6((struct in_addr *)(&(ip_header_->daddr)), &dst_ip_);
+            protocol_ = ip_header_->protocol;
+
+            l3_header_size_ = ip_header_->ihl*4;
+
+            l4_header_ = l3_header_ + ip_header_->ihl*4;  // TCP/UDP header
+
+            struct in_addr v4_src_ip, v4_dst_ip;
+            inet_v6tov4(&src_ip_ , &v4_src_ip);
+            inet_v6tov4(&dst_ip_ , &v4_dst_ip);
+
+            inet_ntop(AF_INET, &v4_src_ip, src_ip_str_, INET6_ADDRSTRLEN);
+            inet_ntop(AF_INET, &v4_dst_ip, dst_ip_str_, INET6_ADDRSTRLEN);
+
+            ip6_header_ = NULL;
+
+            break;
+
+        case ETH_P_IPV6:
+            //LOG(ERROR) << "This is IPv6"; //shanaka
+            version_ = 6;
+            ip6_header_ = (struct ip6_hdr *)l3_header_;
+            src_ip_ = ip6_header_->ip6_src;
+            dst_ip_ = ip6_header_->ip6_dst;
+            protocol_ = ip6_header_->ip6_ctlun.ip6_un1.ip6_un1_nxt;
+
+            l3_header_size_ = 40;  // FIXED Size. no follow about extension header.
+
+            l4_header_ = l3_header_ + 40;  // TCP/UDP header
+            // in IPv6, IP Header size is not included in payload length(ip6_un1_plen).
+
+            inet_ntop(AF_INET6, &src_ip_, src_ip_str_, INET6_ADDRSTRLEN);
+            inet_ntop(AF_INET6, &dst_ip_, dst_ip_str_, INET6_ADDRSTRLEN);
+
+            ip_header_ = NULL;
+            break;
+
+        default:
+            src_port_ = 0;
+            dst_port_ = 0;
+            return;
+    }
+    if (protocol_ == IPPROTO_TCP) {
+        tcp_header_ = (struct tcphdr *)l4_header_;
+        src_port_ = ntohs(tcp_header_->source);
+        dst_port_ = ntohs(tcp_header_->dest);
+    } else if (protocol_ == IPPROTO_UDP) {
+        struct udphdr* udp_header = (struct udphdr *)l4_header_;
+        src_port_ = ntohs(udp_header->source);
+        dst_port_ = ntohs(udp_header->dest);
+    } else {
+        src_port_ = 0;
+        dst_port_ = 0;
+    }
+
+
+    if(sizeof(PacketCnt) < 10000){
+        int thread_ID = 0;
+        thread_ID = (src_port_ | dst_port_)%MAX_THREADS;
+        cb_buffer_struct push_data;
+        push_data.rule_id = 1;
+        //printf("packet pushed to thread %d\n",thread_ID);
+        memcpy(push_data.buffer,pcnt, sizeof(PacketCnt));
+        CB_push( cb_threads[thread_ID], push_data);
+        
+        /*
+        cb_buffer_struct pull_data;
+        int buf_empty;
+        pull_data = CB_pop(cb_threads[thread_ID], &buf_empty);
+
+        //Packet *pkt = new Packet (pcnt);
+        Packet *pkt = new Packet ((PacketCnt *)pull_data.buffer);
+        master->Proc(pkt);
+        */
+    }
+    
 }

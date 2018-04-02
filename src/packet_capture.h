@@ -21,7 +21,7 @@
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
 #include <pcap.h>
-
+#include "thread_header.h"
 
 void pcap_callback(u_char *, const struct pcap_pkthdr *, const u_char *);
 void packetcap();
