@@ -111,10 +111,12 @@ int main(int argc, char *argv[]) {
     int thread_ID = 0;
     int pcap_cap_thread_control = 0;
     pthread_t pcap_cap_thread[MAX_THREADS];
+    int pcap_cap_thread_ID[MAX_THREADS];
     for ( thread_ID = 0; thread_ID < MAX_THREADS; thread_ID++){
         int pcap_cap_thread_control = thread_ID;
+        pcap_cap_thread_ID[thread_ID] = thread_ID;
         printf("thread %d will start\n", thread_ID);
-        pthread_create( &pcap_cap_thread[thread_ID],NULL,packet_handler_thread, &pcap_cap_thread_control );
+        pthread_create( &pcap_cap_thread[thread_ID],NULL,packet_handler_thread, &(pcap_cap_thread_ID[thread_ID]) );
     }
     
 
