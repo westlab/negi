@@ -240,13 +240,13 @@ void pcap_callback(u_char *userdata, const struct pcap_pkthdr *h, const u_char *
     }
 
     if(MEASURE_TIME) pcap_call_hash_end_time = clock();
-    if(sizeof(PacketCnt) < 10000){
+    if((sizeof(PacketCnt)++ h->caplen) < 10000){
         int thread_ID = 0;
         thread_ID = (src_port_ | dst_port_)%MAX_THREADS;
         cb_buffer_struct push_data;
         push_data.rule_id = 1;
         //printf("packet pushed to thread %d\n",thread_ID);
-        memcpy(push_data.buffer,pcnt, sizeof(PacketCnt));
+        memcpy(push_data.buffer,pcnt, sizeof(PacketCnt)+ h->caplen);
         CB_push( cb_threads[thread_ID], push_data);
         
         /*
